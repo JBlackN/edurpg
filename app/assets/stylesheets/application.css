@@ -14,3 +14,7 @@
  *= require_self
  *= require bootstrap/dist/css/bootstrap.min.css
  */
+
+html, body {
+  height: 100%;
+}
