@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  manage_users: false
+  manage_app: false
+  manage_attrs: false
+  manage_achievement_categories: false
+  manage_talent_trees: false
+  manage_talents: false
+  manage_quests: false
+  manage_skills: false
+  manage_achievements: false
+  manage_items: false
+  manage_titles: false
+  user: one
+
+two:
+  manage_users: false
+  manage_app: false
+  manage_attrs: false
+  manage_achievement_categories: false
+  manage_talent_trees: false
+  manage_talents: false
+  manage_quests: false
+  manage_skills: false
+  manage_achievements: false
+  manage_items: false
+  manage_titles: false
+  user: two
