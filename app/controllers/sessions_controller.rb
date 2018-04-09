@@ -1,22 +1,28 @@
 class SessionsController < ApplicationController
-  def create
-    auth = request.env['omniauth.auth']
+  before_action :authorize, only: :index
 
-    if User.any?
-      if User.find_by(username: auth['uid'])
-        set_session(auth)
-        redirect_to 'permissions#update'
-      else
-      end
-    else
+  def index
+    render plain: 'session#index'
+  end
+
+  def create
+    db_empty = !User.any?
+    auth = request.env['omniauth.auth']
+    @user = User.find_by(username: auth['uid'])
+
+    if @user.nil?
       @user = User.new(username: auth['uid'])
-      if @user.save
-        set_session(auth)
-        redirect_to 'permissions#create'
-      else
-        redirect_to root_path
-      end
+      @user.build_permission
+      perms = @user.permission.assign(db_empty, auth['credentials']['token'])
+      redirect_to root_path unless perms
+      redirect_to root_path unless @user.save
+    else
+      perms = @user.permission.refresh(auth['credentials']['token'])
+      redirect_to root_path unless perms
     end
+
+    set_session(auth)
+    redirect_to sessions_index_path
   end
 
   def destroy

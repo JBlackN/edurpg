@@ -6,5 +6,7 @@ Rails.application.routes.draw do
   get 'auth/fitcvut_oauth2/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
 
+  get 'sessions/index'
+
   root 'landing#index'
 end
