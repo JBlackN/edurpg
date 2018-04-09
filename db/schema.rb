@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20180408192455) do
   end
 
   create_table "permissions", force: :cascade do |t|
+    t.boolean "use_app"
     t.boolean "manage_users"
     t.boolean "manage_app"
     t.boolean "manage_attrs"

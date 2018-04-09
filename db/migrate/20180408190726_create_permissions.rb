@@ -1,6 +1,7 @@
 class CreatePermissions < ActiveRecord::Migration[5.1]
   def change
     create_table :permissions do |t|
+      t.boolean :use_app
       t.boolean :manage_users
       t.boolean :manage_app
       t.boolean :manage_attrs
