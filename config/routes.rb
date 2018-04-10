@@ -7,8 +7,13 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
 
   resources :consents
-
   get 'sessions/index'
+
+  get 'dashboards/index'
+
+  namespace :admin do
+    get 'dashboards/index'
+  end
 
   root 'landing#index'
 end

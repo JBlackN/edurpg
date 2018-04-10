@@ -18,6 +18,7 @@ class Permission < ApplicationRecord
   end
 
   def refresh(token)
+    return true if admin_has_all?
     class_restrictions.clear
     assign(false, token)
   end
@@ -65,5 +66,20 @@ class Permission < ApplicationRecord
 
   def assign_student
     self.use_app = true
+  end
+
+  def admin_has_all?
+    !use_app &&
+    manage_users &&
+    manage_app &&
+    manage_attrs &&
+    manage_achievement_categories &&
+    manage_talent_trees &&
+    manage_talents &&
+    manage_quests &&
+    manage_skills &&
+    manage_achievements &&
+    manage_items &&
+    manage_titles
   end
 end

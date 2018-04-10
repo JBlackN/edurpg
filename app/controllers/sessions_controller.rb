@@ -2,10 +2,14 @@ class SessionsController < ApplicationController
   before_action :authorize, only: :index
 
   def index
+    puts "#{current_user.only_admin?}"
+    puts "#{current_user.only_user?}"
     if current_user.consent_invalid?
       redirect_to '/consents/new'
-    else
-      render plain: 'session#index'
+    elsif current_user.only_admin?
+      redirect_to admin_dashboards_index_path
+    elsif current_user.only_user?
+      redirect_to dashboards_index_path
     end
   end
 

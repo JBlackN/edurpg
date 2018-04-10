@@ -3,8 +3,24 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def authorize
-    puts "#{user_signed_in?}"
     redirect_to :login unless user_signed_in?
+  end
+
+  def authorize_user
+    redirect_to :login unless current_user.permission.use_app
+  end
+
+  def authorize_admin
+    redirect_to :login unless current_user.permission.manage_app ||
+      current_user.permission.manage_attrs ||
+      current_user.permission.manage_achievement_categories ||
+      current_user.permission.manage_talent_trees ||
+      current_user.permission.manage_talents ||
+      current_user.permission.manage_quests ||
+      current_user.permission.manage_skills ||
+      current_user.permission.manage_achievements ||
+      current_user.permission.manage_items ||
+      current_user.permission.manage_titles
   end
 
   def current_user
