@@ -36,19 +36,19 @@ ActiveRecord::Schema.define(version: 20180408192455) do
   end
 
   create_table "consents", force: :cascade do |t|
-    t.binary "page"
+    t.text "page"
+    t.text "raw_post_data"
     t.boolean "username"
     t.boolean "name"
-    t.datetime "photo"
+    t.boolean "photo"
     t.boolean "year"
     t.boolean "study_plan"
     t.boolean "grades"
-    t.boolean "title"
+    t.boolean "titles"
     t.boolean "roles"
     t.boolean "classes"
     t.boolean "events"
     t.boolean "exams"
-    t.datetime "expires"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

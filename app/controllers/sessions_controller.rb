@@ -2,7 +2,11 @@ class SessionsController < ApplicationController
   before_action :authorize, only: :index
 
   def index
-    render plain: 'session#index'
+    if current_user.consent_invalid?
+      redirect_to '/consents/new'
+    else
+      render plain: 'session#index'
+    end
   end
 
   def create
