@@ -1,3 +1,4 @@
+require 'base64'
 require 'json'
 require 'rest-client'
 
@@ -26,12 +27,28 @@ class Usermap
     roles
   end
 
+  def self.get_info(username, token)
+    response_user = conn(token)["people/#{username}"].get
+    raw_user_data = JSON.parse(response_user.body)
+    photo = begin
+              Base64.encode64(
+                conn(token, 'image/png')["people/#{username}/photo"].get.body)
+            rescue RestClient::ExceptionWithResponse
+              nil
+            end
+
+    {
+      name: "#{raw_user_data['firstName']} #{raw_user_data['lastName']}",
+      photo: photo
+    }
+  end
+
   private
 
-  def self.conn(token)
+  def self.conn(token, accept = 'application/json')
     RestClient::Resource.new(BASE_URL, headers: {
       authorization: "Bearer #{token}",
-      accept: 'application/json'
+      accept: accept
     })
   end
 end

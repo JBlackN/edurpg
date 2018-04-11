@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20180408192455) do
 
   create_table "characters", force: :cascade do |t|
     t.string "name"
-    t.binary "image"
+    t.text "image"
     t.integer "health"
     t.integer "experience"
     t.integer "level"
