@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180408192455) do
+ActiveRecord::Schema.define(version: 20180411144751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "character_attributes", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "characters", force: :cascade do |t|
     t.string "name"
@@ -74,6 +80,17 @@ ActiveRecord::Schema.define(version: 20180408192455) do
     t.index ["user_id"], name: "index_permissions_on_user_id"
   end
 
+  create_table "skills", force: :cascade do |t|
+    t.string "name"
+    t.text "image"
+    t.string "description"
+    t.integer "rank"
+    t.bigint "character_attribute_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_attribute_id"], name: "index_skills_on_character_attribute_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -85,4 +102,5 @@ ActiveRecord::Schema.define(version: 20180408192455) do
   add_foreign_key "class_restrictions", "permissions"
   add_foreign_key "consents", "users"
   add_foreign_key "permissions", "users"
+  add_foreign_key "skills", "character_attributes"
 end

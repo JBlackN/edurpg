@@ -23,6 +23,18 @@ class ApplicationController < ActionController::Base
       current_user.permission.manage_titles
   end
 
+  def authorize_admin_manage_attrs
+    unless current_user.permission.manage_attrs
+      redirect_to admin_character_attributes_index_path
+    end
+  end
+
+  def authorize_admin_manage_skills
+    unless current_user.permission.manage_skills
+      redirect_to admin_character_attribute_skills_index_path
+    end
+  end
+
   def current_user
     @current_user ||= User.find_by(
       username: session[:user]['name']) unless session[:user].nil?

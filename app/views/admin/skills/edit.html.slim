@@ -1,0 +1,44 @@
+= render 'admin/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Dovednosti
+  .row
+    .col-sm-3
+      h3 Atributy
+      .card.mt-3
+        .card-body
+          h4 = @attribute.name
+    .col-sm-9
+      .card style="height: 100%;"
+        .card-body
+          .card.d-inline-block.mr-3.mb-3.p-2
+            .card-body
+              = form_with model: @skill,
+                url: admin_character_attribute_skill_path, local: true do |form|
+                .custom-file.mb-1
+                  = form.file_field :image, class: 'custom-file-input',
+                    id: 'skill_image'
+                  = form.label :image, 'Vybrat obrázek', for: "skill_image",
+                    class: 'custom-file-label'
+                = form.text_field :name, class: 'form-control w-75 d-inline-block'
+                = form.number_field :rank, min: 1, step: 1,
+                  class: 'form-control w-25 d-inline-block'
+                = form.text_area :description, class: 'form-control my-1'
+                .text-right
+                  = link_to 'X', admin_character_attribute_skills_path,
+                            class: 'btn btn-outline-danger mr-1',
+                            role: 'button'
+                  = form.submit 'S', class: 'btn btn-outline-success'
+          - @skills.each do |skill|
+            .card.d-inline-block.mr-3.mb-3.p-2
+              .card_body
+                .media
+                  - if skill.image.nil?
+                    = image_tag 'placeholder.png', class: 'mr-3 skill-image'
+                  - else
+                    img.mr-3.skill-image src="data:image/png;base64, #{skill.image}"
+                  .media-body
+                    h5.mt-0 = "#{skill.name} (#{skill.rank})"
+                    p = skill.description

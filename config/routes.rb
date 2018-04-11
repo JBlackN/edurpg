@@ -13,6 +13,9 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get 'dashboards/index'
+    resources :character_attributes do
+      resources :skills
+    end
   end
 
   root 'landing#index'
