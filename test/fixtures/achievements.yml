@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  image: MyText
+  description: MyString
+  points: 1
+  achievement_category: one
+
+two:
+  name: MyString
+  image: MyText
+  description: MyString
+  points: 1
+  achievement_category: two
