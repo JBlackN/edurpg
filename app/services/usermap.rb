@@ -22,7 +22,8 @@ class Usermap
     end
 
     roles[:student] = nil if roles[:student].empty? &&
-                             !raw_roles.include?('B-18000-STUDENT')
+                             !raw_roles.include?('B-18000-STUDENT-BAKALAR') &&
+                             !raw_roles.include?('B-18000-STUDENT-MAGISTR')
 
     roles
   end
