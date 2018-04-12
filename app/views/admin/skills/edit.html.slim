@@ -13,7 +13,7 @@
     .col-sm-9
       .card style="height: 100%;"
         .card-body
-          .card.d-inline-block.mr-3.mb-3.p-2
+          .card.d-inline-block.mr-3.mb-3
             .card-body
               = form_with model: @skill,
                 url: admin_character_attribute_skill_path, local: true do |form|
@@ -32,8 +32,8 @@
                             role: 'button'
                   = form.submit 'S', class: 'btn btn-outline-success'
           - @skills.each do |skill|
-            .card.d-inline-block.mr-3.mb-3.p-2
-              .card_body
+            .card.d-inline-block.mr-3.mb-3
+              .card-body
                 .media
                   - if skill.image.nil?
                     = image_tag 'placeholder.png', class: 'mr-3 skill-image'

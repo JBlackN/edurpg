@@ -14,8 +14,8 @@
       .card style="height: 100%;"
         .card-body
           - @attribute.skills.each do |skill|
-            .card.d-inline-block.mr-3.mb-3.p-2
-              .card_body
+            .card.d-inline-block.mr-3.mb-3
+              .card-body
                 .media
                   - if skill.image.nil?
                     = image_tag 'placeholder.png', class: 'mr-3 skill-image'
@@ -24,7 +24,7 @@
                   .media-body
                     h5.mt-0 = "#{skill.name} (#{skill.rank})"
                     p = skill.description
-          .card.d-inline-block.mr-3.mb-3.p-2
+          .card.d-inline-block.mr-3.mb-3
             .card-body
               = form_with scope: :skill,
                 url: admin_character_attribute_skills_path, local: true do |form|
