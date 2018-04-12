@@ -1,0 +1,21 @@
+= render 'admin/menu'
+
+.container
+  .row.mt-3
+    .col-sm-4
+      h2 Úspěchy
+      .card.mt-3
+        .card-body
+          ul.pl-0.achievement-categories
+            = render partial: 'category', collection: @categories
+          .text-center
+            h3
+              = link_to '+', new_admin_achievement_category_path
+    .col-sm-8
+      .card style="height: 100%;"
+        .card-body
+          .container.d-flex.align-items-center.h-100
+            .container
+              .row.text-center
+                .col
+                  p.text-muted Pro zobrazení úspěchů vyberte kategorii.

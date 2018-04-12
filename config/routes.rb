@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     resources :character_attributes do
       resources :skills
     end
+    get 'achievement_categories/new/:parent_id', to: 'achievement_categories#new'
+    resources :achievement_categories do
+      resources :achievements
+    end
   end
 
   root 'landing#index'

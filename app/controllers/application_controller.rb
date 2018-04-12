@@ -29,9 +29,21 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authorize_admin_manage_achievement_categories
+    unless current_user.permission.manage_achievement_categories
+      redirect_to admin_achievement_categories_index_path
+    end
+  end
+
   def authorize_admin_manage_skills
     unless current_user.permission.manage_skills
       redirect_to admin_character_attribute_skills_index_path
+    end
+  end
+
+  def authorize_admin_manage_achievements
+    unless current_user.permission.manage_achievements
+      redirect_to admin_achievement_category_achievements_index_path
     end
   end
 
