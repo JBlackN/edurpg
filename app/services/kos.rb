@@ -47,8 +47,6 @@ class Kos
       }
     end.sort_by { |branch| branch['name'] }.uniq
 
-    #branch_list = Nokogiri::XML(response.body).xpath(
-    #  '//kos:name[lang("cs")]', 'kos' => NS_KOS).map(&:text).sort.uniq
     branches = Hash[branch_list.map { |branch| [branch['name'], {
       'id' => branch['id'],
       'courses' => []
@@ -61,8 +59,6 @@ class Kos
         }
       })
 
-      #course_branches = Nokogiri::XML(response.body).xpath(
-      #  '//kos:name[lang("cs")]', 'kos' => NS_KOS).map(&:text).sort.uniq
       course_branches = Nokogiri::XML(response.body).xpath(
         '//atom:entry', 'atom' => NS_ATOM
       ).map do |content|
