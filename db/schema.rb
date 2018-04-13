@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180413190945) do
+ActiveRecord::Schema.define(version: 20180413201020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,16 @@ ActiveRecord::Schema.define(version: 20180413190945) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_consents_on_user_id"
+  end
+
+  create_table "item_attributes", force: :cascade do |t|
+    t.integer "points"
+    t.bigint "item_id"
+    t.bigint "character_attribute_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_attribute_id"], name: "index_item_attributes_on_character_attribute_id"
+    t.index ["item_id"], name: "index_item_attributes_on_item_id"
   end
 
   create_table "items", force: :cascade do |t|
@@ -163,6 +173,8 @@ ActiveRecord::Schema.define(version: 20180413190945) do
   add_foreign_key "characters", "users"
   add_foreign_key "class_restrictions", "permissions"
   add_foreign_key "consents", "users"
+  add_foreign_key "item_attributes", "character_attributes"
+  add_foreign_key "item_attributes", "items"
   add_foreign_key "permissions", "users"
   add_foreign_key "skills", "character_attributes"
   add_foreign_key "specializations", "character_classes"
