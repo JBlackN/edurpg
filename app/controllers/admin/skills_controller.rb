@@ -27,7 +27,9 @@ class Admin::SkillsController < ApplicationController
     @skill.rank = min_rank if @skill.rank > min_rank
 
     # Process image
-    @skill.image = Base64.encode64(params[:skill][:image].read)
+    if params[:skill].key?(:image)
+      @skill.image = Base64.encode64(params[:skill][:image].read)
+    end
 
     # Asign attribute
     @skill.character_attribute_id = params[:character_attribute_id]

@@ -20,9 +20,11 @@ class Admin::AchievementsController < ApplicationController
     @achievement = Achievement.new(achi_params)
 
     # Process image
-    @achievement.image = Base64.encode64(params[:achievement][:image].read)
+    if params[:achievement].key?(:image)
+      @achievement.image = Base64.encode64(params[:achievement][:image].read)
+    end
 
-    # Asign attribute
+    # Asign category
     @achievement.achievement_category_id = params[:achievement_category_id]
 
     if @achievement.save
