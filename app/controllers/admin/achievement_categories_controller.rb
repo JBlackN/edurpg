@@ -4,26 +4,6 @@ class Admin::AchievementCategoriesController < ApplicationController
   before_action :authorize_admin, only: [:index, :show]
 
   def index
-    courses_category = AchievementCategory.find_by(name: 'Předměty')
-
-    if courses_category.nil?
-      courses = Kos.get_courses(session[:user]['token'])
-
-      courses_category = AchievementCategory.create(name: 'Předměty')
-      courses_bi_category = courses_category.subcategories.create(
-        name: 'Bakalářské')
-      courses_mi_category = courses_category.subcategories.create(
-        name: 'Magisterské')
-
-      courses[:bi].each do |name|
-        courses_bi_category.subcategories.create(name: name)
-      end
-
-      courses[:mi].each do |name|
-        courses_mi_category.subcategories.create(name: name)
-      end
-    end
-
     @categories = AchievementCategory.where(parent_id: nil)
   end
 
