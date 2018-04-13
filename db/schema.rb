@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180412080344) do
+ActiveRecord::Schema.define(version: 20180413130325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,13 @@ ActiveRecord::Schema.define(version: 20180412080344) do
 
   create_table "character_attributes", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "character_classes", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -110,6 +117,32 @@ ActiveRecord::Schema.define(version: 20180412080344) do
     t.index ["character_attribute_id"], name: "index_skills_on_character_attribute_id"
   end
 
+  create_table "specializations", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.bigint "character_class_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_class_id"], name: "index_specializations_on_character_class_id"
+  end
+
+  create_table "specializations_talents", id: false, force: :cascade do |t|
+    t.bigint "specialization_id"
+    t.bigint "talent_id"
+    t.index ["specialization_id"], name: "index_specializations_talents_on_specialization_id"
+    t.index ["talent_id"], name: "index_specializations_talents_on_talent_id"
+  end
+
+  create_table "talents", force: :cascade do |t|
+    t.string "name"
+    t.text "image"
+    t.text "description"
+    t.integer "points"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -123,4 +156,5 @@ ActiveRecord::Schema.define(version: 20180412080344) do
   add_foreign_key "consents", "users"
   add_foreign_key "permissions", "users"
   add_foreign_key "skills", "character_attributes"
+  add_foreign_key "specializations", "character_classes"
 end
