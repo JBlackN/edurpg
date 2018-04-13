@@ -1,0 +1,51 @@
+= render 'admin/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Předměty
+      .card style="height: 100%;"
+        .card-body
+          .card.mb-3
+            .card-body
+              = form_with model: @item,
+                url: admin_item_path, local: true do |form|
+                .custom-file.mb-1
+                  = form.file_field :image, class: 'custom-file-input',
+                    id: 'item_image'
+                  = form.label :image, 'Vybrat obrázek', for: "item_image",
+                    class: 'custom-file-label'
+                = form.text_field :name, class: 'form-control w-75 d-inline-block'
+                = form.select :rarity,
+                  @rarities.map { |rarity| [rarity, rarity] },
+                  { class: 'custom-select w-25 d-inline-block' }
+                = form.text_area :description, class: 'form-control my-1'
+                .form-group
+                  - @attributes.each do |attribute|
+                    label for="item_attributes_#{attribute.id}" = attribute.name
+                    - item_attr = attribute.item_attributes.find_by(character_attribute_id: attribute.id,
+                      item_id: @item.id)
+                    - unless item_attr.nil?
+                      - points = item_attr.points
+                      - if !points.nil? && points > 0
+                        input.form-control id="item_attributes_#{attribute.id}" name="item[attributes][#{attribute.id}]" min="0" step="1" type="number" value="#{points}"
+                      - else
+                        input.form-control id="item_attributes_#{attribute.id}" name="item[attributes][#{attribute.id}]" min="0" step="1" type="number"
+                    - else
+                      input.form-control id="item_attributes_#{attribute.id}" name="item[attributes][#{attribute.id}]" min="0" step="1" type="number"
+                .text-right
+                  = link_to 'X', admin_items_path,
+                            class: 'btn btn-outline-danger mr-1',
+                            role: 'button'
+                  = form.submit 'S', class: 'btn btn-outline-success'
+          - @items.each do |item|
+            .card.d-inline-block.mr-3.mb-3
+              .card-body
+                .media
+                  - if item.image.nil?
+                    = image_tag 'placeholder.png', class: 'mr-3 item-image'
+                  - else
+                    img.mr-3.item-image src="data:image/png;base64, #{item.image}"
+                  .media-body
+                    h3 class="mt-0 item-#{item.rarity}" = "#{item.name}"
+                    p = item.description

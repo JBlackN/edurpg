@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     resources :achievement_categories do
       resources :achievements
     end
+    resources :items
   end
 
   root 'landing#index'

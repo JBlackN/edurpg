@@ -1,0 +1,32 @@
+// Place all the styles related to the Admin/Items controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+img.item-image {
+  height: 3em;
+  width: 3em;
+}
+
+.item-poor {
+  color: #6c757d;
+}
+
+.item-uncommon {
+  color: #28a745;
+}
+
+.item-rare {
+  color: #007bff;
+}
+
+.item-epic {
+  color: #9933cc;
+}
+
+.item-legendary {
+  color: #ff8800;
+}
+
+.item-artifact {
+  color: #ffd740;
+}

@@ -1,0 +1,33 @@
+= render 'admin/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Předměty
+      .card style="height: 100%;"
+        .card-body
+          - @items.each do |item|
+            .card.d-inline-block.mr-3.mb-3
+              .card-body
+                .media
+                  - if item.image.nil?
+                    = image_tag 'placeholder.png', class: 'mr-3 item-image'
+                  - else
+                    img.mr-3.item-image src="data:image/png;base64, #{item.image}"
+                  .media-body
+                    h3 class="d-inline-block mt-0 item-#{item.rarity}" = "#{item.name}"
+                    .d-inline-block.ml-3
+                      = link_to 'U', edit_admin_item_path(item),
+                        class: 'mr-2'
+                      = link_to 'X', admin_item_path(item),
+                        method: :delete, data: { confirm: 'Smazat předmět?' }
+                    p = item.description
+                    ul.list-group
+                      - item.character_attributes.each do |attribute|
+                        - points = attribute.item_attributes.find_by(character_attribute_id: attribute.id,
+                          item_id: item.id).points
+                        - if !points.nil? && points > 0
+                          li.list-group-item = "+ #{points} #{attribute.name}"
+          .text-center
+            h3
+              = link_to '+', new_admin_item_path
