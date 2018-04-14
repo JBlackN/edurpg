@@ -1,0 +1,50 @@
+= render 'admin/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Nový úkol
+      = form_with scope: :quest,
+        url: admin_quests_path, local: true do |form|
+        .row.mt-3
+          .col
+            = form.text_field :name, class: 'form-control w-50 d-inline-block',
+              placeholder: 'Název'
+            = form.select :difficulty,
+              @difficulties, { class: 'custom-select w-25 d-inline-block' }
+            = form.datetime_field :deadline, class: 'form-control w-25 d-inline-block',
+              placeholder: 'Deadline'
+        .row.mt-3
+          .col-sm-7
+            h3 Stručně
+            = form.text_area :objectives, class: 'form-control', rows: 4
+            h3.mt-3 Podrobně
+            = form.text_area :description, class: 'form-control', rows: 12
+            .text-center.mt-3
+              = link_to 'Zrušit', admin_quests_path,
+                        class: 'btn btn-outline-danger mr-3',
+                        role: 'button'
+              = form.submit 'Uložit úkol', class: 'btn btn-outline-success'
+          .col-sm-5
+            h3 Odměny
+            .card
+              .card-body
+            h3.mt-3 Identifikátor splnění
+            p Identifikátor hodnocení z aplikace Klasifikace.
+            = form.text_field :completion_check_id, class: 'form-control'
+            h3.mt-3 Kategorie
+            = form.label :character_class, 'Povolání', class: 'form-label'
+            = form.select :character_class,
+              CharacterClass.all.map { |c| [c.name, c.id] },
+              { include_blank: true },
+              { class: 'custom-select' }
+            = form.label :specialization, 'Specializace', class: 'form-label'
+            = form.select :specialization,
+              Specialization.all.order(name: :asc).map { |s| [s.name, s.id] },
+              { include_blank: true },
+              { class: 'custom-select' }
+            = form.label :talent, 'Talent', class: 'form-label'
+            = form.select :talent,
+              Talent.all.order(name: :asc).map { |t| ["#{t.name} (#{t.code})", t.id] },
+              { include_blank: true },
+              { class: 'custom-select' }
