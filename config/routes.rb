@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       resources :achievements
     end
     resources :items
+    resources :titles
   end
 
   root 'landing#index'
