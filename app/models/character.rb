@@ -1,5 +1,6 @@
 class Character < ApplicationRecord
   belongs_to :user
+  has_many :quests
 
   def init(token)
     info = Usermap.get_info(user.username, token)

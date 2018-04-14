@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  difficulty: MyString
+  objectives: MyString
+  description: MyString
+  deadline: 2018-04-14 17:13:09
+  completion_check_id: MyString
+  character: one
+
+two:
+  name: MyString
+  difficulty: MyString
+  objectives: MyString
+  description: MyString
+  deadline: 2018-04-14 17:13:09
+  completion_check_id: MyString
+  character: two
