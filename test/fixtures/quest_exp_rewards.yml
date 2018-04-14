@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  points: MyString
+  quest: one
+
+two:
+  points: MyString
+  quest: two
