@@ -8,4 +8,9 @@ class Quest < ApplicationRecord
   has_and_belongs_to_many :items
   has_and_belongs_to_many :titles
   has_one :quest_exp_reward, dependent: :destroy
+
+  before_destroy { skills.clear }
+  before_destroy { achievements.clear }
+  before_destroy { items.clear }
+  before_destroy { titles.clear }
 end

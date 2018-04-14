@@ -29,6 +29,55 @@
             h3 Odměny
             .card
               .card-body
+                - if @quest.quest_exp_reward
+                  .card.mb-1
+                    .card-body.p-2
+                      .media
+                        .media-body
+                          h4.d-inline-block.mt-0 = "+ #{@quest.quest_exp_reward.points}"
+                          p.float-right.text-muted = "(Zkušenosti)"
+                - @quest.skills.each do |skill|
+                  .card.mb-1
+                    .card-body.p-2
+                      .media
+                        - if skill.image.nil?
+                          = image_tag 'placeholder.png', class: 'mr-3 reward-image'
+                        - else
+                          img.mr-3.reward-image src="data:image/png;base64, #{skill.image}"
+                        .media-body
+                          h4 class="d-inline-block mt-0" = "#{skill.name} (#{skill.rank})"
+                          p.float-right.text-muted = "(Dovednost)"
+                - @quest.achievements.each do |achi|
+                  .card.mb-1
+                    .card-body.p-2
+                      .media
+                        - if achi.image.nil?
+                          = image_tag 'placeholder.png', class: 'mr-3 reward-image'
+                        - else
+                          img.mr-3.reward-image src="data:image/png;base64, #{achi.image}"
+                        .media-body
+                          h4 class="d-inline-block mt-0" = "#{achi.name}"
+                          p.float-right.text-muted = "(Úspěch)"
+                - @quest.items.each do |item|
+                  .card.mb-1
+                    .card-body.p-2
+                      .media
+                        - if item.image.nil?
+                          = image_tag 'placeholder.png', class: 'mr-3 reward-image'
+                        - else
+                          img.mr-3.reward-image src="data:image/png;base64, #{item.image}"
+                        .media-body
+                          h4 class="d-inline-block mt-0 item-#{item.rarity}" = "#{item.name}"
+                          p.float-right.text-muted = "(Předmět)"
+                - @quest.titles.each do |title|
+                  .card.mb-1
+                    .card-body.p-2
+                      .media
+                        .media-body
+                          h4.d-inline-block.mt-0 = "#{title.title}"
+                          p.float-right.text-muted = "(Titul)"
+                .text-center.mt-3
+                  a.btn.btn-primary href="#{url_for new_admin_quest_quest_reward_path(@quest.id)}" role="button" Nastavit odměny
             h3.mt-3 Identifikátor splnění
             p Identifikátor hodnocení z aplikace Klasifikace.
             = form.text_field :completion_check_id, class: 'form-control'

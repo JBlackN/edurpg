@@ -1,0 +1,64 @@
+= render 'admin/menu'
+
+.container
+  = form_with url: admin_quest_quest_rewards_path,
+    local: true do |form|
+    .row.mt-3
+      .col
+        h2.d-inline-block = "Nastavení odměn pro úkol: #{@quest.name}"
+        = form.submit 'Uložit', class: 'btn btn-primary float-right'
+    .row.mt-3
+      .col
+        .card
+          .card-body
+            h3.mb-3 Zkušenosti
+            - if @quest.quest_exp_reward
+              = form.number_field 'exp', min: 0, step: 1,
+                class: 'form-control', value: @quest.quest_exp_reward.points
+            - else
+              = form.number_field 'exp', min: 0, step: 1,
+                class: 'form-control'
+            h3.mb-3 Dovednosti
+            - @skills.each do |skill|
+              .card.d-inline-block.mr-3.mb-3
+                .card-body
+                  h4 = skill.name
+                  .form-check.text-right
+                    - if @quest.skills.exists?(skill.id)
+                      = form.check_box "skills[#{skill.id}]", class: 'form-check-input', checked: true
+                    - else
+                      = form.check_box "skills[#{skill.id}]", class: 'form-check-input'
+                    = form.label "skills[#{skill.id}]", 'Vybrat', class: 'form-check-label'
+            h3.mb-3 Úspěchy
+            - @achievements.each do |achi|
+              .card.d-inline-block.mr-3.mb-3
+                .card-body
+                  h4 = achi.name
+                  .form-check.text-right
+                    - if @quest.achievements.exists?(achi.id)
+                      = form.check_box "achievements[#{achi.id}]", class: 'form-check-input', checked: true
+                    - else
+                      = form.check_box "achievements[#{achi.id}]", class: 'form-check-input'
+                    = form.label "achievements[#{achi.id}]", 'Vybrat', class: 'form-check-label'
+            h3.mb-3 Předměty
+            - @items.each do |item|
+              .card.d-inline-block.mr-3.mb-3
+                .card-body
+                  h4 = item.name
+                  .form-check.text-right
+                    - if @quest.items.exists?(item.id)
+                      = form.check_box "items[#{item.id}]", class: 'form-check-input', checked: true
+                    - else
+                      = form.check_box "items[#{item.id}]", class: 'form-check-input'
+                    = form.label "items[#{item.id}]", 'Vybrat', class: 'form-check-label'
+            h3.mb-3 Tituly
+            - @titles.each do |title|
+              .card.d-inline-block.mr-3.mb-3
+                .card-body
+                  h4 = title.title
+                  .form-check.text-right
+                    - if @quest.titles.exists?(title.id)
+                      = form.check_box "titles[#{title.id}]", class: 'form-check-input', checked: true
+                    - else
+                      = form.check_box "titles[#{title.id}]", class: 'form-check-input'
+                    = form.label "titles[#{title.id}]", 'Vybrat', class: 'form-check-label'

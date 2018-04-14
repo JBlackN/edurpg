@@ -22,7 +22,9 @@ Rails.application.routes.draw do
     end
     resources :items
     resources :titles
-    resources :quests
+    resources :quests do
+      resources :quest_rewards
+    end
   end
 
   root 'landing#index'
