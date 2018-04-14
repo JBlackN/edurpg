@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414195539) do
+ActiveRecord::Schema.define(version: 20180414213812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,11 +34,25 @@ ActiveRecord::Schema.define(version: 20180414195539) do
     t.index ["achievement_category_id"], name: "index_achievements_on_achievement_category_id"
   end
 
+  create_table "achievements_items", id: false, force: :cascade do |t|
+    t.bigint "achievement_id"
+    t.bigint "item_id"
+    t.index ["achievement_id"], name: "index_achievements_items_on_achievement_id"
+    t.index ["item_id"], name: "index_achievements_items_on_item_id"
+  end
+
   create_table "achievements_quests", id: false, force: :cascade do |t|
     t.bigint "quest_id"
     t.bigint "achievement_id"
     t.index ["achievement_id"], name: "index_achievements_quests_on_achievement_id"
     t.index ["quest_id"], name: "index_achievements_quests_on_quest_id"
+  end
+
+  create_table "achievements_titles", id: false, force: :cascade do |t|
+    t.bigint "achievement_id"
+    t.bigint "title_id"
+    t.index ["achievement_id"], name: "index_achievements_titles_on_achievement_id"
+    t.index ["title_id"], name: "index_achievements_titles_on_title_id"
   end
 
   create_table "character_attributes", force: :cascade do |t|
