@@ -1,0 +1,35 @@
+= render 'admin/menu'
+
+.container
+  = form_with url: admin_achievement_category_achievement_achi_rewards_path,
+    local: true do |form|
+    .row.mt-3
+      .col
+        h2.d-inline-block = "Nastavení odměn pro úspěch: #{@achievement.name}"
+        = form.submit 'Uložit', class: 'btn btn-primary float-right'
+    .row.mt-3
+      .col
+        .card
+          .card-body
+            h3.mb-3 Předměty
+            - @items.each do |item|
+              .card.d-inline-block.mr-3.mb-3
+                .card-body
+                  h4 = item.name
+                  .form-check.text-right
+                    - if @achievement.items.exists?(item.id)
+                      = form.check_box "items[#{item.id}]", class: 'form-check-input', checked: true
+                    - else
+                      = form.check_box "items[#{item.id}]", class: 'form-check-input'
+                    = form.label "items[#{item.id}]", 'Vybrat', class: 'form-check-label'
+            h3.mb-3 Tituly
+            - @titles.each do |title|
+              .card.d-inline-block.mr-3.mb-3
+                .card-body
+                  h4 = title.title
+                  .form-check.text-right
+                    - if @achievement.titles.exists?(title.id)
+                      = form.check_box "titles[#{title.id}]", class: 'form-check-input', checked: true
+                    - else
+                      = form.check_box "titles[#{title.id}]", class: 'form-check-input'
+                    = form.label "titles[#{title.id}]", 'Vybrat', class: 'form-check-label'

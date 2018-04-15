@@ -23,6 +23,19 @@
                 = form.number_field :points, min: 0, step: 1,
                   class: 'form-control w-25 d-inline-block'
                 = form.text_area :description, class: 'form-control my-1'
+                .btn-group role="group"
+                  - @achievement.items.each do |item|
+                    button.btn.btn-outline-secondary type="button"
+                      = item.name
+                      span.badge.badge-info.ml-2
+                        | Předmět
+                  - @achievement.titles.each do |title|
+                    button.btn.btn-outline-secondary type="button"
+                      = title.title
+                      span.badge.badge-info.ml-2
+                        | Titul
+                .text-center.mt-3
+                  a.btn.btn-primary href="#{url_for new_admin_achievement_category_achievement_achi_reward_path(@category.id, @achievement.id)}" role="button" Nastavit odměny
                 .text-right
                   = link_to 'X', admin_achievement_category_achievements_path,
                             class: 'btn btn-outline-danger mr-1',

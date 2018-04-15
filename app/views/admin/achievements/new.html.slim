@@ -23,6 +23,7 @@
                 = form.number_field :points, min: 0, step: 1,
                   class: 'form-control w-25 d-inline-block'
                 = form.text_area :description, class: 'form-control my-1'
+                p.text-muted Pro nastavení odměn je třeba úspěch nejprve uložit.
                 .text-right
                   = link_to 'X', admin_achievement_category_achievements_path,
                             class: 'btn btn-outline-danger mr-1',

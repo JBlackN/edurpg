@@ -30,6 +30,17 @@
                       = link_to 'X', admin_achievement_category_achievement_path(@category, achi),
                         method: :delete, data: { confirm: 'Smazat úspěch?' }
                     p = achi.description
+                    .btn-group role="group"
+                      - achi.items.each do |item|
+                        button.btn.btn-outline-secondary type="button"
+                          = item.name
+                          span.badge.badge-info.ml-2
+                            | Předmět
+                      - achi.titles.each do |title|
+                        button.btn.btn-outline-secondary type="button"
+                          = title.title
+                          span.badge.badge-info.ml-2
+                            | Titul
           .text-center
             h4
               = link_to '+', new_admin_achievement_category_achievement_path

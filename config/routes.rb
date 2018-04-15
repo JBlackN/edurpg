@@ -18,7 +18,9 @@ Rails.application.routes.draw do
     end
     get 'achievement_categories/new/:parent_id', to: 'achievement_categories#new'
     resources :achievement_categories do
-      resources :achievements
+      resources :achievements do
+        resources :achi_rewards
+      end
     end
     resources :items
     resources :titles
