@@ -208,6 +208,7 @@ ActiveRecord::Schema.define(version: 20180414213812) do
   create_table "specializations", force: :cascade do |t|
     t.string "name"
     t.string "code"
+    t.string "abbr"
     t.bigint "character_class_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

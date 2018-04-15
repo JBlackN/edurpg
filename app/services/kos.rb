@@ -42,6 +42,8 @@ class Kos
     ).map do |content|
       {
         'id' => content.xpath('./atom:id', 'atom' => NS_ATOM).text.split(':').last,
+        'code' => content.xpath('./atom:content/kos:code',
+                                'atom' => NS_ATOM, 'kos' => NS_KOS).text,
         'name' => content.xpath('./atom:content/kos:name[lang("cs")]',
                                 'atom' => NS_ATOM, 'kos' => NS_KOS).text,
       }
@@ -49,6 +51,7 @@ class Kos
 
     branches = Hash[branch_list.map { |branch| [branch['name'], {
       'id' => branch['id'],
+      'code' => branch['code'],
       'courses' => []
     }] }]
 
@@ -64,16 +67,15 @@ class Kos
       ).map do |content|
         {
           'id' => content.xpath('./atom:id', 'atom' => NS_ATOM).text.split(':').last,
+          'code' => content.xpath('./atom:content/kos:code',
+                                  'atom' => NS_ATOM, 'kos' => NS_KOS).text,
           'name' => content.xpath('./atom:content/kos:name[lang("cs")]',
                                   'atom' => NS_ATOM, 'kos' => NS_KOS).text,
         }
       end.sort_by { |branch| branch['name'] }.uniq
 
       course_branches.each do |branch|
-        unless branches.key?(branch['name'])
-          branches[branch['name']] = { 'id' => branch['id'], 'courses' => [] }
-        end
-        branches[branch['name']]['courses'] << course
+        branches[branch['name']]['courses'] << course if branches.key?(branch['name'])
       end
     end
 

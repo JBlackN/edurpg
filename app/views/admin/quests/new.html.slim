@@ -41,7 +41,7 @@
               { class: 'custom-select' }
             = form.label :specialization, 'Specializace', class: 'form-label'
             = form.select :specialization,
-              Specialization.all.order(name: :asc).map { |s| [s.name, s.id] },
+              Specialization.all.order(name: :asc).map { |s| ["#{s.name} (#{s.character_class.name})", s.id] },
               { include_blank: true },
               { class: 'custom-select' }
             = form.label :talent, 'Talent', class: 'form-label'

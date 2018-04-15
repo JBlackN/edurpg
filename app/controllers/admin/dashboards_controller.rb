@@ -12,7 +12,8 @@ class Admin::DashboardsController < ApplicationController
       # Specializations & Talents
 
       courses[:branch]['BI'].each do |branch, data|
-        spec = class_bc.specializations.create(name: branch, code: data['id'])
+        spec = class_bc.specializations.find_or_create_by(name: branch, code: data['id'],
+                                                          abbr: data['code'])
         data['courses'].each do |course|
           talent = Talent.find_or_create_by(
             name: course['name'], description: course['description'],
@@ -23,7 +24,8 @@ class Admin::DashboardsController < ApplicationController
       end
 
       courses[:branch]['MI'].each do |branch, data|
-        spec = class_ing.specializations.create(name: branch, code: data['id'])
+        spec = class_ing.specializations.find_or_create_by(name: branch, code: data['id'],
+                                                           abbr: data['code'])
         data['courses'].each do |course|
           talent = Talent.find_or_create_by(
             name: course['name'], description: course['description'],
