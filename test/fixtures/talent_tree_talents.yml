@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pos_x: 1
+  pos_y: 1
+  talent_tree: one
+  talent: one
+
+two:
+  pos_x: 1
+  pos_y: 1
+  talent_tree: two
+  talent: two

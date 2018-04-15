@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  src_pos: MyString
+  dest_pos: MyString
+  connection_points: MyString
+  talent_tree_talent: one
+
+two:
+  src_pos: MyString
+  dest_pos: MyString
+  connection_points: MyString
+  talent_tree_talent: two

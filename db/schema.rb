@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414213812) do
+ActiveRecord::Schema.define(version: 20180415165712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -222,6 +222,54 @@ ActiveRecord::Schema.define(version: 20180414213812) do
     t.index ["talent_id"], name: "index_specializations_talents_on_talent_id"
   end
 
+  create_table "talent_attributes", force: :cascade do |t|
+    t.integer "points"
+    t.bigint "talent_id"
+    t.bigint "character_attribute_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_attribute_id"], name: "index_talent_attributes_on_character_attribute_id"
+    t.index ["talent_id"], name: "index_talent_attributes_on_talent_id"
+  end
+
+  create_table "talent_connections", force: :cascade do |t|
+    t.string "src_pos"
+    t.string "dest_pos"
+    t.string "connection_points"
+    t.bigint "src_talent_id"
+    t.bigint "dest_talent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dest_talent_id"], name: "index_talent_connections_on_dest_talent_id"
+    t.index ["src_talent_id"], name: "index_talent_connections_on_src_talent_id"
+  end
+
+  create_table "talent_tree_talents", force: :cascade do |t|
+    t.integer "pos_x"
+    t.integer "pos_y"
+    t.bigint "talent_tree_id"
+    t.bigint "talent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["talent_id"], name: "index_talent_tree_talents_on_talent_id"
+    t.index ["talent_tree_id"], name: "index_talent_tree_talents_on_talent_tree_id"
+  end
+
+  create_table "talent_trees", force: :cascade do |t|
+    t.text "image"
+    t.integer "width"
+    t.integer "height"
+    t.integer "talent_size"
+    t.bigint "character_class_id"
+    t.bigint "specialization_id"
+    t.bigint "item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_class_id"], name: "index_talent_trees_on_character_class_id"
+    t.index ["item_id"], name: "index_talent_trees_on_item_id"
+    t.index ["specialization_id"], name: "index_talent_trees_on_specialization_id"
+  end
+
   create_table "talents", force: :cascade do |t|
     t.string "name"
     t.text "image"
@@ -260,4 +308,13 @@ ActiveRecord::Schema.define(version: 20180414213812) do
   add_foreign_key "quests", "talents"
   add_foreign_key "skills", "character_attributes"
   add_foreign_key "specializations", "character_classes"
+  add_foreign_key "talent_attributes", "character_attributes"
+  add_foreign_key "talent_attributes", "talents"
+  add_foreign_key "talent_connections", "talent_tree_talents", column: "dest_talent_id"
+  add_foreign_key "talent_connections", "talent_tree_talents", column: "src_talent_id"
+  add_foreign_key "talent_tree_talents", "talent_trees"
+  add_foreign_key "talent_tree_talents", "talents"
+  add_foreign_key "talent_trees", "character_classes"
+  add_foreign_key "talent_trees", "items"
+  add_foreign_key "talent_trees", "specializations"
 end
