@@ -96,12 +96,12 @@
             = form.label :specialization, 'Specializace', class: 'form-label'
             - unless @quest.specialization.nil?
               = form.select :specialization,
-                Specialization.all.order(name: :asc).map { |s| ["#{s.name} (#{s.character_class.name})", s.id] },
+                Specialization.all.order(name: :asc).map { |s| ["#{s.name} (#{s.character_class.code})", s.id] },
                 { selected: @quest.specialization.id, include_blank: true },
                 { class: 'custom-select' }
             - else
               = form.select :specialization,
-                Specialization.all.order(name: :asc).map { |s| ["#{s.name} (#{s.character_class.name})", s.id] },
+                Specialization.all.order(name: :asc).map { |s| ["#{s.name} (#{s.character_class.code})", s.id] },
                 { include_blank: true },
                 { class: 'custom-select' }
             = form.label :talent, 'Talent', class: 'form-label'
