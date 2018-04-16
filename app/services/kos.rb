@@ -7,8 +7,8 @@ class Kos
   NS_KOS = 'http://kosapi.feld.cvut.cz/schema/3'
 
   def self.get_courses(token)
-    courses_bi = get_courses_by_programme(token, 'BI')
-    courses_mi = get_courses_by_programme(token, 'MI')
+    courses_bi = get_courses_by_programme(token)['BI']
+    courses_mi = get_courses_by_programme(token)['MI']
     {
       programme: {
         'BI' => courses_bi.uniq { |course| course['name'] },
@@ -83,16 +83,16 @@ class Kos
     branches
   end
 
-  def self.get_courses_by_programme(token, programme_code)
-    response = conn(token)["/programmes/#{programme_code}/courses"].get({
+  def self.get_courses_by_programme(token)
+    response = conn(token)["/courses"].get({
       params: {
         limit: 1000,
-        query: 'state==APPROVED,state==OPEN',
+        query: 'faculty.code=18000;(state==APPROVED,state==OPEN)',
         detail: 1
       }
     })
 
-    Nokogiri::XML(response.body).xpath(
+    courses = Nokogiri::XML(response.body).xpath(
       '//atom:content', 'atom' => NS_ATOM
     ).map do |content|
       {
@@ -102,5 +102,52 @@ class Kos
         'credits' => content.xpath('./kos:credits', 'kos' => NS_KOS).text.to_i
       }
     end
+
+    # Delete (B|M)IE-, keep only (B|M)I- (prefered) or (B|M)IK-
+    courses.delete_if do |course|
+      if course['code'] =~ /^(B|M)IE-/
+        true
+      elsif match = course['code'].match(/^(B|M)IK-([A-Z0-9]+)(\..+)?$/)
+        if courses.any? { |c| c['code'] =~ /^#{match[1]}I-#{match[2]}(\..+)?$/ }
+          true
+        else
+          false
+        end
+      else
+        false
+      end
+    end
+
+    # Group courses by normalized code ((B|M)IK -> (B|M)I + remove number suffix)
+    courses_grouped = {}
+    courses.each do |course|
+      code = course['code'].gsub(/^(B|M)IK-/, '\1I-').gsub(/\..+$/, '')
+      courses_grouped[code] = [] unless courses_grouped.key?(code)
+      courses_grouped[code] << course
+    end
+
+    # Sort groups by preference (newest version of course)
+    courses_grouped.each do |code, courses|
+      courses.sort_by! { |course| course['code'] }.reverse!
+    end
+
+    # Reconstruct original array with removed duplicates & normalized codes
+    # Split by programme
+    results = { 'BI' => [], 'MI' => [] }
+    courses_grouped.each do |code, courses|
+      course = courses.first
+      course['code'] = code
+
+      if code =~ /^BI-/
+        results['BI'] << course
+      elsif code =~ /^MI-/
+        results['MI'] << course
+      else
+        results['BI'] << course
+        results['MI'] << course
+      end
+    end
+
+    results
   end
 end
