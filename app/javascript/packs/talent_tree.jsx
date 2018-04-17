@@ -39,11 +39,27 @@ class TalentTreeContainer extends React.Component {
 class TalentTree extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
+    for (var i = 0; i < this.props.tree.talent_tree_talents.length; i++) {
+      const talent_tree_talent = this.props.tree.talent_tree_talents[i];
+      this.state[talent_tree_talent.id] = {
+        x: talent_tree_talent.pos_x,
+        y: talent_tree_talent.pos_y
+      };
+    }
+
+    this.handleMoveStart = this.handleMoveStart.bind(this);
+    this.handleMove = this.handleMove.bind(this);
+    this.handleMoveEnd = this.handleMoveEnd.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   componentDidMount() {
-    const talentTreeForm = document.getElementById('talent-tree-form');
-    talentTreeForm.addEventListener('submit', this.handleFormSubmit);
+    if (!window.formSubmitAttached) {
+      const talentTreeForm = document.getElementById('talent-tree-form');
+      talentTreeForm.addEventListener('submit', this.handleFormSubmit);
+    }
+    window.formSubmitAttached = true;
   }
 
   componentWillUnmount() {
@@ -51,20 +67,60 @@ class TalentTree extends React.Component {
     talentTreeForm.removeEventListener('submit', this.handleFormSubmit);
   }
 
-  handleFormSubmit() {
+  handleFormSubmit(e) {
     const talentTreeForm = document.getElementById('talent-tree-form');
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'talent_tree[test]'
-    input.value = 'test';
-    talentTreeForm.appendChild(input);
+    for (var id in this.state) {
+      const {x, y} = this.state[id];
+      var inputX = document.createElement('input');
+      var inputY = document.createElement('input');
+
+      inputX.type = 'hidden';
+      inputX.name = 'talent_tree[positions][' + id + '][x]';
+      inputX.value = x;
+
+      inputY.type = 'hidden';
+      inputY.name = 'talent_tree[positions][' + id + '][y]';
+      inputY.value = y;
+
+      talentTreeForm.appendChild(inputX);
+      talentTreeForm.appendChild(inputY);
+    }
+  }
+
+  handleMoveStart(e, id) {
+    this.mouseX = e.pageX;
+    this.mouseY = e.pageY;
+    this.startX = this.state[id].x;
+    this.startY = this.state[id].y;
+    this.movingId = id;
+
+    document.addEventListener('mousemove', this.handleMove);
+  }
+
+  handleMove(e, id) {
+    e.preventDefault();
+    var dx = (e.pageX - this.mouseX) / this.props.scale;
+    var dy = (e.pageY - this.mouseY) / this.props.scale;
+
+    var state = this.state
+    state[this.movingId].x = this.startX + dx;
+    state[this.movingId].y = this.startY + dy;
+
+    this.setState(prevState => (state));
+  }
+
+  handleMoveEnd() {
+    document.removeEventListener('mousemove', this.handleMove);
   }
 
   render() {
     const {width, height, talent_size} = this.props.tree
     const talents = this.props.tree.talent_tree_talents.map((talent) =>
-      <Talent x={talent.pos_x} y={talent.pos_y} size={talent_size} talent={talent.talent}
-              scale={this.props.scale} key={talent.id} />
+      <Talent x={this.state[talent.id].x} y={this.state[talent.id].y}
+              size={talent_size} talent={talent.talent}
+              onMouseDown={this.handleMoveStart} onMouseUp={this.handleMoveEnd}
+              onMouseMove={this.handleMove}
+              scale={this.props.scale} id={talent.id} key={talent.id} />
     );
 
     return (
@@ -87,12 +143,6 @@ class TalentTree extends React.Component {
 class Talent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      x: this.props.x,
-      y: this.props.y,
-      size: this.props.size
-    };
-
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
@@ -100,26 +150,16 @@ class Talent extends React.Component {
   }
 
   handleMouseDown(e) {
-    this.mouseX = e.pageX;
-    this.mouseY = e.pageY;
-    this.startX = this.state.x
-    this.startY = this.state.y
-    document.addEventListener('mousemove', this.handleMouseMove);
+    this.props.onMouseDown(e, this.props.id);
   }
 
   handleMouseMove(e) {
     e.preventDefault();
-    var dx = (e.pageX - this.mouseX) / this.props.scale;
-    var dy = (e.pageY - this.mouseY) / this.props.scale;
-
-    this.setState(prevState => ({
-      x: this.startX + dx,
-      y: this.startY + dy
-    }));
+    this.props.onMouseMove(e, this.props.id);
   }
 
   handleMouseUp() {
-    document.removeEventListener('mousemove', this.handleMouseMove);
+    this.props.onMouseUp();
   }
 
   handleDragStart(e) {
@@ -127,8 +167,7 @@ class Talent extends React.Component {
   }
 
   render() {
-    const {x, y, size} = this.state
-    const {talent} = this.props
+    const {x, y, size, talent} = this.props
 
     return (
       <g onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}
