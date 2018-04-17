@@ -14,7 +14,8 @@ class Admin::TalentsController < ApplicationController
     if @talent.save
       # Asign to tree
       @tree.talent_tree_talents << TalentTreeTalent.new(talent: @talent,
-                                                        pos_x: 0, pos_y: 0)
+                                                        pos_x: params[:talent][:pos_x].to_i,
+                                                        pos_y: params[:talent][:pos_y].to_i)
 
       redirect_to edit_admin_talent_tree_path(@tree)
     else

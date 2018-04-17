@@ -25,5 +25,12 @@
             = form.number_field :points, min: 0, step: 1, class: 'form-control'
         = form.label :description, 'Popis', class: 'col-form-label'
         = form.text_area :description, class: 'form-control'
+        .form-row
+          .col-sm-6
+            = form.label :pos_x, 'Pozice X', class: 'col-form-label'
+            = form.text_field :pos_x, value: 0, class: 'form-control'
+          .col-sm-6
+            = form.label :pos_y, 'Pozice Y', class: 'col-form-label'
+            = form.text_field :pos_y, value: 0, class: 'form-control'
         .text-right
           = form.submit 'Uložit', class: 'btn btn-outline-success mt-3'
