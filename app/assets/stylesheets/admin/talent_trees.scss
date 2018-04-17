@@ -1,0 +1,21 @@
+// Place all the styles related to the Admin/Talents controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.talent-tree-form-number-input {
+  width: 10ex !important;
+}
+
+.talent {
+  -webkit-touch-callout: none;
+  -webkit-user-select:none;
+  -khtml-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  -o-user-select:none;
+  user-select: none;
+
+  text {
+    pointer-events: none;
+  }
+}

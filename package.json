@@ -9,7 +9,9 @@
     "popper": "^1.0.1",
     "prop-types": "^15.6.1",
     "react": "^16.3.1",
-    "react-dom": "^16.3.1"
+    "react-dom": "^16.3.1",
+    "react-svg-pan-zoom": "^2.16.1",
+    "react-virtualized": "^9.18.5"
   },
   "devDependencies": {
     "webpack-dev-server": "2.11.2"

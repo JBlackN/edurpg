@@ -27,6 +27,9 @@ Rails.application.routes.draw do
     resources :quests do
       resources :quest_rewards
     end
+    resources :talent_trees do
+      resources :talents
+    end
   end
 
   root 'landing#index'
