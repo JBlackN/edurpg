@@ -27,8 +27,10 @@ class Admin::ItemsController < ApplicationController
     end
 
     # Process attributes
-    params[:item][:attributes].each do |attribute_id, points|
-      @item.add_attribute(CharacterAttribute.find(attribute_id), points)
+    if params[:item].key?(:attributes)
+      params[:item][:attributes].each do |attribute_id, points|
+        @item.add_attribute(CharacterAttribute.find(attribute_id), points)
+      end
     end
 
     if @item.save
@@ -47,9 +49,11 @@ class Admin::ItemsController < ApplicationController
     end
 
     # Process attributes
-    @item.item_attributes.clear
-    params[:item][:attributes].each do |attribute_id, points|
-      @item.add_attribute(CharacterAttribute.find(attribute_id), points)
+    if params[:item].key?(:attributes)
+      @item.item_attributes.clear
+      params[:item][:attributes].each do |attribute_id, points|
+        @item.add_attribute(CharacterAttribute.find(attribute_id), points)
+      end
     end
 
     if @item.save && @item.update(item_params)
