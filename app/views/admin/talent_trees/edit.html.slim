@@ -21,7 +21,7 @@
           | Talentový strom
       = form_with model: @tree, url: admin_talent_tree_path, local: true,
         class: 'form-inline', id: 'talent-tree-form' do |form|
-        a.btn.btn-outline-primary.mr-2 href="#" role="button" Nový talent
+        a.btn.btn-outline-primary.mr-2 href="#{url_for new_admin_talent_tree_talent_path(@tree.id)}" role="button" Nový talent
         = form.label :width, 'Šířka', class: 'col-form-label mr-2'
         = form.number_field :width, min: 1, step: 1,
           class: 'form-control talent-tree-form-number-input mr-2'

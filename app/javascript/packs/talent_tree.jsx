@@ -117,7 +117,7 @@ class TalentTree extends React.Component {
     const {width, height, talent_size} = this.props.tree
     const talents = this.props.tree.talent_tree_talents.map((talent) =>
       <Talent x={this.state[talent.id].x} y={this.state[talent.id].y}
-              size={talent_size} talent={talent.talent}
+              size={talent_size} talent={talent.talent} treeId={this.props.tree.id}
               onMouseDown={this.handleMoveStart} onMouseUp={this.handleMoveEnd}
               onMouseMove={this.handleMove}
               scale={this.props.scale} id={talent.id} key={talent.id} />
@@ -167,16 +167,41 @@ class Talent extends React.Component {
   }
 
   render() {
-    const {x, y, size, talent} = this.props
+    const {x, y, size, talent} = this.props;
+    const deletePath = "/admin/talent_trees/" + this.props.treeId + "/talents/" + this.props.id;
+    const bgUrl = "url(#talent" + this.props.id + ")";
+    const bg = talent.image ? (
+      <svg>
+        <defs>
+          <pattern id={"talent" + this.props.id} x={0} y={0} height="100%" width="100%"
+                   patternContentUnits="objectBoundingBox">
+            <image height={1} width={1} preserveAspectRatio="none"
+              xlinkHref={"data:image/png;base64," + talent.image} />
+          </pattern>
+        </defs>
+        <rect x={x} y={y} width={size} height={size}
+              style={{fill: bgUrl, stroke: 'black', strokeWidth: '0.2em'}} />
+      </svg>
+    ) : (
+      <rect x={x} y={y} width={size} height={size}
+            style={{fill: 'pink', stroke: 'black', strokeWidth: '0.2em'}} />
+    );
 
     return (
       <g onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}
          onDragStart={this.handleDragStart} className="talent">
-        <rect x={x} y={y} width={size} height={size}
-              style={{fill: 'pink', stroke: 'black', strokeWidth: '0.2em'}} />
+        {bg}
         <svg x={x} y={y} width={size} height={size}>
           <text x='50%' y='55%' alignmentBaseline="middle" textAnchor="middle"
                 style={{fontSize: '0.67em'}}>{talent.code}</text>
+        </svg>
+        <svg x={x} y={y} width={size} height={size}>
+          <a xlinkHref={deletePath}
+             data-confirm="Neuložené změny budou ztraceny. Smazat talent?"
+             data-method="delete" rel="nofollow">
+            <text x='90%' y='2%' dominantBaseline="hanging" textAnchor="end"
+                  style={{fontSize: '0.67em', fontWeight: 'bold'}}>X</text>
+          </a>
         </svg>
       </g>
     );
@@ -184,6 +209,9 @@ class Talent extends React.Component {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // <a><text/></a> Rails error on obtaining href workaround
+  SVGAnimatedString.prototype.toString = function () { return this.baseVal; }
+
   const container = document.getElementById('talent-tree');
   const tree = JSON.parse(container.getAttribute('data-talent-tree'));
 
