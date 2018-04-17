@@ -168,7 +168,9 @@ class Talent extends React.Component {
 
   render() {
     const {x, y, size, talent} = this.props;
+    const updatePath = "/admin/talent_trees/" + this.props.treeId + "/talents/" + this.props.id + "/edit";
     const deletePath = "/admin/talent_trees/" + this.props.treeId + "/talents/" + this.props.id;
+
     const bgUrl = "url(#talent" + this.props.id + ")";
     const bg = talent.image ? (
       <svg>
@@ -196,6 +198,11 @@ class Talent extends React.Component {
                 style={{fontSize: '0.67em'}}>{talent.code}</text>
         </svg>
         <svg x={x} y={y} width={size} height={size}>
+          <a xlinkHref={updatePath}
+             data-confirm="Neuložené změny budou ztraceny. Pokračovat?">
+            <text x='10%' y='2%' dominantBaseline="hanging" textAnchor="start"
+                  style={{fontSize: '0.67em', fontWeight: 'bold'}}>U</text>
+          </a>
           <a xlinkHref={deletePath}
              data-confirm="Neuložené změny budou ztraceny. Smazat talent?"
              data-method="delete" rel="nofollow">

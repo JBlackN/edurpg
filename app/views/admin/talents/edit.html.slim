@@ -1,0 +1,29 @@
+= render 'admin/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 = "Upravit talent: #{@talent.name}"
+  .row.mt-3
+    .col
+      = form_with model: @talent, url: admin_talent_tree_talent_path,
+        local: true do |form|
+        .custom-file.mb-1
+          = form.file_field :image, class: 'custom-file-input',
+            id: 'talent_image'
+          = form.label :image, 'Vybrat obrázek', for: "talent_image",
+            class: 'custom-file-label'
+        .form-row
+          .col-sm-8
+            = form.label :name, 'Název', class: 'col-form-label'
+            = form.text_field :name, class: 'form-control'
+          .col-sm-2
+            = form.label :code, 'Kód předmětu', class: 'col-form-label'
+            = form.text_field :code, class: 'form-control'
+          .col-sm-2
+            = form.label :points, 'Počet bodů', class: 'col-form-label'
+            = form.number_field :points, min: 0, step: 1, class: 'form-control'
+        = form.label :description, 'Popis', class: 'col-form-label'
+        = form.text_area :description, class: 'form-control'
+        .text-right
+          = form.submit 'Uložit', class: 'btn btn-outline-success mt-3'

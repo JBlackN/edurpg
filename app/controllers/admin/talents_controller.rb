@@ -2,6 +2,11 @@ class Admin::TalentsController < ApplicationController
   def new
   end
 
+  def edit
+    @tree_talent = TalentTreeTalent.find(params[:id])
+    @talent = @tree_talent.talent
+  end
+
   def create
     @tree = TalentTree.find(params[:talent_tree_id])
     @talent = Talent.new(talent_params)
@@ -23,6 +28,22 @@ class Admin::TalentsController < ApplicationController
     end
   end
 
+  def update
+    @tree = TalentTree.find(params[:talent_tree_id])
+    @talent = TalentTreeTalent.find(params[:id]).talent
+
+    # Process image
+    if params[:talent].key?(:image)
+      @talent.image = Base64.encode64(params[:talent][:image].read)
+    end
+
+    if @talent.save && @talent.update(talent_params)
+      redirect_to edit_admin_talent_tree_path(@tree)
+    else
+      render 'edit' # TODO: errors -> view
+    end
+  end
+
   def destroy
     @tree = TalentTree.find(params[:talent_tree_id])
     @tree_talent = TalentTreeTalent.find(params[:id])
@@ -38,6 +59,6 @@ class Admin::TalentsController < ApplicationController
   private
 
   def talent_params
-    params.require(:talent).permit(:name, :image, :description, :points, :code)
+    params.require(:talent).permit(:name, :description, :points, :code)
   end
 end
