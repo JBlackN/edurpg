@@ -26,4 +26,7 @@
         = form.label :description, 'Popis', class: 'col-form-label'
         = form.text_area :description, class: 'form-control'
         .text-right
+          = link_to 'Zrušit', edit_admin_talent_tree_path(@tree),
+                    class: 'btn btn-outline-danger mt-3 mr-3',
+                    role: 'button', 'data-turbolinks': 'false'
           = form.submit 'Uložit', class: 'btn btn-outline-success mt-3'

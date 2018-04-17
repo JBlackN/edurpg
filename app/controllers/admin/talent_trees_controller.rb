@@ -11,6 +11,11 @@ class Admin::TalentTreesController < ApplicationController
   def update
     @tree = TalentTree.find(params[:id])
 
+    # Process image
+    if params[:talent_tree].key?(:image)
+      @tree.image = Base64.encode64(params[:talent_tree][:image].read)
+    end
+
     # Process talent positions
     params[:talent_tree][:positions].each do |id, pos|
       @talent = TalentTreeTalent.find(id.to_i)

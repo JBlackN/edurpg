@@ -114,7 +114,7 @@ class TalentTree extends React.Component {
   }
 
   render() {
-    const {width, height, talent_size} = this.props.tree
+    const {width, height, talent_size, image} = this.props.tree
     const talents = this.props.tree.talent_tree_talents.map((talent) =>
       <Talent x={this.state[talent.id].x} y={this.state[talent.id].y}
               size={talent_size} talent={talent.talent} treeId={this.props.tree.id}
@@ -123,13 +123,19 @@ class TalentTree extends React.Component {
               scale={this.props.scale} id={talent.id} key={talent.id} />
     );
 
+    const bgUrl = image ? (
+      "data:image/png;base64," + image
+    ) : (
+      "https://i.imgur.com/4KeO1m5.jpg"
+    );
+
     return (
       <g>
         <defs>
           <pattern id="backdrop" x={0} y={0} height="100%" width="100%"
                    patternContentUnits="objectBoundingBox">
             <image height={1} width={1} preserveAspectRatio="none"
-                   xlinkHref="https://i.imgur.com/4KeO1m5.jpg" />
+                   xlinkHref={bgUrl} />
           </pattern>
         </defs>
         <rect x={0} y={0} width={width} height={height}

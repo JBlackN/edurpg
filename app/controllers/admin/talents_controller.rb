@@ -1,8 +1,10 @@
 class Admin::TalentsController < ApplicationController
   def new
+    @tree = TalentTree.find(params[:talent_tree_id])
   end
 
   def edit
+    @tree = TalentTree.find(params[:talent_tree_id])
     @tree_talent = TalentTreeTalent.find(params[:id])
     @talent = @tree_talent.talent
   end

@@ -31,6 +31,11 @@
         = form.label :talent_size, 'Rozměry talentu', class: 'col-form-label mr-2'
         = form.number_field :talent_size, min: 1, step: 1,
           class: 'form-control talent-tree-form-number-input mr-2'
+        .custom-file.w-25.mr-2 style="overflow: hidden;"
+          = form.file_field :image, class: 'custom-file-input',
+            id: 'talent_image'
+          = form.label :image, 'Vybrat obrázek', for: "talent_image",
+            class: 'custom-file-label'
         = form.submit 'Uložit', class: 'btn btn-outline-success'
   .row.mt-3 style="height: 90%;"
     .col#talent-tree data-talent-tree="#{@tree.to_json(include: {talent_tree_talents: {include: :talent}})}"
