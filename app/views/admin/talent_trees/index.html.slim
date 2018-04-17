@@ -2,9 +2,11 @@
 
 .container
   .row.mt-3
-    .col-sm-4
+    .col
       h2 Talentové stromy
-      .card.mt-3
+  .row.mt-3
+    .col-sm-6
+      .card
         .card-body
           h3 Povolání a specializace
           ul.pl-3
@@ -16,11 +18,11 @@
                     li
                       a href="#{url_for edit_admin_talent_tree_path(spec.talent_tree)}" data-turbolinks="false" = spec.name
                       /TODO: smazat specializaci
+    .col-sm-6
+      .card
+        .card-body
           h3 Artefaktové zbraně
           ul.pl-3
             - @items.each do |item|
               li
                 a href="#{url_for edit_admin_talent_tree_path(item.talent_tree)}" data-turbolinks="false" = item.name
-    .col-sm-8
-      .card style="height: 100%;"
-        .card-body

@@ -1,42 +1,37 @@
 = render 'admin/menu'
 
-.container
+.container style="height: 90%;"
   .row.mt-3
-    .col-sm-4
-      h2 Talentové stromy
-      .card.mt-3
-        .card-body
-          h3 Povolání a specializace
-          ul.pl-3
-            - @classes.each do |character_class|
-              li
-                a href="#{url_for edit_admin_talent_tree_path(character_class.talent_tree)}" data-turbolinks="false" = character_class.name
-                ul.pl-3
-                  - character_class.specializations.each do |spec|
-                    li
-                      a href="#{url_for edit_admin_talent_tree_path(spec.talent_tree)}" data-turbolinks="false" = spec.name
-                      /TODO: smazat specializaci
-          h3 Artefaktové zbraně
-          ul.pl-3
-            - @items.each do |item|
-              li
-                a href="#{url_for edit_admin_talent_tree_path(item.talent_tree)}" data-turbolinks="false" = item.name
-    .col-sm-8
-      .row.mb-3
-        .col
-          = form_with model: @tree, url: admin_talent_tree_path, local: true,
-            class: 'form-inline', id: 'talent-tree-form' do |form|
-            a.btn.btn-outline-primary.mr-2 href="#" role="button" Nový talent
-            = form.label :width, 'Šířka', class: 'col-form-label mr-2'
-            = form.number_field :width, min: 1, step: 1,
-              class: 'form-control talent-tree-form-number-input mr-2'
-            = form.label :height, 'Výška', class: 'col-form-label mr-2'
-            = form.number_field :height, min: 1, step: 1,
-              class: 'form-control talent-tree-form-number-input mr-2'
-            = form.label :talent_size, 'Rozměry talentu', class: 'col-form-label mr-2'
-            = form.number_field :talent_size, min: 1, step: 1,
-              class: 'form-control talent-tree-form-number-input mr-2'
-            = form.submit 'Uložit', class: 'btn btn-outline-success'
-      .row style="height: 100%;"
-        .col#talent-tree data-talent-tree="#{@tree.to_json(include: {talent_tree_talents: {include: :talent}})}"
-          = javascript_pack_tag 'talent_tree', 'data-turbolinks-track': true
+    .col
+      - if @tree.item
+        h2.d-inline-block
+          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' 🡰
+          = "Talentový strom: #{@tree.item.name}"
+      - elsif @tree.specialization
+        h2.d-inline-block
+          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' 🡰
+          = "Talentový strom: #{@tree.specialization.name}"
+      - elsif @tree.character_class
+        h2.d-inline-block
+          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' 🡰
+          = "Talentový strom: #{@tree.character_class.name}"
+      - else
+        h2.d-inline-block
+          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' 🡰
+          | Talentový strom
+      = form_with model: @tree, url: admin_talent_tree_path, local: true,
+        class: 'form-inline', id: 'talent-tree-form' do |form|
+        a.btn.btn-outline-primary.mr-2 href="#" role="button" Nový talent
+        = form.label :width, 'Šířka', class: 'col-form-label mr-2'
+        = form.number_field :width, min: 1, step: 1,
+          class: 'form-control talent-tree-form-number-input mr-2'
+        = form.label :height, 'Výška', class: 'col-form-label mr-2'
+        = form.number_field :height, min: 1, step: 1,
+          class: 'form-control talent-tree-form-number-input mr-2'
+        = form.label :talent_size, 'Rozměry talentu', class: 'col-form-label mr-2'
+        = form.number_field :talent_size, min: 1, step: 1,
+          class: 'form-control talent-tree-form-number-input mr-2'
+        = form.submit 'Uložit', class: 'btn btn-outline-success'
+  .row.mt-3 style="height: 90%;"
+    .col#talent-tree data-talent-tree="#{@tree.to_json(include: {talent_tree_talents: {include: :talent}})}"
+      = javascript_pack_tag 'talent_tree', 'data-turbolinks-track': true
