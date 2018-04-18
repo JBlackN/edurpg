@@ -1,0 +1,65 @@
+= render 'admin/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Nastavení pravomocí
+      h3 = "#{@user.character.name} (#{@user.username})"
+      = form_with model: @permission, url: admin_user_permission_path,
+        local: true do |form|
+        .card.mt-3
+          .card-body
+            .form-check.form-check-inline
+              = form.check_box :use_app, class: 'form-check-input'
+              = form.label :use_app, 'Používat aplikaci v režimu uživatele',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_users, class: 'form-check-input'
+              = form.label :manage_users, 'Spravovat uživatele a jejich pravomoci',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_app, class: 'form-check-input'
+              = form.label :manage_app, 'Spravovat aplikaci',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_attrs, class: 'form-check-input'
+              = form.label :manage_attrs, 'Spravovat atributy',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_achievement_categories,
+                class: 'form-check-input'
+              = form.label :manage_achievement_categories,
+                'Spravovat kategorie úspěchů',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_talent_trees, class: 'form-check-input'
+              = form.label :manage_talent_trees, 'Spravovat talentové stromy',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_talents, class: 'form-check-input'
+              = form.label :manage_talents, 'Spravovat talenty',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_quests, class: 'form-check-input'
+              = form.label :manage_quests, 'Spravovat úkoly',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_skills, class: 'form-check-input'
+              = form.label :manage_skills, 'Spravovat dovednosti',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_achievements, class: 'form-check-input'
+              = form.label :manage_achievements, 'Spravovat úspěchy',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_items, class: 'form-check-input'
+              = form.label :manage_items, 'Spravovat předměty',
+                class: 'form-check-label ml-1 mr-2'
+            .form-check.form-check-inline
+              = form.check_box :manage_titles, class: 'form-check-input'
+              = form.label :manage_titles, 'Spravovat tituly',
+                class: 'form-check-label ml-1 mr-2'
+        .text-right
+          = link_to 'Zrušit', admin_users_path,
+                    class: 'btn btn-outline-danger mt-3 mr-3', role: 'button'
+          = form.submit 'Uložit', class: 'btn btn-outline-success mt-3'

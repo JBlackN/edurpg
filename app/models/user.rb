@@ -1,7 +1,7 @@
 class User < ApplicationRecord
-  has_one :permission
-  has_many :consents, -> { order 'created_at DESC' }
-  has_one :character
+  has_one :permission, dependent: :destroy
+  has_many :consents, -> { order 'created_at DESC' }, dependent: :destroy
+  has_one :character, dependent: :destroy
 
   def consent_invalid?
     return true unless consents.any?

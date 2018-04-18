@@ -30,6 +30,9 @@ Rails.application.routes.draw do
     resources :talent_trees do
       resources :talents
     end
+    resources :users do
+      resources :permissions
+    end
   end
 
   root 'landing#index'

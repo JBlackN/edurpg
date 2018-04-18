@@ -1,6 +1,6 @@
 class Character < ApplicationRecord
   belongs_to :user
-  has_many :quests
+  has_many :quests, dependent: :nullify
 
   def init(token)
     info = Usermap.get_info(user.username, token)

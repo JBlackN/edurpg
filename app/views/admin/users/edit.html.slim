@@ -1,0 +1,30 @@
+= render 'admin/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Správa administrátorského účtu
+  .row.mt-3
+    .col-sm-8
+      .card
+        .card-body
+          = form_with model: @character,
+            url: admin_user_path, local: true do |form|
+            .custom-file.mb-1
+              = form.file_field :image, class: 'custom-file-input',
+                id: 'item_image'
+              = form.label :image, 'Vybrat obrázek', for: "item_image",
+                class: 'custom-file-label'
+            = form.text_field :name, class: 'form-control mb-2'
+            .text-right
+              = form.submit 'Uložit', class: 'btn btn-outline-success'
+    .col-sm-4
+      a.btn.btn-info.w-100.mb-2 href="#{url_for new_consent_path}" role="button" Upravit souhlasy
+      a.btn.btn-warning.w-100.mb-2 href="#" role="button" Exportovat data
+      a.btn.btn-danger.w-100 href="#{url_for admin_user_path(current_user)}" role="button" data-method="delete" data-confirm="Odstranit účet a veškerá data?" rel="nofollow" Odstranit účet
+  .row.mt-3
+    .col
+      h3 Nastavení aplikace
+      .card
+        .card-body
+          a.btn.btn-primary href="#{url_for admin_users_path}" role="button" Správa uživatelů
