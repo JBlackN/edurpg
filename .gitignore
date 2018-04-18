@@ -25,3 +25,4 @@ yarn-debug.log*
 
 # Added
 /lib/generators/slim/
+/vendor
