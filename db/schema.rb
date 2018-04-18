@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 20180415165712) do
 
   create_table "achievement_categories", force: :cascade do |t|
     t.string "name"
+    t.string "code"
     t.bigint "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

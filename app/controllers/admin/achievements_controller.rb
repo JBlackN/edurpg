@@ -1,12 +1,18 @@
 require 'base64'
 
 class Admin::AchievementsController < ApplicationController
-  before_action :authorize_admin_manage_achievements, except: [:index]
   before_action :authorize_admin, only: [:index]
+  before_action :authorize_admin_manage_achievements, except: [:index]
+  before_action -> {
+    authorize_admin_manage_achievement_categories(params[:achievement_category_id])
+  }, except: [:index]
 
   def index
     @category = AchievementCategory.find(params[:achievement_category_id])
     @categories = AchievementCategory.where(parent_id: nil)
+    @codes = current_user.permission.class_restrictions.map do |cr|
+      cr.code
+    end
   end
 
   def new

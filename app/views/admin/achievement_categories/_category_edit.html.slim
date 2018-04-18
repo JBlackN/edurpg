@@ -1,8 +1,9 @@
 - unless category_edit.id == params[:id].to_i
-  li
-    h3 = category_edit.name
+  - if @codes.empty? || !category_edit.code || @codes.include?(category_edit.code)
+    li
+      h3 = category_edit.name
 
-  - if category_edit.subcategories.any?
-    ul.pl-3
-      = render partial: 'category_edit',
-        collection: category_edit.subcategories
+    - if category_edit.subcategories.any?
+      ul.pl-3
+        = render partial: 'category_edit',
+          collection: category_edit.subcategories

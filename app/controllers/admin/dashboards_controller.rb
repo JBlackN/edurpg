@@ -73,11 +73,13 @@ class Admin::DashboardsController < ApplicationController
         name: 'Magisterské')
 
       courses[:programme]['BI'].each do |course|
-        courses_bi_category.subcategories.create(name: course['name'])
+        courses_bi_category.subcategories.create(name: course['name'],
+                                                 code: course['code'])
       end
 
       courses[:programme]['MI'].each do |course|
-        courses_mi_category.subcategories.create(name: course['name'])
+        courses_mi_category.subcategories.create(name: course['name'],
+                                                 code: course['code'])
       end
 
       # Items & their talent trees

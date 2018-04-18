@@ -1,10 +1,14 @@
 class Admin::AchievementCategoriesController < ApplicationController
-  before_action :authorize_admin_manage_achievement_categories,
-    except: [:index, :show]
   before_action :authorize_admin, only: [:index, :show]
+  before_action -> {
+    authorize_admin_manage_achievement_categories(params[:id])
+  }, except: [:index, :show]
 
   def index
     @categories = AchievementCategory.where(parent_id: nil)
+    @codes = current_user.permission.class_restrictions.map do |cr|
+      cr.code
+    end
   end
 
   def show
@@ -14,11 +18,17 @@ class Admin::AchievementCategoriesController < ApplicationController
   def new
     @categories = AchievementCategory.where(parent_id: nil)
     @category = AchievementCategory.new
+    @codes = current_user.permission.class_restrictions.map do |cr|
+      cr.code
+    end
   end
 
   def edit
     @categories = AchievementCategory.where(parent_id: nil)
     @category = AchievementCategory.find(params[:id])
+    @codes = current_user.permission.class_restrictions.map do |cr|
+      cr.code
+    end
   end
 
   def create

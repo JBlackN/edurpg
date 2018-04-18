@@ -1,7 +1,8 @@
-li
-  h3 = category_no_links.name
+- if @codes.empty? || !category_no_links.code || @codes.include?(category_no_links.code)
+  li
+    h3 = category_no_links.name
 
-- if category_no_links.subcategories.any?
-  ul.pl-3
-    = render partial: 'category_no_links',
-      collection: category_no_links.subcategories
+  - if category_no_links.subcategories.any?
+    ul.pl-3
+      = render partial: 'category_no_links',
+        collection: category_no_links.subcategories

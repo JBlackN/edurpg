@@ -35,8 +35,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def authorize_admin_manage_achievement_categories
-    unless current_user.permission.manage_achievement_categories
+  def authorize_admin_manage_achievement_categories(category_id = nil)
+    if current_user.permission.manage_achievement_categories
+      unless category_id.nil?
+        if current_user.permission.class_restrictions.any?
+          code = AchievementCategory.find(category_id).code
+          unless code.nil?
+            unless current_user.permission.class_restrictions.exists?(code: code)
+              redirect_back fallback_location: root_path
+            end
+          end
+        end
+      end
+    else
       redirect_back fallback_location: root_path
     end
   end
@@ -47,8 +58,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def authorize_admin_manage_talents
-    unless current_user.permission.manage_talents
+  def authorize_admin_manage_talents(talent_tree_talent_id = nil)
+    if current_user.permission.manage_talents
+      unless talent_tree_talent_id.nil?
+        if current_user.permission.class_restrictions.any?
+          code = TalentTreeTalent.find(talent_tree_talent_id).talent.code
+          unless current_user.permission.class_restrictions.exists?(code: code)
+            redirect_back fallback_location: root_path
+          end
+        end
+      end
+    else
       redirect_back fallback_location: root_path
     end
   end

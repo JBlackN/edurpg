@@ -11,6 +11,7 @@ class Usermap
     roles = { student: [], teacher: [] }
 
     raw_roles.each do |role|
+      # FIXME: course codes not in ..-... format?
       matches = role.match(/^P-(..-...)-(STUDENT|UCITEL).*$/)
       next if matches.nil?
 

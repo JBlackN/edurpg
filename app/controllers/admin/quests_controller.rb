@@ -9,12 +9,14 @@ class Admin::QuestsController < ApplicationController
   def new
     @quests = Quest.all
     @difficulties = difficulties
+    @talents = talents_with_class_restrictions
   end
 
   def edit
     @quest = Quest.find(params[:id])
     @quests = Quest.all - [@quest]
     @difficulties = difficulties
+    @talents = talents_with_class_restrictions
   end
 
   def create
@@ -32,6 +34,16 @@ class Admin::QuestsController < ApplicationController
 
     # Assign talent
     unless params[:quest][:talent].empty?
+      if current_user.permission.class_restrictions.any?
+        code = Talent.find(params[:quest][:talent].to_i).code
+        unless code.nil?
+          unless current_user.permission.class_restrictions.exists?(code: code)
+            redirect_back fallback_location: root_path
+            return
+          end
+        end
+      end
+
       @quest.talent_id = params[:quest][:talent].to_i
     end
 
@@ -66,6 +78,16 @@ class Admin::QuestsController < ApplicationController
     if params[:quest][:talent].empty?
       @quest.talent_id = nil
     else
+      if current_user.permission.class_restrictions.any?
+        code = Talent.find(params[:quest][:talent].to_i).code
+        unless code.nil?
+          unless current_user.permission.class_restrictions.exists?(code: code)
+            redirect_back fallback_location: root_path
+            return
+          end
+        end
+      end
+
       @quest.talent_id = params[:quest][:talent].to_i
     end
 
@@ -101,5 +123,18 @@ class Admin::QuestsController < ApplicationController
       ['Obtížný', 'hard'],
       ['Velmi obtížný', 'very_hard']
     ]
+  end
+
+  def talents_with_class_restrictions
+    if current_user.permission.class_restrictions.any?
+      codes = current_user.permission.class_restrictions.map do |cr|
+        cr.code
+      end
+      Talent.where(code: codes)
+    else
+      Talent.all
+    end.order(name: :asc).map do |t|
+      ["#{t.name} (#{t.code})", t.id]
+    end
   end
 end

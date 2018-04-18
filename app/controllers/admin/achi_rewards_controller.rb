@@ -1,5 +1,8 @@
 class Admin::AchiRewardsController < ApplicationController
   before_action :authorize_admin_manage_achievements
+  before_action -> {
+    authorize_admin_manage_achievement_categories(params[:achievement_category_id])
+  }
 
   def new
     @achievement = Achievement.find(params[:achievement_id])

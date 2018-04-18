@@ -45,7 +45,5 @@
               { include_blank: true },
               { class: 'custom-select' }
             = form.label :talent, 'Talent', class: 'form-label'
-            = form.select :talent,
-              Talent.all.order(name: :asc).map { |t| ["#{t.name} (#{t.code})", t.id] },
-              { include_blank: true },
+            = form.select :talent, @talents, { include_blank: true },
               { class: 'custom-select' }
