@@ -23,27 +23,63 @@ class ApplicationController < ActionController::Base
       current_user.permission.manage_titles
   end
 
+  def authorize_admin_manage_users
+    unless current_user.permission.manage_users
+      redirect_back fallback_location: root_path
+    end
+  end
+
   def authorize_admin_manage_attrs
     unless current_user.permission.manage_attrs
-      redirect_to admin_character_attributes_index_path
+      redirect_back fallback_location: root_path
     end
   end
 
   def authorize_admin_manage_achievement_categories
     unless current_user.permission.manage_achievement_categories
-      redirect_to admin_achievement_categories_index_path
+      redirect_back fallback_location: root_path
+    end
+  end
+
+  def authorize_admin_manage_talent_trees
+    unless current_user.permission.manage_talent_trees
+      redirect_back fallback_location: root_path
+    end
+  end
+
+  def authorize_admin_manage_talents
+    unless current_user.permission.manage_talents
+      redirect_back fallback_location: root_path
+    end
+  end
+
+  def authorize_admin_manage_quests
+    unless current_user.permission.manage_quests
+      redirect_back fallback_location: root_path
     end
   end
 
   def authorize_admin_manage_skills
     unless current_user.permission.manage_skills
-      redirect_to admin_character_attribute_skills_index_path
+      redirect_back fallback_location: root_path
     end
   end
 
   def authorize_admin_manage_achievements
     unless current_user.permission.manage_achievements
-      redirect_to admin_achievement_category_achievements_index_path
+      redirect_back fallback_location: root_path
+    end
+  end
+
+  def authorize_admin_manage_items
+    unless current_user.permission.manage_items
+      redirect_back fallback_location: root_path
+    end
+  end
+
+  def authorize_admin_manage_titles
+    unless current_user.permission.manage_titles
+      redirect_back fallback_location: root_path
     end
   end
 

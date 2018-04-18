@@ -1,6 +1,9 @@
 require 'base64'
 
 class Admin::SkillsController < ApplicationController
+  before_action :authorize_admin_manage_skills, except: [:index]
+  before_action :authorize_admin, only: [:index]
+
   def index
     @attribute = CharacterAttribute.find(params[:character_attribute_id])
     @attributes = CharacterAttribute.all - [@attribute]

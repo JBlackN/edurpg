@@ -1,4 +1,6 @@
 class Admin::PermissionsController < ApplicationController
+  before_action :authorize_admin_manage_users
+
   def edit
     @user = User.find(params[:user_id])
     @permission = @user.permission

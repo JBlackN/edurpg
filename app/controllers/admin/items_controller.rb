@@ -1,6 +1,9 @@
 require 'base64'
 
 class Admin::ItemsController < ApplicationController
+  before_action :authorize_admin_manage_items, except: [:index]
+  before_action :authorize_admin, only: [:index]
+
   def index
     @items = Item.all
   end

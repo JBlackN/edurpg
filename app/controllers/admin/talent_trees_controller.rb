@@ -1,4 +1,8 @@
 class Admin::TalentTreesController < ApplicationController
+  before_action :authorize_admin_manage_talent_trees, except: [:index]
+  before_action :authorize_admin_manage_talents, except: [:index, :edit]
+  before_action :authorize_admin, only: [:index]
+
   def index
     @classes = CharacterClass.all
     @items = Item.joins(:talent_tree).where(rarity: 'artifact')

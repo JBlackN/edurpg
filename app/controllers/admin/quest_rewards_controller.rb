@@ -1,4 +1,6 @@
 class Admin::QuestRewardsController < ApplicationController
+  before_action :authorize_admin_manage_quests
+
   def new
     @quest = Quest.find(params[:quest_id])
     @skills = Skill.all
