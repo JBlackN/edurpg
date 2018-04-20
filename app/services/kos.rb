@@ -103,9 +103,9 @@ class Kos
       }
     end
 
-    # Delete (B|M)IE-, keep only (B|M)I- (prefered) or (B|M)IK-
+    # Delete PI(K)-/(B|M|F)IE-, keep only (B|M)I- (prefered) or (B|M)IK-
     courses.delete_if do |course|
-      if course['code'] =~ /^(B|M)IE-/
+      if course['code'] =~ /^(PI(|K)-|(B|M|F)IE-)/
         true
       elsif match = course['code'].match(/^(B|M)IK-([A-Z0-9]+)(\..+)?$/)
         if courses.any? { |c| c['code'] =~ /^#{match[1]}I-#{match[2]}(\..+)?$/ }

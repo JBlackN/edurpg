@@ -17,11 +17,15 @@ class Admin::TalentsController < ApplicationController
 
   def create
     @tree = TalentTree.find(params[:talent_tree_id])
-    @talent = Talent.new(talent_params)
+    @talent = Talent.find_by(code: params[:talent][:code])
 
-    # Process image
-    if params[:talent].key?(:image)
-      @talent.image = Base64.encode64(params[:talent][:image].read)
+    unless @talent
+      @talent = Talent.new(talent_params)
+
+      # Process image
+      if params[:talent].key?(:image)
+        @talent.image = Base64.encode64(params[:talent][:image].read)
+      end
     end
 
     if @talent.save
