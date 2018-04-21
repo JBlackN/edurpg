@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180415165712) do
+ActiveRecord::Schema.define(version: 20180421194315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,16 @@ ActiveRecord::Schema.define(version: 20180415165712) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "character_titles", force: :cascade do |t|
+    t.boolean "active"
+    t.bigint "character_id"
+    t.bigint "title_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_character_titles_on_character_id"
+    t.index ["title_id"], name: "index_character_titles_on_title_id"
+  end
+
   create_table "characters", force: :cascade do |t|
     t.string "name"
     t.text "image"
@@ -78,6 +88,10 @@ ActiveRecord::Schema.define(version: 20180415165712) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "character_class_id"
+    t.bigint "specialization_id"
+    t.index ["character_class_id"], name: "index_characters_on_character_class_id"
+    t.index ["specialization_id"], name: "index_characters_on_specialization_id"
     t.index ["user_id"], name: "index_characters_on_user_id"
   end
 
@@ -296,6 +310,10 @@ ActiveRecord::Schema.define(version: 20180415165712) do
   end
 
   add_foreign_key "achievements", "achievement_categories"
+  add_foreign_key "character_titles", "characters"
+  add_foreign_key "character_titles", "titles"
+  add_foreign_key "characters", "character_classes"
+  add_foreign_key "characters", "specializations"
   add_foreign_key "characters", "users"
   add_foreign_key "class_restrictions", "permissions"
   add_foreign_key "consents", "users"

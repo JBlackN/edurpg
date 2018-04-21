@@ -3,7 +3,7 @@
 .container
   .row.mt-3
     .col
-      .card
+      .card.user-infobox
         .card-body
           .media
             - if current_user.character.image.nil?
@@ -11,5 +11,17 @@
             - else
               img.mr-4.character_image src="data:image/png;base64, #{current_user.character.image}"
             .media-body
-              h2.mt-0 = current_user.character.name
-              h3 Uživatel
+              h2.mt-0.mb-0 = @character_name_titled
+              h3.mt-1.mb-0.ml-1.character-level-class
+                = "Úroveň #{current_user.character.level} #{current_user.character.character_class.name}"
+              /XXX: use guild not spec?
+              h3.mt-0.character-guild = "<#{current_user.character.specialization.name}>"
+  .row.mt-3
+    .col-sm-8
+      h3 Úkoly
+      .card
+        .card-body
+    .col-sm-4
+      h3 Aktivita
+      .card
+        .card-body

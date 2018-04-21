@@ -1,6 +1,12 @@
 class Character < ApplicationRecord
   belongs_to :user
+  belongs_to :character_class
+  belongs_to :specialization
+
   has_many :quests, dependent: :nullify
+
+  has_many :character_titles
+  has_many :titles, through: :character_titles
 
   def init(token)
     info = Usermap.get_info(user.username, token)
@@ -13,5 +19,9 @@ class Character < ApplicationRecord
     end
 
     save
+  end
+
+  def add_title(title, active = false)
+    self.character_titles.build(title: title, active: active)
   end
 end

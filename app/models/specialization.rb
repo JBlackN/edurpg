@@ -3,6 +3,7 @@ class Specialization < ApplicationRecord
   has_one :talent_tree
   has_and_belongs_to_many :talents
   has_many :quests
+  has_many :characters
 
   before_destroy { talents.clear }
 end
