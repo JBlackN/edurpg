@@ -52,6 +52,14 @@ class User::DashboardsController < ApplicationController
     current_user.character.character_class = CharacterClass.find_by(code: student_info['programme'])
     current_user.character.specialization = Specialization.find_by(code: student_info['branch'])
     current_user.character.save
+
+    # Attributes
+    CharacterAttribute.all.each do |attr|
+      unless current_user.character.character_attributes.exists?(attr.id)
+        current_user.character.add_attribute(attr)
+      end
+    end
+    current_user.character.save
   end
 
   def character_name_titled

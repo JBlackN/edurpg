@@ -5,7 +5,10 @@ class Character < ApplicationRecord
 
   has_many :quests, dependent: :nullify
 
-  has_many :character_titles
+  has_many :character_character_attributes, dependent: :destroy
+  has_many :character_attributes, through: :character_character_attributes
+
+  has_many :character_titles, dependent: :destroy
   has_many :titles, through: :character_titles
 
   def init(token)
@@ -19,6 +22,11 @@ class Character < ApplicationRecord
     end
 
     save
+  end
+
+  def add_attribute(attr, points = 0)
+    self.character_character_attributes.build(character_attribute: attr,
+                                              points: points)
   end
 
   def add_title(title, active = false)

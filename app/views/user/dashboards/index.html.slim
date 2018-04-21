@@ -16,6 +16,11 @@
                 = "Úroveň #{current_user.character.level} #{current_user.character.character_class.name}"
               /XXX: use guild not spec?
               h3.mt-0.character-guild = "<#{current_user.character.specialization.name}>"
+              ul.character-attributes
+                - current_user.character.character_character_attributes.each do |attr|
+                  li.mt-1.mr-4.d-inline-block
+                    span.character-attribute = "#{attr.character_attribute.name}: "
+                    = attr.points
   .row.mt-3
     .col-sm-8
       h3 Úkoly
