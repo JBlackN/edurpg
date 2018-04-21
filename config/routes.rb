@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   resources :consents
   get 'sessions/index'
 
-  get 'dashboards/index'
+  namespace :user do
+    get 'dashboards/index'
+  end
 
   namespace :admin do
     get 'dashboards/index'

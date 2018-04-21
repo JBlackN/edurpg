@@ -1,0 +1,31 @@
+nav.navbar.navbar-expand-lg.navbar-light.bg-light
+  a.navbar-brand href="#{url_for landing_index_path}" eduRPG
+  button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+    span.navbar-toggler-icon
+
+  #navbarSupportedContent.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+      li.nav-item.dropdown
+        a.nav-link.dropdown-toggle#navbarDropdownCharacter href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" Postava
+        .dropdown-menu aria-labelledby="navbarDropdownCharacter"
+          a.dropdown-item href="#" Dovednosti
+          a.dropdown-item href="#" Úspěchy
+          a.dropdown-item href="#" Tituly
+          a.dropdown-item href="#" Inventář
+      li.nav-item.dropdown
+        a.nav-link.dropdown-toggle#navbarDropdownClass href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" Povolání
+        .dropdown-menu aria-labelledby="navbarDropdownClass"
+          a.dropdown-item href="#" Úkoly
+          a.dropdown-item href="#" Talentové stromy
+          a.dropdown-item href="#" Nehráčské postavy
+      li.nav-item.dropdown
+        a.nav-link.dropdown-toggle#navbarDropdownGuild href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" Cechy
+        .dropdown-menu aria-labelledby="navbarDropdownGuild"
+          a.dropdown-item href="#" FIT ČVUT
+          a.dropdown-item href="#" TBD
+    ul.navbar-nav
+      li.nav-item.dropdown
+        a.nav-link.dropdown-toggle#navbarDropdownUser href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" = current_user.username
+        .dropdown-menu aria-labelledby="navbarDropdownUser"
+          a.dropdown-item href="#" Správa účtu
+          a.dropdown-item href="#{url_for :logout}" Odhlásit se

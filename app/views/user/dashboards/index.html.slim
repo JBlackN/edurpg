@@ -1,0 +1,15 @@
+= render 'user/menu'
+
+.container
+  .row.mt-3
+    .col
+      .card
+        .card-body
+          .media
+            - if current_user.character.image.nil?
+              = image_tag 'user.png', class: 'mr-4 character-image'
+            - else
+              img.mr-4.character_image src="data:image/png;base64, #{current_user.character.image}"
+            .media-body
+              h2.mt-0 = current_user.character.name
+              h3 Uživatel

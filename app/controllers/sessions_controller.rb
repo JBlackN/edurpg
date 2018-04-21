@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
     elsif current_user.admin_only?
       redirect_to admin_dashboards_index_path
     elsif current_user.user_only?
-      redirect_to dashboards_index_path
+      redirect_to user_dashboards_index_path
     end
   end
 
