@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   namespace :user do
     get 'dashboards/index'
+    resources :skills
   end
 
   namespace :admin do

@@ -1,0 +1,22 @@
+= render 'user/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Dovednosti
+  .row
+    .col-sm-3
+      h3 Atributy
+      .card.mt-3
+        .card-body
+          - @attributes.each do |attribute|
+            h4
+              = link_to attribute.name, user_skill_path(attribute)
+    .col-sm-9
+      .card style="height: 100%;"
+        .card-body
+          .container.d-flex.align-items-center.h-100
+            .container
+              .row.text-center
+                .col
+                  p.text-muted Pro zobrazení dovedností vyberte atribut.

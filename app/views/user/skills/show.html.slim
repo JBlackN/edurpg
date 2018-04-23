@@ -1,0 +1,42 @@
+= render 'user/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Dovednosti
+  .row
+    .col-sm-3
+      h3 Atributy
+      .card.mt-3
+        .card-body
+          h4
+            a.mr-2 href="#{url_for user_skills_path}" 🡰
+            = @attribute.name
+          - @attributes.each do |attribute|
+            h4
+              = link_to attribute.name, user_skill_path(attribute)
+    .col-sm-9
+      .card style="height: 100%;"
+        .card-body
+          - @character_skills.each do |skill|
+            .card.d-inline-block.mr-3.mb-3
+                .card-body
+                  .media
+                    - if skill.image.nil?
+                      = image_tag 'placeholder.png', class: 'mr-3 skill-image'
+                    - else
+                      img.mr-3.skill-image src="data:image/png;base64, #{skill.image}"
+                    .media-body
+                      h5.mt-0 = "#{skill.name} (#{skill.rank})"
+                      p = skill.description
+          - @unobtained_skills.each do |skill|
+            .card.d-inline-block.mr-3.mb-3 style="opacity: 0.33;"
+                .card-body
+                  .media
+                    - if skill.image.nil?
+                      = image_tag 'placeholder.png', class: 'mr-3 skill-image'
+                    - else
+                      img.mr-3.skill-image src="data:image/png;base64, #{skill.image}"
+                    .media-body
+                      h5.mt-0 = "#{skill.name} (#{skill.rank})"
+                      p = skill.description

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180421212122) do
+ActiveRecord::Schema.define(version: 20180422202520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,15 @@ ActiveRecord::Schema.define(version: 20180421212122) do
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "character_skills", force: :cascade do |t|
+    t.bigint "character_id"
+    t.bigint "skill_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_character_skills_on_character_id"
+    t.index ["skill_id"], name: "index_character_skills_on_skill_id"
   end
 
   create_table "character_titles", force: :cascade do |t|
@@ -322,6 +331,8 @@ ActiveRecord::Schema.define(version: 20180421212122) do
   add_foreign_key "achievements", "achievement_categories"
   add_foreign_key "character_character_attributes", "character_attributes"
   add_foreign_key "character_character_attributes", "characters"
+  add_foreign_key "character_skills", "characters"
+  add_foreign_key "character_skills", "skills"
   add_foreign_key "character_titles", "characters"
   add_foreign_key "character_titles", "titles"
   add_foreign_key "characters", "character_classes"

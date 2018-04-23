@@ -8,6 +8,9 @@ class Character < ApplicationRecord
   has_many :character_character_attributes, dependent: :destroy
   has_many :character_attributes, through: :character_character_attributes
 
+  has_many :character_skills
+  has_many :skills, through: :character_skills
+
   has_many :character_titles, dependent: :destroy
   has_many :titles, through: :character_titles
 
