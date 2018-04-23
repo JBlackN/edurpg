@@ -11,6 +11,9 @@ class Character < ApplicationRecord
   has_many :character_skills
   has_many :skills, through: :character_skills
 
+  has_many :character_achievements
+  has_many :achievements, through: :character_achievements
+
   has_many :character_titles, dependent: :destroy
   has_many :titles, through: :character_titles
 

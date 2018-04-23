@@ -1,0 +1,18 @@
+= render 'user/menu'
+
+.container
+  .row.mt-3
+    .col-sm-4
+      h2 Úspěchy
+      .card.mt-3
+        .card-body
+          h3.achievement-category-selected
+            a.mr-2 href="#{url_for user_achievements_path}" 🡰
+            = @category.name
+          ul.pl-0.achievement-categories
+            = render partial: 'category', collection: @categories
+    .col-sm-8
+      .card style="height: 100%;"
+        .card-body
+          = render partial: 'achievement', collection: @character_achievements, locals: { opacity: 1 }
+          = render partial: 'achievement', collection: @unobtained_achievements, locals: { opacity: 0.33 }

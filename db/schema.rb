@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180422202520) do
+ActiveRecord::Schema.define(version: 20180423150606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,15 @@ ActiveRecord::Schema.define(version: 20180422202520) do
     t.bigint "title_id"
     t.index ["achievement_id"], name: "index_achievements_titles_on_achievement_id"
     t.index ["title_id"], name: "index_achievements_titles_on_title_id"
+  end
+
+  create_table "character_achievements", force: :cascade do |t|
+    t.bigint "character_id"
+    t.bigint "achievement_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["achievement_id"], name: "index_character_achievements_on_achievement_id"
+    t.index ["character_id"], name: "index_character_achievements_on_character_id"
   end
 
   create_table "character_attributes", force: :cascade do |t|
@@ -329,6 +338,8 @@ ActiveRecord::Schema.define(version: 20180422202520) do
   end
 
   add_foreign_key "achievements", "achievement_categories"
+  add_foreign_key "character_achievements", "achievements"
+  add_foreign_key "character_achievements", "characters"
   add_foreign_key "character_character_attributes", "character_attributes"
   add_foreign_key "character_character_attributes", "characters"
   add_foreign_key "character_skills", "characters"

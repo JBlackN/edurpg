@@ -5,6 +5,10 @@ class User::DashboardsController < ApplicationController
     refresh_character
 
     @character_name_titled = character_name_titled
+    @achievement_points = 0
+    current_user.character.achievements.each do |achi|
+      @achievement_points += achi.points
+    end
   end
 
   private

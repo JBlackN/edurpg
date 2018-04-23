@@ -1,0 +1,11 @@
+- if @codes.empty? || !category.code || @codes.include?(category.code)
+  li
+    h3
+      - if category == @category
+        = category.name
+      - else
+        = link_to category.name, user_achievement_path(category)
+
+  - if category.subcategories.any?
+    ul.pl-3
+      = render partial: 'category', collection: category.subcategories

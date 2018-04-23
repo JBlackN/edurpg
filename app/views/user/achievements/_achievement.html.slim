@@ -1,0 +1,24 @@
+.card style="opacity: #{opacity};"
+  .card-body
+    .card.float-right
+      .card-body.p-3
+        span.font-weight-bold = achievement.points
+    .media
+      - if achievement.image.nil?
+        = image_tag 'placeholder.png', class: 'mr-3 achi-image'
+      - else
+        img.mr-3.achi-image src="data:image/png;base64, #{achievement.image}"
+      .media-body
+        h4.mt-0 = achievement.name
+        p = achievement.description
+        .btn-group role="group"
+          - achievement.items.each do |item|
+            button.btn.btn-outline-secondary type="button"
+              span class="item-#{item.rarity}" = item.name
+              span.badge.badge-info.ml-2
+                | Předmět
+          - achievement.titles.each do |title|
+            button.btn.btn-outline-secondary type="button"
+              = title.title
+              span.badge.badge-info.ml-2
+                | Titul
