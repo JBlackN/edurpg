@@ -17,6 +17,9 @@ class Character < ApplicationRecord
   has_many :character_titles, dependent: :destroy
   has_many :titles, through: :character_titles
 
+  has_many :character_items
+  has_many :items, through: :character_items
+
   def init(token)
     info = Usermap.get_info(user.username, token)
 

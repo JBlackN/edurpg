@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     resources :skills
     resources :achievements
     resources :titles
+    resources :items
   end
 
   namespace :admin do

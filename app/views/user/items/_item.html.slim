@@ -1,0 +1,16 @@
+.card.d-inline-block.mr-3.mb-3 style="opacity: #{opacity};"
+  .card-body
+    .media
+      - if item.image.nil?
+        = image_tag 'placeholder.png', class: 'mr-3 item-image'
+      - else
+        img.mr-3.item-image src="data:image/png;base64, #{item.image}"
+      .media-body
+        h3 class="mt-0 item-#{item.rarity}" = "#{item.name}"
+        p = item.description
+        ul.list-group
+          - item.character_attributes.each do |attribute|
+            - points = attribute.item_attributes.find_by(character_attribute_id: attribute.id,
+              item_id: item.id).points
+            - if !points.nil? && points > 0
+              li.list-group-item = "+ #{points} #{attribute.name}"

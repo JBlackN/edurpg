@@ -1,0 +1,28 @@
+= render 'user/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Inventář
+      .card.mt-3
+        .card-body
+          = form_with url: user_items_path, method: :get, local: true,
+            class: 'form-inline' do |form|
+            = form.label :quality, 'Kvalita', class: 'mr-2'
+            = form.select :quality, @rarities,
+              { selected: params[:quality], include_blank: true },
+              { class: 'custom-select w-25 mr-3', disabled: false }
+            = form.label :attr, 'Atribut', class: 'mr-2'
+            = form.select :attr,
+              CharacterAttribute.all.map { |attr| [attr.name, attr.id] },
+              { selected: params[:attr], include_blank: true },
+              { class: 'custom-select w-25 mr-3', disabled: false }
+            .form-check
+              = form.check_box :all, class: 'form-check-input',
+                checked: params[:all] == '1' ? true : false
+              = form.label :all, 'Nezískané', class: 'form-check-label mr-3'
+            = form.submit 'Filtrovat', class: 'btn btn-outline-success'
+      .card.mt-3 style="height: 100%;"
+        .card-body
+          = render partial: 'item', collection: @character_items, locals: { opacity: 1 }
+          = render partial: 'item', collection: @unobtained_items, locals: { opacity: 0.33 }
