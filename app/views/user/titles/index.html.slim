@@ -1,0 +1,32 @@
+= render 'user/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Tituly
+      .card style="height: 100%;"
+        .card-body
+          - @character_titles.each do |title|
+            .card.d-inline-block.mr-3.mb-3
+              .card-body.text-center
+                h3
+                  - if title.title.after_name
+                    = "#{current_user.character.name}, "
+                    strong = title.title.title
+                  - else
+                    strong = title.title.title
+                    = " #{current_user.character.name}"
+                - if title.active
+                  a.btn.btn-outline-danger.btn-sm href="#{url_for user_title_path(title)}" data-method="patch" role="button" Deaktivovat
+                - else
+                  a.btn.btn-outline-success.btn-sm href="#{url_for user_title_path(title)}" data-method="patch" role="button" Aktivovat
+          - @unobtained_titles.each do |title|
+            .card.d-inline-block.mr-3.mb-3 style="opacity: 0.33;"
+              .card-body.text-center
+                h3
+                  - if title.after_name
+                    = "#{current_user.character.name}, "
+                    strong = title.title
+                  - else
+                    strong = title.title
+                    = " #{current_user.character.name}"

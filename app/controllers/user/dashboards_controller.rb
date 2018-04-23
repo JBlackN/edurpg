@@ -14,10 +14,6 @@ class User::DashboardsController < ApplicationController
   private
 
   def refresh_character
-    # FIXME: begin
-    current_user.character.titles.clear
-    # FIXME: end
-
     student_info = Kos.get_student_info(current_user.username, session[:user]['token'])
     student_courses = Kos.get_student_courses(current_user.username, session[:user]['token'])
 
@@ -29,16 +25,18 @@ class User::DashboardsController < ApplicationController
     }] }]
 
     # Titles
-    active_title_set = false
-    if student_info['titles'].include?('Ing.')
-      current_user.character.add_title(Title.find_by(title: 'Ing.'), true)
-      active_title_set = true
+    unless current_user.character.titles.any?
+      active_title_set = false
+      if student_info['titles'].include?('Ing.')
+        current_user.character.add_title(Title.find_by(title: 'Ing.'), true)
+        active_title_set = true
+      end
+      if student_info['titles'].include?('Bc.')
+        active = active_title_set ? false : true
+        current_user.character.add_title(Title.find_by(title: 'Bc.'), active)
+      end
+      current_user.character.save
     end
-    if student_info['titles'].include?('Bc.')
-      active = active_title_set ? false : true
-      current_user.character.add_title(Title.find_by(title: 'Bc.'), active)
-    end
-    current_user.character.save
 
     # Level
     credits = student_info['programme'] == 'MI' ? 180 : 0
@@ -70,11 +68,13 @@ class User::DashboardsController < ApplicationController
     titles_before = []
     titles_after = []
 
-    Character.find(current_user.character.id).titles.each do |title|
-      if title.after_name
-        titles_after << title.title
+    Character.find(current_user.character.id).character_titles.each do |title|
+      next unless title.active
+
+      if title.title.after_name
+        titles_after << title.title.title
       else
-        titles_before << title.title
+        titles_before << title.title.title
       end
     end
 

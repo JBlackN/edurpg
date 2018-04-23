@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     get 'dashboards/index'
     resources :skills
     resources :achievements
+    resources :titles
   end
 
   namespace :admin do
