@@ -1,0 +1,94 @@
+= render 'user/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2.d-inline-block.w-75 class="quest-#{@quest.difficulty}"
+        a.mr-2 href="#{url_for user_quests_path(params: @params)}" 🡰
+        - if @quest.talent
+          = "[#{@quest.talent.code}] #{@quest.name}"
+        - elsif @quest.specialization
+          = "[#{@quest.specialization.abbr}] #{@quest.name}"
+        - elsif @quest.character_class
+          = "[#{@quest.character_class.code}] #{@quest.name}"
+        - else
+          = "#{@quest.name}"
+      - if @quest.deadline
+        p.d-inline-block.w-25 = @quest.deadline.strftime('%d.%m.%Y %H:%M')
+  .row.mt-3
+    .col-sm-8
+      h3 Stručně
+      .card
+        .card-body
+          p = @quest.objectives
+      h3.mt-3 Podrobně
+      .card
+        .card-body
+          p = @quest.description
+      .text-center.mt-3
+        = link_to 'Exportovat úkol (iCalendar)', user_quest_path(@quest, format: :ics),
+                  class: 'btn btn-outline-info mr-3',
+                  role: 'button'
+        - if current_user.character.completed_quests.exists?(@quest.id)
+          a.btn.btn-outline-danger href="#{url_for user_quest_path(@quest, params: @params)}" data-method="patch" role="button" Označit úkol jako nesplněný
+        - else
+          a.btn.btn-outline-success href="#{url_for user_quest_path(@quest, params: @params)}" data-method="patch" role="button" Splnit úkol
+    .col-sm-4
+      h3 Zadavatel
+      .card
+        - if @quest.character.image.nil?
+          = image_tag 'user.png', class: 'card-img-top'
+        - else
+          img.card-img-top src="data:image/png;base64, #{@quest.character.image}"
+        .card-body
+          h4.card-title = @quest.character.name
+      h3.mt-3 Odměny
+      .card.mt-3.mb-3
+        .card-body
+          - if @quest.quest_exp_reward
+            .card.mb-1
+              .card-body.p-2
+                .media
+                  .media-body
+                    h4.d-inline-block.mt-0 = "+ #{@quest.quest_exp_reward.points}"
+                    p.float-right.text-muted = "(Zkušenosti)"
+          - @quest.skills.each do |skill|
+            .card.mb-1
+              .card-body.p-2
+                .media
+                  - if skill.image.nil?
+                    = image_tag 'placeholder.png', class: 'mr-3 reward-image'
+                  - else
+                    img.mr-3.reward-image src="data:image/png;base64, #{skill.image}"
+                  .media-body
+                    h4 class="d-inline-block mt-0" = "#{skill.name} (#{skill.rank})"
+                    p.float-right.text-muted = "(Dovednost)"
+          - @quest.achievements.each do |achi|
+            .card.mb-1
+              .card-body.p-2
+                .media
+                  - if achi.image.nil?
+                    = image_tag 'placeholder.png', class: 'mr-3 reward-image'
+                  - else
+                    img.mr-3.reward-image src="data:image/png;base64, #{achi.image}"
+                  .media-body
+                    h4 class="d-inline-block mt-0" = "#{achi.name}"
+                    p.float-right.text-muted = "(Úspěch)"
+          - @quest.items.each do |item|
+            .card.mb-1
+              .card-body.p-2
+                .media
+                  - if item.image.nil?
+                    = image_tag 'placeholder.png', class: 'mr-3 reward-image'
+                  - else
+                    img.mr-3.reward-image src="data:image/png;base64, #{item.image}"
+                  .media-body
+                    h4 class="d-inline-block mt-0 item-#{item.rarity}" = "#{item.name}"
+                    p.float-right.text-muted = "(Předmět)"
+          - @quest.titles.each do |title|
+            .card.mb-1
+              .card-body.p-2
+                .media
+                  .media-body
+                    h4.d-inline-block.mt-0 = "#{title.title}"
+                    p.float-right.text-muted = "(Titul)"

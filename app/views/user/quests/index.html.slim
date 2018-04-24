@@ -1,0 +1,47 @@
+= render 'user/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 Úkoly
+      .card.mt-3
+        .card-body
+          = form_with url: user_quests_path, method: :get, local: true,
+            class: 'form-inline' do |form|
+            = form.label :groups, 'Skupiny', class: 'mr-2'
+            = form.select :groups, grouped_options_for_select(@groups, params[:groups]),
+              { include_blank: true },
+              { class: 'custom-select w-25 mr-3', disabled: false }
+            = form.label :difficulty, 'Obtížnost', class: 'mr-2'
+            = form.select :difficulty, @difficulties,
+              { selected: params[:difficulty], include_blank: true },
+              { class: 'custom-select w-25 mr-3', disabled: false }
+            .form-check
+              = form.check_box :expired, class: 'form-check-input',
+                checked: params[:expired] == '1' ? true : false
+              = form.label :expired, 'Expirované', class: 'form-check-label mr-3'
+            .form-check
+              = form.check_box :completed, class: 'form-check-input',
+                checked: params[:completed] == '1' ? true : false
+              = form.label :completed, 'Splněné', class: 'form-check-label mr-3'
+            = form.submit 'Filtrovat', class: 'btn btn-outline-success'
+      .card.mt-3 style="height: 100%;"
+        .card-body
+          ul.pl-3
+            - @quests.each do |quest|
+              li class="align-middle#{' quest-completed' if current_user.character.completed_quests.exists?(quest.id)}"
+                h4 class="d-inline-block m-0 quest-#{quest.difficulty}"
+                  - if quest.talent
+                    a href="#{url_for user_quest_path(quest, params: @params)}" class="quest-link quest-#{quest.difficulty}" = "[#{quest.talent.code}] #{quest.name}"
+                  - elsif quest.specialization
+                    a href="#{url_for user_quest_path(quest, params: @params)}" class="quest-link quest-#{quest.difficulty}" = "[#{quest.specialization.abbr}] #{quest.name}"
+                  - elsif quest.character_class
+                    a href="#{url_for user_quest_path(quest, params: @params)}" class="quest-link quest-#{quest.difficulty}" = "[#{quest.character_class.code}] #{quest.name}"
+                  - else
+                    a href="#{url_for user_quest_path(quest, params: @params)}" class="quest-link quest-#{quest.difficulty}" = "#{quest.name}"
+                - if quest.deadline
+                  p.d-inline-block.m-0.ml-4 = "(#{quest.deadline.strftime('%d.%m.%Y %H:%M')})"
+      .text-center.mt-3
+        = link_to 'Exportovat úkoly (iCalendar)', user_quests_path(format: :ics, params: @params),
+                  class: 'btn btn-outline-info mr-3 mb-3',
+                  role: 'button'
