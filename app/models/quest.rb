@@ -9,8 +9,13 @@ class Quest < ApplicationRecord
   has_and_belongs_to_many :titles
   has_one :quest_exp_reward, dependent: :destroy
 
+  has_many :character_quests
+  has_many :characters, through: :character_quests
+
   before_destroy { skills.clear }
   before_destroy { achievements.clear }
   before_destroy { items.clear }
   before_destroy { titles.clear }
+
+  default_scope { order(deadline: :asc) }
 end

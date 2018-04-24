@@ -20,6 +20,9 @@ class Character < ApplicationRecord
   has_many :character_items
   has_many :items, through: :character_items
 
+  has_many :character_quests
+  has_many :given_quests, through: :character_quests, source: :quest
+
   def init(token)
     info = Usermap.get_info(user.username, token)
 

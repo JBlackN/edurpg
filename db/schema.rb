@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180423194652) do
+ActiveRecord::Schema.define(version: 20180424094627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,15 @@ ActiveRecord::Schema.define(version: 20180423194652) do
     t.datetime "updated_at", null: false
     t.index ["character_id"], name: "index_character_items_on_character_id"
     t.index ["item_id"], name: "index_character_items_on_item_id"
+  end
+
+  create_table "character_quests", force: :cascade do |t|
+    t.bigint "character_id"
+    t.bigint "quest_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_character_quests_on_character_id"
+    t.index ["quest_id"], name: "index_character_quests_on_quest_id"
   end
 
   create_table "character_skills", force: :cascade do |t|
@@ -353,6 +362,8 @@ ActiveRecord::Schema.define(version: 20180423194652) do
   add_foreign_key "character_character_attributes", "characters"
   add_foreign_key "character_items", "characters"
   add_foreign_key "character_items", "items"
+  add_foreign_key "character_quests", "characters"
+  add_foreign_key "character_quests", "quests"
   add_foreign_key "character_skills", "characters"
   add_foreign_key "character_skills", "skills"
   add_foreign_key "character_titles", "characters"
