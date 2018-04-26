@@ -1,6 +1,12 @@
+require 'rest-client'
+
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :current_user
+
+  rescue_from RestClient::Unauthorized do
+    redirect_to :logout
+  end
 
   def authorize
     redirect_to :login unless user_signed_in?
