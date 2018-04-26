@@ -4,7 +4,7 @@ class User::QuestsController < ApplicationController
   before_action :authorize_user
 
   def index
-    @quests = Quest.all
+    @quests = quests_given
 
     filter_expired unless params[:expired] == '1'
     filter_completed unless params[:completed] == '1'
@@ -77,23 +77,6 @@ class User::QuestsController < ApplicationController
     ]
   end
 
-  def filter_expired
-    filtered = []
-    @quests.each do |quest|
-      filtered << quest if quest.deadline >= DateTime.now
-    end
-    @quests = filtered
-  end
-
-  def filter_completed
-    filtered = []
-    @quests.each do |quest|
-      filtered << quest unless current_user.character.completed_quests.exists?(
-        quest.id)
-    end
-    @quests = filtered
-  end
-
   def filter_by_difficulty(difficulty)
     filtered = []
     @quests.each do |quest|
@@ -123,6 +106,23 @@ class User::QuestsController < ApplicationController
     @quests = filtered
   end
 
+  def filter_completed
+    filtered = []
+    @quests.each do |quest|
+      filtered << quest unless current_user.character.completed_quests.exists?(
+        quest.id)
+    end
+    @quests = filtered
+  end
+
+  def filter_expired
+    filtered = []
+    @quests.each do |quest|
+      filtered << quest if !quest.deadline || quest.deadline >= DateTime.now
+    end
+    @quests = filtered
+  end
+
   def ics(quests)
     calendar = Icalendar::Calendar.new
 
@@ -146,5 +146,19 @@ class User::QuestsController < ApplicationController
       ['Specializace', Specialization.all.order(name: :asc).map { |s| ["#{s.name} (#{s.character_class.code})", "s#{s.id}"] }],
       ['Talent', Talent.all.order(name: :asc).map { |t| ["#{t.name} (#{t.code})", "t#{t.id}"] }],
     ]
+  end
+
+  def quests_given
+    @courses ||= Kos.get_student_courses(current_user.username,
+                                         session[:user]['token']).map do |course|
+      Talent.find_by(code: course['code']).id
+    end
+
+    Quest.where(talent_id: @courses).or(
+      Quest.where(
+        specialization_id: current_user.character.specialization.id).or(
+          Quest.where(character_class_id: current_user.character.character_class.id)
+        )
+    )
   end
 end
