@@ -82,33 +82,6 @@
             p Identifikátor hodnocení z aplikace Klasifikace.
             = form.text_field :completion_check_id, class: 'form-control'
             h3.mt-3 Kategorie
-            = form.label :character_class, 'Povolání', class: 'form-label'
-            - unless @quest.character_class.nil?
-              = form.select :character_class,
-                CharacterClass.all.map { |c| [c.name, c.id] },
-                { selected: @quest.character_class.id, include_blank: true },
-                { class: 'custom-select' }
-            - else
-              = form.select :character_class,
-                CharacterClass.all.map { |c| [c.name, c.id] },
-                { include_blank: true },
-                { class: 'custom-select' }
-            = form.label :specialization, 'Specializace', class: 'form-label'
-            - unless @quest.specialization.nil?
-              = form.select :specialization,
-                Specialization.all.order(name: :asc).map { |s| ["#{s.name} (#{s.character_class.code})", s.id] },
-                { selected: @quest.specialization.id, include_blank: true },
-                { class: 'custom-select' }
-            - else
-              = form.select :specialization,
-                Specialization.all.order(name: :asc).map { |s| ["#{s.name} (#{s.character_class.code})", s.id] },
-                { include_blank: true },
-                { class: 'custom-select' }
-            = form.label :talent, 'Talent', class: 'form-label'
-            - unless @quest.talent.nil?
-              = form.select :talent, @talents,
-                { selected: @quest.talent.id, include_blank: true },
-                { class: 'custom-select' }
-            - else
-              = form.select :talent, @talents, { include_blank: true },
-                { class: 'custom-select' }
+            = form.select :groups, grouped_options_for_select(@groups, @group),
+              { include_blank: true },
+              { class: 'custom-select', disabled: false }

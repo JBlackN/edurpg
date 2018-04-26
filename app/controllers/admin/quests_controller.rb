@@ -9,42 +9,52 @@ class Admin::QuestsController < ApplicationController
   def new
     @quests = Quest.all
     @difficulties = difficulties
-    @talents = talents_with_class_restrictions
+    @groups = quest_groups
   end
 
   def edit
     @quest = Quest.find(params[:id])
     @quests = Quest.all - [@quest]
     @difficulties = difficulties
-    @talents = talents_with_class_restrictions
+    @groups = quest_groups
+    @group = if @quest.talent
+               "t#{@quest.talent.id}"
+             elsif @quest.specialization
+               "s#{@quest.specialization.id}"
+             elsif @quest.character_class
+               "c#{@quest.character_class.id}"
+             else
+               ''
+             end
   end
 
   def create
     @quest = Quest.new(quest_params)
 
-    # Asign class
-    unless params[:quest][:character_class].empty?
-      @quest.character_class_id = params[:quest][:character_class].to_i
-    end
+    if params[:quest].key?(:groups) && !params[:quest][:groups].empty?
+      group_id_type = params[:quest][:groups][0]
+      group_id = params[:quest][:groups][1..-1].to_i
 
-    # Assign spec
-    unless params[:quest][:specialization].empty?
-      @quest.specialization_id = params[:quest][:specialization].to_i
-    end
+      # Asign class
+      @quest.character_class_id = group_id if group_id_type == 'c'
 
-    # Assign talent
-    unless params[:quest][:talent].empty?
-      if current_user.permission.class_restrictions.any?
-        code = Talent.find(params[:quest][:talent].to_i).code
-        unless code.nil?
-          unless current_user.permission.class_restrictions.exists?(code: code)
-            redirect_back fallback_location: root_path
-            return
+      # Assign spec
+      @quest.specialization_id = group_id if group_id_type == 's'
+
+      # Assign talent
+      if group_id_type == 't'
+        if current_user.permission.class_restrictions.any?
+          code = Talent.find(group_id).code
+          unless code.nil?
+            unless current_user.permission.class_restrictions.exists?(code: code)
+              redirect_back fallback_location: root_path
+              return
+            end
           end
         end
-      end
 
-      @quest.talent_id = params[:quest][:talent].to_i
+        @quest.talent_id = group_id
+      end
     end
 
     # Assign character (quest submitter)
@@ -60,35 +70,44 @@ class Admin::QuestsController < ApplicationController
   def update
     @quest = Quest.find(params[:id])
 
-    # Asign class
-    if params[:quest][:character_class].empty?
-      @quest.character_class_id = nil
-    else
-      @quest.character_class_id = params[:quest][:character_class].to_i
-    end
+    if params[:quest].key?(:groups) && !params[:quest][:groups].empty?
+      group_id_type = params[:quest][:groups][0]
+      group_id = params[:quest][:groups][1..-1].to_i
 
-    # Assign spec
-    if params[:quest][:specialization].empty?
-      @quest.specialization_id = nil
-    else
-      @quest.specialization_id = params[:quest][:specialization].to_i
-    end
-
-    # Assign talent
-    if params[:quest][:talent].empty?
-      @quest.talent_id = nil
-    else
-      if current_user.permission.class_restrictions.any?
-        code = Talent.find(params[:quest][:talent].to_i).code
-        unless code.nil?
-          unless current_user.permission.class_restrictions.exists?(code: code)
-            redirect_back fallback_location: root_path
-            return
-          end
-        end
+      # Asign class
+      if group_id_type == 'c'
+        @quest.character_class_id = group_id
+        @quest.specialization_id = nil
+        @quest.talent_id = nil
       end
 
-      @quest.talent_id = params[:quest][:talent].to_i
+      # Assign spec
+      if group_id_type == 's'
+        @quest.character_class_id = nil
+        @quest.specialization_id = group_id
+        @quest.talent_id = nil
+      end
+
+      # Assign talent
+      if group_id_type == 't'
+        if current_user.permission.class_restrictions.any?
+          code = Talent.find(group_id).code
+          unless code.nil?
+            unless current_user.permission.class_restrictions.exists?(code: code)
+              redirect_back fallback_location: root_path
+              return
+            end
+          end
+        end
+
+        @quest.character_class_id = nil
+        @quest.specialization_id = nil
+        @quest.talent_id = group_id
+      end
+    else
+      @quest.character_class_id = nil
+      @quest.specialization_id = nil
+      @quest.talent_id = nil
     end
 
     # Reassign character (quest submitter)
@@ -125,6 +144,17 @@ class Admin::QuestsController < ApplicationController
     ]
   end
 
+  def quest_groups
+    [
+      ['Povolání', CharacterClass.all.map { |c| [c.name, "c#{c.id}"] }],
+      ['Specializace', Specialization.all.order(name: :asc).map do |s|
+        ["#{s.name} (#{s.character_class.code})", "s#{s.id}"]
+      end
+      ],
+      ['Talent', talents_with_class_restrictions],
+    ]
+  end
+
   def talents_with_class_restrictions
     if current_user.permission.class_restrictions.any?
       codes = current_user.permission.class_restrictions.map do |cr|
@@ -134,7 +164,7 @@ class Admin::QuestsController < ApplicationController
     else
       Talent.all
     end.order(name: :asc).map do |t|
-      ["#{t.name} (#{t.code})", t.id]
+      ["#{t.name} (#{t.code})", "t#{t.id}"]
     end
   end
 end

@@ -34,16 +34,6 @@
             p Identifikátor hodnocení z aplikace Klasifikace.
             = form.text_field :completion_check_id, class: 'form-control'
             h3.mt-3 Kategorie
-            = form.label :character_class, 'Povolání', class: 'form-label'
-            = form.select :character_class,
-              CharacterClass.all.map { |c| [c.name, c.id] },
+            = form.select :groups, grouped_options_for_select(@groups),
               { include_blank: true },
-              { class: 'custom-select' }
-            = form.label :specialization, 'Specializace', class: 'form-label'
-            = form.select :specialization,
-              Specialization.all.order(name: :asc).map { |s| ["#{s.name} (#{s.character_class.code})", s.id] },
-              { include_blank: true },
-              { class: 'custom-select' }
-            = form.label :talent, 'Talent', class: 'form-label'
-            = form.select :talent, @talents, { include_blank: true },
-              { class: 'custom-select' }
+              { class: 'custom-select', disabled: false }
