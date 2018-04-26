@@ -122,6 +122,7 @@ class Admin::DashboardsController < ApplicationController
           tree_artifact_spec.add_talent(talent, 0, 0)
         end
         tree_artifact_spec.save
+        Specialization.find_by(code: data['id']).item = artifact_spec
       end
 
       courses[:branch]['MI'].each do |branch, data|
@@ -138,7 +139,11 @@ class Admin::DashboardsController < ApplicationController
           tree_artifact_spec.add_talent(talent, 0, 0)
         end
         tree_artifact_spec.save
+        Specialization.find_by(code: data['id']).item = artifact_spec
       end
+
+      class_bc.item = artifact_bc
+      class_ing.item = artifact_ing
 
       # Titles
 
