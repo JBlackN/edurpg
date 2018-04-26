@@ -1,9 +1,10 @@
 class Character < ApplicationRecord
   belongs_to :user
-  belongs_to :character_class
-  belongs_to :specialization
+  belongs_to :character_class, optional: true
+  belongs_to :specialization, optional: true
 
   has_many :quests, dependent: :nullify
+  has_many :talent_trees, dependent: :destroy
 
   has_many :character_character_attributes, dependent: :destroy
   has_many :character_attributes, through: :character_character_attributes

@@ -1,4 +1,6 @@
 class Item < ApplicationRecord
+  belongs_to :character_class, optional: true
+  belongs_to :specialization, optional: true
   has_many :item_attributes, dependent: :destroy
   has_many :character_attributes, through: :item_attributes
   has_one :talent_tree

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424094627) do
+ActiveRecord::Schema.define(version: 20180425222211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -186,6 +186,10 @@ ActiveRecord::Schema.define(version: 20180424094627) do
     t.string "rarity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "character_class_id"
+    t.bigint "specialization_id"
+    t.index ["character_class_id"], name: "index_items_on_character_class_id"
+    t.index ["specialization_id"], name: "index_items_on_specialization_id"
   end
 
   create_table "items_quests", id: false, force: :cascade do |t|
@@ -312,6 +316,7 @@ ActiveRecord::Schema.define(version: 20180424094627) do
     t.bigint "talent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "unlocked"
     t.index ["talent_id"], name: "index_talent_tree_talents_on_talent_id"
     t.index ["talent_tree_id"], name: "index_talent_tree_talents_on_talent_tree_id"
   end
@@ -326,7 +331,9 @@ ActiveRecord::Schema.define(version: 20180424094627) do
     t.bigint "item_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "character_id"
     t.index ["character_class_id"], name: "index_talent_trees_on_character_class_id"
+    t.index ["character_id"], name: "index_talent_trees_on_character_id"
     t.index ["item_id"], name: "index_talent_trees_on_item_id"
     t.index ["specialization_id"], name: "index_talent_trees_on_specialization_id"
   end
@@ -375,6 +382,8 @@ ActiveRecord::Schema.define(version: 20180424094627) do
   add_foreign_key "consents", "users"
   add_foreign_key "item_attributes", "character_attributes"
   add_foreign_key "item_attributes", "items"
+  add_foreign_key "items", "character_classes"
+  add_foreign_key "items", "specializations"
   add_foreign_key "permissions", "users"
   add_foreign_key "quest_exp_rewards", "quests"
   add_foreign_key "quests", "character_classes"
@@ -390,6 +399,7 @@ ActiveRecord::Schema.define(version: 20180424094627) do
   add_foreign_key "talent_tree_talents", "talent_trees"
   add_foreign_key "talent_tree_talents", "talents"
   add_foreign_key "talent_trees", "character_classes"
+  add_foreign_key "talent_trees", "characters"
   add_foreign_key "talent_trees", "items"
   add_foreign_key "talent_trees", "specializations"
 end
