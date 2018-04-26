@@ -129,6 +129,24 @@ class Kos
           'xlink' => NS_XLINK
         ).text.gsub(
           /courses\/(.+)\//, '\1'
+        ).gsub(
+          /^(B|M|F)I(|K|E)-([A-Z0-9]+)(\..+)?$/, '\1I-\3'
+        ),
+
+        'code_full' => content.xpath(
+          './kos:course/@xlink:href',
+          'kos' => NS_KOS,
+          'xlink' => NS_XLINK
+        ).text.gsub(
+          /courses\/(.+)\//, '\1'
+        ),
+
+        'semester' => content.xpath(
+          './kos:semester/@xlink:href',
+          'kos' => NS_KOS,
+          'xlink' => NS_XLINK
+        ).text.gsub(
+          /semesters\/(.+)\//, '\1'
         ),
 
         'completed' => content.xpath(
@@ -136,6 +154,11 @@ class Kos
         ).text == 'true' ? true : false
       }
     end
+  end
+
+  def self.get_current_semester(token)
+    response = conn(token)["/semesters/current"].get
+    Nokogiri::XML(response.body).xpath('//kos:code', 'kos' => NS_KOS).text
   end
 
   private
@@ -171,6 +194,12 @@ class Kos
       'code' => branch['code'],
       'courses' => []
     }] }]
+
+    unspecified_branch = nil
+    branches.each do |branch, data|
+      unspecified_branch = branch if data['code'] == '---'
+    end
+    branches.except!(unspecified_branch) unless unspecified_branch.nil?
 
     programme_courses.each do |course|
       response = conn(token)["/courses/#{course['code']}/branches"].get({
