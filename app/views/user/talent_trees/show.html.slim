@@ -1,0 +1,21 @@
+= render 'user/menu'
+
+.container style="height: 90%;"
+  .row.mt-3
+    .col
+      h2 Talentové stromy
+  .row.mt-3
+    .col
+      .card
+        .card-body
+          = form_with url: user_talent_trees_path, method: :get, local: true,
+            class: 'form-inline' do |form|
+            a.btn.btn-outline-primary.mr-3 href="#" role="button" Nový individuální strom
+            a.btn.btn-outline-warning.mr-3 href="#" role="button" Upravit
+            = form.select :tree, grouped_options_for_select(@groups, params[:id]),
+              { include_blank: false },
+              { class: 'custom-select form-control mr-3', disabled: false }
+            = form.submit 'Zobrazit', class: 'btn btn-outline-success'
+  .row.mt-3.mb-3 style="height: 90%;"
+    .col#talent-tree data-talent-tree="#{@tree.to_json(include: {talent_tree_talents: {include: :talent}})}"
+      = javascript_pack_tag 'talent_tree_view', 'data-turbolinks-track': true
