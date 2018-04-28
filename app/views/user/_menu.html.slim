@@ -28,5 +28,5 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
       li.nav-item.dropdown
         a.nav-link.dropdown-toggle#navbarDropdownUser href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" = current_user.username
         .dropdown-menu aria-labelledby="navbarDropdownUser"
-          a.dropdown-item href="#" Správa účtu
+          a.dropdown-item href="#{url_for edit_user_user_path(current_user)}" Správa účtu
           a.dropdown-item href="#{url_for :logout}" Odhlásit se

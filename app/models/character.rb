@@ -9,19 +9,19 @@ class Character < ApplicationRecord
   has_many :character_character_attributes, dependent: :destroy
   has_many :character_attributes, through: :character_character_attributes
 
-  has_many :character_skills
+  has_many :character_skills, dependent: :destroy
   has_many :skills, through: :character_skills
 
-  has_many :character_achievements
+  has_many :character_achievements, dependent: :destroy
   has_many :achievements, through: :character_achievements
 
   has_many :character_titles, dependent: :destroy
   has_many :titles, through: :character_titles
 
-  has_many :character_items
+  has_many :character_items, dependent: :destroy
   has_many :items, through: :character_items
 
-  has_many :character_quests
+  has_many :character_quests, dependent: :destroy
   has_many :completed_quests, through: :character_quests, source: :quest
 
   def init(token)

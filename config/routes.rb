@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :talents
     end
     resources :guilds
+    resources :users
   end
 
   namespace :admin do
