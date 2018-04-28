@@ -4,11 +4,8 @@ class User::DashboardsController < ApplicationController
   def index
     refresh_character
 
-    @character_name_titled = character_name_titled
-    @achievement_points = 0
-    current_user.character.achievements.each do |achi|
-      @achievement_points += achi.points
-    end
+    @character_name_titled = current_user.character.name_with_titles
+    @achievement_points = current_user.character.achi_points
   end
 
   private
@@ -327,26 +324,6 @@ class User::DashboardsController < ApplicationController
     current_user.character.level = (credits / 60.0).ceil
     current_user.character.save
   end
-
-  def character_name_titled
-    titles_before = []
-    titles_after = []
-
-    Character.find(current_user.character.id).character_titles.each do |title|
-      next unless title.active
-
-      if title.title.after_name
-        titles_after << title.title.title
-      else
-        titles_before << title.title.title
-      end
-    end
-
-    titles_before.join(' ') +
-      " #{current_user.character.name}#{titles_after.empty? ? '' : ', '}" +
-      titles_after.join(', ')
-  end
-
 
   def courses_quests_given(student_courses)
     courses = student_courses.map do |course|

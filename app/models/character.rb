@@ -45,4 +45,31 @@ class Character < ApplicationRecord
   def add_title(title, active = false)
     self.character_titles.build(title: title, active: active)
   end
+
+  def name_with_titles
+    titles_before = []
+    titles_after = []
+
+    self.character_titles.each do |title|
+      next unless title.active
+
+      if title.title.after_name
+        titles_after << title.title.title
+      else
+        titles_before << title.title.title
+      end
+    end
+
+    titles_before.join(' ') +
+      " #{self.name}#{titles_after.empty? ? '' : ', '}" +
+      titles_after.join(', ')
+  end
+
+  def achi_points
+    points = 0
+    self.achievements.each do |achi|
+      points += achi.points
+    end
+    points
+  end
 end
