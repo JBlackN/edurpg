@@ -18,7 +18,6 @@
               h2.mt-0.mb-0 = @character.name_with_titles
               h3.mt-1.mb-0.ml-1.character-level-class
                 = "Úroveň #{@character.level} #{@character.character_class.name}"
-              /XXX: use guild not spec?
               h3.mt-0.character-guild = "<#{@character.specialization.name}>"
               ul.character-attributes
                 - @character.character_character_attributes.each do |attr|
@@ -31,9 +30,26 @@
   .row.mt-3
     .col-sm-8
       h3 Úkoly
-      .card
+      .card.mt-3
         .card-body
+          - if @quests.any?
+            ul.pl-3
+              - @quests.each do |quest|
+                li class="align-middle"
+                  h4 class="d-inline-block m-0 quest-#{quest.difficulty}"
+                    - if quest.talent
+                      a href="#{url_for user_quest_path(quest)}" class="quest-link quest-#{quest.difficulty}" = "[#{quest.talent.code}] #{quest.name}"
+                    - elsif quest.specialization
+                      a href="#{url_for user_quest_path(quest)}" class="quest-link quest-#{quest.difficulty}" = "[#{quest.specialization.abbr}] #{quest.name}"
+                    - elsif quest.character_class
+                      a href="#{url_for user_quest_path(quest)}" class="quest-link quest-#{quest.difficulty}" = "[#{quest.character_class.code}] #{quest.name}"
+                    - else
+                      a href="#{url_for user_quest_path(quest)}" class="quest-link quest-#{quest.difficulty}" = "#{quest.name}"
+                  - if quest.deadline
+                    p.d-inline-block.m-0.ml-4 = "(#{quest.deadline.strftime('%d.%m.%Y %H:%M')})"
+          - else
+            p.text-center.text-muted.mb-0 V příštích 14 dnech nemáte žádné úkoly!
     .col-sm-4
       h3 Aktivita
-      .card
+      .card.mt-3
         .card-body

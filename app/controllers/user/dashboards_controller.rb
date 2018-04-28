@@ -5,14 +5,19 @@ class User::DashboardsController < ApplicationController
     refresh_character
     @character = current_user.character
     @current_exp = ((@character.experience % 60) / 60.0) * 100
+    @quests = courses_quests_given(student_courses, true).where.not(
+      deadline: nil
+    ).where(
+      'deadline > ? AND deadline <= ?', DateTime.now, 14.days.from_now
+    ) - @character.completed_quests
   end
 
   private
 
   def refresh_character
     student_info = Kos.get_student_info(current_user.username, session[:user]['token'])
-    student_courses = Kos.get_student_courses(current_user.username, session[:user]['token'])
-    student_semesters = student_courses.map do |course|
+    student_courses
+    student_semesters = @student_courses.map do |course|
       course['semester']
     end.sort.uniq
 
@@ -64,14 +69,14 @@ class User::DashboardsController < ApplicationController
           spec_tree.save
 
           spec.talent_tree.talent_tree_talents.each do |talent|
-            next unless student_courses.any? do |course|
+            next unless @student_courses.any? do |course|
               course['code'] == talent.talent.code
             end
 
             new_talent = talent.dup
             new_talent.talent_tree_id = spec_tree.id
             new_talent.talent_id = talent.talent.id
-            new_talent.unlocked = student_courses.select do |course|
+            new_talent.unlocked = @student_courses.select do |course|
               course['code'] == talent.talent.code
             end.first['completed']
             new_talent.save
@@ -100,14 +105,14 @@ class User::DashboardsController < ApplicationController
           item_tree.save
 
           item.talent_tree.talent_tree_talents.each do |talent|
-            next unless student_courses.any? do |course|
+            next unless @student_courses.any? do |course|
               course['code'] == talent.talent.code
             end
 
             new_talent = talent.dup
             new_talent.talent_tree_id = item_tree.id
             new_talent.talent_id = talent.talent.id
-            new_talent.unlocked = student_courses.select do |course|
+            new_talent.unlocked = @student_courses.select do |course|
               course['code'] == talent.talent.code
             end.first['completed']
             new_talent.save
@@ -129,7 +134,7 @@ class User::DashboardsController < ApplicationController
           talent_trees.where.not(item_id: nil)
         )
       )
-      current_courses = student_courses.select do |course|
+      current_courses = @student_courses.select do |course|
         course['semester'] == current_semester
       end
 
@@ -149,7 +154,7 @@ class User::DashboardsController < ApplicationController
         destroy_queue = []
 
         tree.talent_tree_talents.each do |tree_talent|
-          unless student_courses.any? do |course|
+          unless @student_courses.any? do |course|
             course['code'] == tree_talent.talent.code
           end
            destroy_queue << tree_talent
@@ -169,14 +174,14 @@ class User::DashboardsController < ApplicationController
         spec_tree.save
 
         spec.talent_tree.talent_tree_talents.each do |talent|
-          next unless student_courses.any? do |course|
+          next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
 
           new_talent = talent.dup
           new_talent.talent_tree_id = spec_tree.id
           new_talent.talent_id = talent.talent.id
-          new_talent.unlocked = student_courses.select do |course|
+          new_talent.unlocked = @student_courses.select do |course|
             course['code'] == talent.talent.code
           end.first['completed']
           new_talent.save
@@ -196,14 +201,14 @@ class User::DashboardsController < ApplicationController
         item_tree.save
 
         item.talent_tree.talent_tree_talents.each do |talent|
-          next unless student_courses.any? do |course|
+          next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
 
           new_talent = talent.dup
           new_talent.talent_tree_id = item_tree.id
           new_talent.talent_id = talent.talent.id
-          new_talent.unlocked = student_courses.select do |course|
+          new_talent.unlocked = @student_courses.select do |course|
             course['code'] == talent.talent.code
           end.first['completed']
           new_talent.save
@@ -223,14 +228,14 @@ class User::DashboardsController < ApplicationController
         character_class_tree.save
 
         character_class.talent_tree.talent_tree_talents.each do |talent|
-          next unless student_courses.any? do |course|
+          next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
 
           new_talent = talent.dup
           new_talent.talent_tree_id = character_class_tree.id
           new_talent.talent_id = talent.talent.id
-          new_talent.unlocked = student_courses.select do |course|
+          new_talent.unlocked = @student_courses.select do |course|
             course['code'] == talent.talent.code
           end.first['completed']
           new_talent.save
@@ -250,14 +255,14 @@ class User::DashboardsController < ApplicationController
         item_tree.save
 
         item.talent_tree.talent_tree_talents.each do |talent|
-          next unless student_courses.any? do |course|
+          next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
 
           new_talent = talent.dup
           new_talent.talent_tree_id = item_tree.id
           new_talent.talent_id = talent.talent.id
-          new_talent.unlocked = student_courses.select do |course|
+          new_talent.unlocked = @student_courses.select do |course|
             course['code'] == talent.talent.code
           end.first['completed']
           new_talent.save
@@ -272,15 +277,15 @@ class User::DashboardsController < ApplicationController
       end
     end
 
-    # TODO: Quests
+    # Quests
     classifications = {}
 
-    courses_quests_given(student_courses).each do |quest|
+    courses_quests_given(@student_courses).each do |quest|
       next if current_user.character.character_quests.exists?(
         quest_id: quest.id)
       next if quest.completion_check_id.nil? || quest.completion_check_id.empty?
 
-      courses = student_courses.select do |course|
+      courses = @student_courses.select do |course|
         course['code'] == quest.talent.code
       end.sort_by { |course| course['semester'] }.reverse
 
@@ -313,7 +318,7 @@ class User::DashboardsController < ApplicationController
 
     # Level & experience
     credits = student_info['programme'] == 'MI' ? 180 : 0
-    student_courses.each do |course|
+    @student_courses.each do |course|
       next unless course['completed']
       code = course['code'].gsub(/^(.I).?-(...)(\..+)?$/, '\1-\2')
       if all_courses.key?(code)
@@ -325,10 +330,24 @@ class User::DashboardsController < ApplicationController
     current_user.character.save
   end
 
-  def courses_quests_given(student_courses)
+  def courses_quests_given(student_courses, include_class_spec = false)
     courses = student_courses.map do |course|
       Talent.find_by(code: course['code']).id
     end
-    Quest.where(talent_id: courses)
+
+    quests = Quest.where(talent_id: courses)
+    quests = quests.or(
+      Quest.where(
+        specialization_id: current_user.character.specialization.id).or(
+          Quest.where(character_class_id: current_user.character.character_class.id)
+        )
+    ) if include_class_spec
+    quests
+  end
+
+  def student_courses
+    @student_courses ||= Kos.get_student_courses(current_user.username,
+                                                 session[:user]['token'])
+    @student_courses
   end
 end
