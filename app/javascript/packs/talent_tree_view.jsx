@@ -84,21 +84,25 @@ class Talent extends React.Component {
           </pattern>
         </defs>
         <rect x={x} y={y} width={size} height={size}
-              style={{fill: bgUrl, stroke: 'black', strokeWidth: '0.2em'}} />
+              style={{fill: bgUrl, stroke: 'black', strokeWidth: '0.2em'}}
+              data-toggle="popover" data-container="body"
+              title={talent.name + ' (' + points + '/' + talent.points + ')'}
+              data-content={talent.description} data-placement="auto"
+              data-trigger="click hover" />
       </svg>
     ) : (
       <rect x={x} y={y} width={size} height={size}
-            style={{fill: 'pink', stroke: 'black', strokeWidth: '0.2em'}} />
+            style={{fill: 'pink', stroke: 'black', strokeWidth: '0.2em'}}
+            data-toggle="popover" data-container="body"
+            title={talent.name + ' (' + points + '/' + talent.points + ')'}
+            data-content={talent.description} data-placement="auto"
+            data-trigger="click hover" />
     );
 
     return (
       <g className="talent" style={{opacity: unlocked ? 1 : 0.33}}>
         {bg}
-        <svg x={x} y={y} width={size} height={size}
-             data-toggle="popover" data-container="body"
-             title={talent.name + ' (' + points + '/' + talent.points + ')'}
-             data-content={talent.description} data-placement="auto"
-             data-trigger="click hover">
+        <svg x={x} y={y} width={size} height={size} style={{pointerEvents: 'none'}}>
           <text x='50%' y='55%' alignmentBaseline="middle" textAnchor="middle"
                 style={{fontSize: '0.67em'}}>{talent.code}</text>
         </svg>

@@ -16,7 +16,9 @@ Rails.application.routes.draw do
     resources :titles
     resources :items
     resources :quests
-    resources :talent_trees
+    resources :talent_trees do
+      resources :talents
+    end
   end
 
   namespace :admin do

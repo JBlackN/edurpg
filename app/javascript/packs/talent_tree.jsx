@@ -117,7 +117,7 @@ class TalentTree extends React.Component {
     const {width, height, talent_size, image} = this.props.tree
     const talents = this.props.tree.talent_tree_talents.map((talent) =>
       <Talent x={this.state[talent.id].x} y={this.state[talent.id].y}
-              size={talent_size} talent={talent.talent} treeId={this.props.tree.id}
+              size={talent_size} talent={talent.talent} tree={this.props.tree}
               onMouseDown={this.handleMoveStart} onMouseUp={this.handleMoveEnd}
               onMouseMove={this.handleMove}
               scale={this.props.scale} id={talent.id} key={talent.id} />
@@ -173,15 +173,16 @@ class Talent extends React.Component {
   }
 
   render() {
-    const {x, y, size, talent} = this.props;
-    const updatePath = "/admin/talent_trees/" + this.props.treeId + "/talents/" + this.props.id + "/edit";
-    const deletePath = "/admin/talent_trees/" + this.props.treeId + "/talents/" + this.props.id;
+    const {x, y, size, tree, talent, id} = this.props;
+    const namespace = tree.character_id ? 'user' : 'admin';
+    const updatePath = "/" + namespace + "/talent_trees/" + tree.id + "/talents/" + id + "/edit";
+    const deletePath = "/" + namespace + "/talent_trees/" + tree.id + "/talents/" + id;
 
-    const bgUrl = "url(#talent" + this.props.id + ")";
+    const bgUrl = "url(#talent" + id + ")";
     const bg = talent.image ? (
       <svg>
         <defs>
-          <pattern id={"talent" + this.props.id} x={0} y={0} height="100%" width="100%"
+          <pattern id={"talent" + id} x={0} y={0} height="100%" width="100%"
                    patternContentUnits="objectBoundingBox">
             <image height={1} width={1} preserveAspectRatio="none"
               xlinkHref={"data:image/png;base64," + talent.image} />

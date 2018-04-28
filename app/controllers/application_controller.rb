@@ -16,6 +16,19 @@ class ApplicationController < ActionController::Base
     redirect_to :login unless current_user.permission.use_app
   end
 
+  def authorize_user_manage_talent_tree(id)
+    unless current_user.character.talent_trees.exists?(id.to_i)
+      redirect_to user_talent_trees_path
+    end
+  end
+
+  def authorize_user_manage_talent_tree_talent(id)
+    unless current_user.character.talent_trees.exists?(
+        TalentTreeTalent.find(id).talent_tree.id)
+      redirect_to user_talent_trees_path
+    end
+  end
+
   def authorize_admin
     redirect_to :login unless current_user.permission.manage_app ||
       current_user.permission.manage_attrs ||

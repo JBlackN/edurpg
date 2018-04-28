@@ -1,5 +1,8 @@
 class User::TalentTreesController < ApplicationController
   before_action :authorize_user
+  before_action -> {
+    authorize_user_manage_talent_tree(params[:id])
+  }, except: [:index]
 
   def index
     if params.key?(:tree)
@@ -15,10 +18,6 @@ class User::TalentTreesController < ApplicationController
   end
 
   def show
-    unless current_user.character.talent_trees.exists?(params[:id].to_i)
-      redirect_to user_talent_trees_path
-    end
-
     @groups = talent_tree_groups
     @tree = TalentTree.includes(:talents).find(params[:id])
   end
@@ -44,7 +43,7 @@ class User::TalentTreesController < ApplicationController
     end
 
     if @tree.save && @tree.update(talent_tree_params)
-      redirect_to edit_admin_talent_tree_path(@tree)
+      redirect_to edit_user_talent_tree_path(@tree)
     else
       render 'edit' # TODO: errors -> view
     end
@@ -67,17 +66,9 @@ class User::TalentTreesController < ApplicationController
         [tree.item.name, tree.id]
       end
 
-    individual_tree_items =
-      current_user.character.talent_trees.where(character_class_id: nil,
-                                                specialization_id: nil,
-                                                item_id: nil).map do |tree|
-                                                  [tree.id, tree.id] # FIXME
-                                                end
-
     [
       ['Obecné stromy', generic_tree_items],
-      ['Artefaktové zbraně', artifact_items],
-      ['Individuální stromy', individual_tree_items],
+      ['Artefaktové zbraně', artifact_items]
     ]
   end
 

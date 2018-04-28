@@ -10,8 +10,7 @@
         .card-body
           = form_with url: user_talent_trees_path, method: :get, local: true,
             class: 'form-inline' do |form|
-            a.btn.btn-outline-primary.mr-3 href="#" role="button" Nový individuální strom
-            a.btn.btn-outline-warning.mr-3 href="#" role="button" Upravit
+            a.btn.btn-outline-warning.mr-3 href="#{url_for edit_user_talent_tree_path(@tree)}" role="button" data-turbolinks="false" Upravit
             = form.select :tree, grouped_options_for_select(@groups, params[:id]),
               { include_blank: false },
               { class: 'custom-select form-control mr-3', disabled: false }

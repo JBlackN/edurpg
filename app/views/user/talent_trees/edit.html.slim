@@ -1,0 +1,42 @@
+= render 'user/menu'
+
+.container style="height: 90%;"
+  .row.mt-3
+    .col
+      - if @tree.item
+        h2.d-inline-block
+          a.mr-2#talent-tree-back href="#{url_for user_talent_tree_path(@tree)}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' data-turbolinks="false" 🡰
+          = "Talentový strom: #{@tree.item.name}"
+      - elsif @tree.specialization
+        h2.d-inline-block
+          a.mr-2#talent-tree-back href="#{url_for user_talent_tree_path(@tree)}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' data-turbolinks="false" 🡰
+          = "Talentový strom: #{@tree.specialization.name}"
+      - elsif @tree.character_class
+        h2.d-inline-block
+          a.mr-2#talent-tree-back href="#{url_for user_talent_tree_path(@tree)}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' data-turbolinks="false" 🡰
+          = "Talentový strom: #{@tree.character_class.name}"
+      - else
+        h2.d-inline-block
+          a.mr-2#talent-tree-back href="#{url_for user_talent_tree_path(@tree)}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' data-turbolinks="false" 🡰
+          | Talentový strom
+      = form_with model: @tree, url: user_talent_tree_path, local: true,
+        class: 'form-inline', id: 'talent-tree-form' do |form|
+        a.btn.btn-outline-primary.mr-2 href="#{url_for new_user_talent_tree_talent_path(@tree.id)}" role="button" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' Přidat talent
+        = form.label :width, 'Šířka', class: 'col-form-label mr-2'
+        = form.number_field :width, min: 1, step: 1,
+          class: 'form-control talent-tree-form-number-input mr-2'
+        = form.label :height, 'Výška', class: 'col-form-label mr-2'
+        = form.number_field :height, min: 1, step: 1,
+          class: 'form-control talent-tree-form-number-input mr-2'
+        = form.label :talent_size, 'Rozměry talentu', class: 'col-form-label mr-2'
+        = form.number_field :talent_size, min: 1, step: 1,
+          class: 'form-control talent-tree-form-number-input mr-2'
+        .custom-file.w-25.mr-2 style="overflow: hidden;"
+          = form.file_field :image, class: 'custom-file-input',
+            id: 'talent_image'
+          = form.label :image, 'Vybrat obrázek', for: "talent_image",
+            class: 'custom-file-label'
+        = form.submit 'Uložit', class: 'btn btn-outline-success'
+  .row.mt-3.mb-3 style="height: 90%;"
+    .col#talent-tree data-talent-tree="#{@tree.to_json(include: {talent_tree_talents: {include: :talent}})}"
+      = javascript_pack_tag 'talent_tree', 'data-turbolinks-track': true
