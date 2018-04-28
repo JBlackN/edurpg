@@ -14,6 +14,7 @@ class CreateConsents < ActiveRecord::Migration[5.1]
       t.boolean :classes
       t.boolean :events
       t.boolean :exams
+      t.boolean :guilds
       t.references :user, foreign_key: true
 
       t.timestamps

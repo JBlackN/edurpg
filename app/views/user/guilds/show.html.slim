@@ -1,0 +1,50 @@
+= render 'user/menu'
+
+.container
+  .row.mt-3
+    .col
+      h2 = "<#{@name}>"
+      .card.mt-3
+        .card-body
+          = form_with url: user_guild_path, method: :get, local: true,
+            class: 'form-inline' do |form|
+            = form.label :order, 'Řazení', class: 'mr-2'
+            = form.select :order, @orders,
+              { selected: params[:order] ? params[:order] : :achi_points, include_blank: false },
+              { class: 'custom-select form-control mr-3', disabled: false }
+            = form.submit 'Uložit', class: 'btn btn-outline-success'
+      ul.list-group.mt-3
+        - if @characters.is_a?(Hash)
+          li.list-group-item.list-group-item-primary.d-flex.justify-content-between.align-items-center
+            = "#{@characters[:position]}/#{@characters[:total]}"
+            span.font-weight-bold = @characters[:name]
+            span.badge.badge-info
+              - if params.key?(:order)
+                = @characters[params[:order].to_sym]
+              - else
+                = @characters[:achi_points]
+        - elsif @characters.is_a?(Array)
+          - @characters.each do |character|
+            - if character.nil?
+              li.list-group-item.d-flex.justify-content-between.align-items-center.text-muted
+                span &hellip;
+                span &hellip;
+                span &hellip;
+            - elsif character[:id] == current_user.character.id
+              li.list-group-item.list-group-item-primary.d-flex.justify-content-between.align-items-center
+                = "#{character[:position]}/#{character[:total]}"
+                span.font-weight-bold = character[:name]
+                span.badge.badge-info
+                  - if params.key?(:order)
+                    = character[params[:order].to_sym]
+                  - else
+                    = character[:achi_points]
+            - else
+              li.list-group-item.d-flex.justify-content-between.align-items-center
+                = "#{character[:position]}/#{character[:total]}"
+                span.font-weight-bold = character[:name]
+                span.badge.badge-info
+                  - if params.key?(:order)
+                    = character[params[:order].to_sym]
+                  - else
+                    = character[:achi_points]

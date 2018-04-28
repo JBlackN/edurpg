@@ -21,8 +21,9 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
       li.nav-item.dropdown
         a.nav-link.dropdown-toggle#navbarDropdownGuild href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" Cechy
         .dropdown-menu aria-labelledby="navbarDropdownGuild"
-          a.dropdown-item href="#" FIT ČVUT
-          a.dropdown-item href="#" TBD
+          a.dropdown-item href="#{url_for user_guild_path(0)}" = current_user.character.character_class.name
+          - if current_user.character.specialization
+            a.dropdown-item href="#{url_for user_guild_path(1)}" = current_user.character.specialization.name
     ul.navbar-nav
       li.nav-item.dropdown
         a.nav-link.dropdown-toggle#navbarDropdownUser href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" = current_user.username

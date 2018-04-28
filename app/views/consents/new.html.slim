@@ -76,6 +76,13 @@
         .form-check.text-right
           = form.check_box :photo, class: 'form-check-input'
           = form.label :photo, 'I agree', class: 'form-check-label gdpr-label'
+    .row.mt-3
+      .col
+        h2 Guilds
+        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
+        .form-check.text-right
+          = form.check_box :guilds, class: 'form-check-input'
+          = form.label :guilds, 'I agree', class: 'form-check-label gdpr-label'
     .row.mt-5.mb-5
       .col.text-center
         = form.submit 'Submit', class: 'btn btn-danger'

@@ -22,6 +22,6 @@ class ConsentsController < ApplicationController
   def consent_params
     params.require(:consent).permit(:username, :name, :year, :study_plan,
                                     :grades, :titles, :roles, :classes,
-                                    :events, :exams, :photo)
+                                    :events, :exams, :photo, :guilds)
   end
 end
