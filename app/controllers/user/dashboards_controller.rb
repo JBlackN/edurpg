@@ -51,21 +51,16 @@ class User::DashboardsController < ApplicationController
 
     # Talent trees & artifact weapons
     if current_user.character.talent_trees.any?
-      has_spec_tree = false
-      current_user.character.talent_trees.each do |tree|
-        has_spec_tree = true if tree.specialization
-      end
-
       if current_user.character.specialization
-        current_tree = current_user.character.talent_trees.where.not(
+        old_spec_tree = current_user.character.talent_trees.where.not(
           specialization_id: nil).take
-        if !current_tree ||
-            current_tree.specialization_id != current_user.character.specialization.id
-          # replace class tree with spec tree
+        if !old_spec_tree ||
+            old_spec_tree.specialization_id != current_user.character.specialization.id
+          # replace class/old spec tree with new spec tree
           character_class_tree = current_user.character.talent_trees.where.not(
             character_class_id: nil).take
           character_class_tree.destroy if character_class_tree
-          current_tree.destroy if current_tree
+          old_spec_tree.destroy if old_spec_tree
 
           spec = current_user.character.specialization
           spec_tree = spec.talent_tree.dup
@@ -143,13 +138,30 @@ class User::DashboardsController < ApplicationController
       end
 
       current_courses.each do |course|
-        if course['completed']
-          talent_trees.each do |tree|
-            talent_id = Talent.find_by(code: course['code'])
-            talent = tree.talent_tree_talents.find_by(talent_id: talent_id)
-            talent.completed = true
-            talent.save
+        talent = Talent.find_by(code: course['code'])
+        next unless talent
+        talent_trees.each do |tree|
+          tree_talent = tree.talent_tree_talents.find_by(talent_id: talent.id)
+          tree.talent_tree_talents << talent unless tree_talent
+          tree_talent.completed = true if course['completed']
+          tree_talent.save
+          tree.save
+        end
+      end
+
+      talent_trees.each do |tree|
+        destroy_queue = []
+
+        tree.talent_tree_talents.each do |tree_talent|
+          unless student_courses.any? do |course|
+            course['code'] == tree_talent.talent.code
           end
+           destroy_queue << tree_talent
+          end
+        end
+
+        destroy_queue.each do |tree_talent|
+          tree.talent_tree_talents.destroy(tree_talent)
         end
       end
     else
