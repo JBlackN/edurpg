@@ -5,7 +5,7 @@ class Admin::TalentTreesController < ApplicationController
 
   def index
     @classes = CharacterClass.all
-    @items = Item.joins(:talent_tree).where(rarity: 'artifact')
+    @items = Item.joins(:talent_tree).where(rarity: 'artifact').distinct
   end
 
   def edit
