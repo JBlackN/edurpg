@@ -3,9 +3,8 @@ class User::DashboardsController < ApplicationController
 
   def index
     refresh_character
-
-    @character_name_titled = current_user.character.name_with_titles
-    @achievement_points = current_user.character.achi_points
+    @character = current_user.character
+    @current_exp = ((@character.experience % 60) / 60.0) * 100
   end
 
   private
@@ -312,7 +311,7 @@ class User::DashboardsController < ApplicationController
     end
     current_user.character.save
 
-    # Level
+    # Level & experience
     credits = student_info['programme'] == 'MI' ? 180 : 0
     student_courses.each do |course|
       next unless course['completed']
@@ -322,6 +321,7 @@ class User::DashboardsController < ApplicationController
       end
     end
     current_user.character.level = (credits / 60.0).ceil
+    current_user.character.experience = credits
     current_user.character.save
   end
 
