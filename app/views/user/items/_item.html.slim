@@ -9,8 +9,19 @@
         h3 class="mt-0 item-#{item.rarity}" = "#{item.name}"
         p = item.description
         ul.list-group
-          - item.character_attributes.each do |attribute|
-            - points = attribute.item_attributes.find_by(character_attribute_id: attribute.id,
-              item_id: item.id).points
+          - item_tree = item.talent_trees.where(character_id: current_user.character.id).take
+          - CharacterAttribute.all.each do |attribute|
+            - item_attr = attribute.item_attributes.find_by(character_attribute_id: attribute.id,
+              item_id: item.id)
+            - if item_attr && !item_attr.points.nil?
+              - points = item_attr.points
+            - else
+              - points = 0
+            - if item_tree
+              - item_tree.talent_tree_talents.each do |talent|
+                - next unless talent.unlocked
+                - talent_attr = talent.talent.talent_attributes.where(character_attribute_id: attribute.id).take
+                - if talent_attr && !talent_attr.points.nil? && talent_attr.points > 0
+                  - points += talent_attr.points
             - if !points.nil? && points > 0
               li.list-group-item = "+ #{points} #{attribute.name}"
