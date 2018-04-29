@@ -353,6 +353,28 @@ class User::DashboardsController < ApplicationController
       end
     end
     current_user.character.save
+    current_user.character.character_character_attributes.each do |attr|
+      attr.points = 0
+      current_user.character.items.each do |item|
+        item_attr = attr.character_attribute.item_attributes.find_by(
+          character_attribute_id: attr.character_attribute.id, item_id: item.id)
+        attr.points += item_attr.points if item_attr && !item_attr.points.nil?
+
+        item_tree = item.talent_trees.where(
+          character_id: current_user.character.id).take
+        if item_tree
+          item_tree.talent_tree_talents.each do |talent|
+            next unless talent.unlocked
+            talent_attr = talent.talent.talent_attributes.where(
+              character_attribute_id: attr.character_attribute.id).take
+            if talent_attr && !talent_attr.points.nil? && talent_attr.points > 0
+              attr.points += talent_attr.points
+            end
+          end
+        end
+      end
+      attr.save
+    end
 
     # Level & experience
     credits = student_info['programme'] == 'MI' ? 180 : 0
