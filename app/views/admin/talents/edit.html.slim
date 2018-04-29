@@ -25,6 +25,22 @@
             = form.number_field :points, min: 0, step: 1, class: 'form-control'
         = form.label :description, 'Popis', class: 'col-form-label'
         = form.text_area :description, class: 'form-control'
+        h3.mt-3 Atributy
+        .form-row
+          .col
+            .form-group.form-inline.mt-3
+              - @attributes.each do |attribute|
+                label.mr-2.mb-3 for="talent_attributes_#{attribute.id}" = attribute.name
+                - talent_attr = attribute.talent_attributes.find_by(character_attribute_id: attribute.id,
+                  talent_id: @talent.id)
+                - unless talent_attr.nil?
+                  - points = talent_attr.points
+                  - if !points.nil? && points > 0
+                    input.form-control.mr-3.mb-2 id="talent_attributes_#{attribute.id}" name="talent[attributes][#{attribute.id}]" min="0" step="1" type="number" value="#{points}"
+                  - else
+                    input.form-control.mr-3.mb-2 id="talent_attributes_#{attribute.id}" name="talent[attributes][#{attribute.id}]" min="0" step="1" type="number"
+                - else
+                  input.form-control.mr-3.mb-2 id="talent_attributes_#{attribute.id}" name="talent[attributes][#{attribute.id}]" min="0" step="1" type="number"
         .text-right
           = link_to 'Zrušit', edit_admin_talent_tree_path(@tree),
                     class: 'btn btn-outline-danger mt-3 mr-3',

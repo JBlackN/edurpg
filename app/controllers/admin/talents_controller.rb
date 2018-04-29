@@ -7,12 +7,14 @@ class Admin::TalentsController < ApplicationController
 
   def new
     @tree = TalentTree.find(params[:talent_tree_id])
+    @attributes = CharacterAttribute.all
   end
 
   def edit
     @tree = TalentTree.find(params[:talent_tree_id])
     @tree_talent = TalentTreeTalent.find(params[:id])
     @talent = @tree_talent.talent
+    @attributes = CharacterAttribute.all
   end
 
   def create
@@ -25,6 +27,13 @@ class Admin::TalentsController < ApplicationController
       # Process image
       if params[:talent].key?(:image)
         @talent.image = Base64.encode64(params[:talent][:image].read)
+      end
+
+      # Process attributes
+      if params[:talent].key?(:attributes)
+        params[:talent][:attributes].each do |attribute_id, points|
+          @talent.add_attribute(CharacterAttribute.find(attribute_id), points)
+        end
       end
     end
 
@@ -47,6 +56,14 @@ class Admin::TalentsController < ApplicationController
     # Process image
     if params[:talent].key?(:image)
       @talent.image = Base64.encode64(params[:talent][:image].read)
+    end
+
+    # Process attributes
+    if params[:talent].key?(:attributes)
+      @talent.talent_attributes.clear
+      params[:talent][:attributes].each do |attribute_id, points|
+        @talent.add_attribute(CharacterAttribute.find(attribute_id), points)
+      end
     end
 
     if @talent.save && @talent.update(talent_params)

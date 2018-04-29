@@ -5,4 +5,9 @@ class Talent < ApplicationRecord
   has_many :character_attributes, through: :talent_attributes
   has_many :talent_tree_talents
   has_many :talent_trees, through: :talent_tree_talents
+
+  def add_attribute(attribute, points)
+    self.talent_attributes.build(character_attribute: attribute,
+                                 points: points)
+  end
 end
