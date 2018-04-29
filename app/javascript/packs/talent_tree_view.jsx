@@ -73,6 +73,19 @@ class Talent extends React.Component {
     const {x, y, size, talent, unlocked} = this.props;
     const points = unlocked ? talent.points : 0;
 
+    var content = '<p class="mb-2">' + talent.description + '</p>' +
+      '<ul class="list-group">';
+    for (var i = 0; i < talent.talent_attributes.length; i++) {
+      const attr = talent.talent_attributes[i];
+      if (attr.points !== null && attr.points > 0) {
+        content += '<li class="list-group-item">' +
+          '+ ' + attr.points + ' ' +
+          attr.character_attribute.name +
+          '</li>';
+      }
+    }
+    content += '</ul>';
+
     const bgUrl = "url(#talent" + this.props.id + ")";
     const bg = talent.image ? (
       <svg>
@@ -85,17 +98,17 @@ class Talent extends React.Component {
         </defs>
         <rect x={x} y={y} width={size} height={size}
               style={{fill: bgUrl, stroke: 'black', strokeWidth: '0.2em'}}
-              data-toggle="popover" data-container="body"
+              data-toggle="popover" data-container="body" data-html="true"
               title={talent.name + ' (' + points + '/' + talent.points + ')'}
-              data-content={talent.description} data-placement="auto"
+              data-content={content} data-placement="auto"
               data-trigger="click hover" />
       </svg>
     ) : (
       <rect x={x} y={y} width={size} height={size}
             style={{fill: 'pink', stroke: 'black', strokeWidth: '0.2em'}}
-            data-toggle="popover" data-container="body"
+            data-toggle="popover" data-container="body" data-html="true"
             title={talent.name + ' (' + points + '/' + talent.points + ')'}
-            data-content={talent.description} data-placement="auto"
+            data-content={content} data-placement="auto"
             data-trigger="click hover" />
     );
 
