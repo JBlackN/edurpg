@@ -53,9 +53,69 @@ class User::QuestsController < ApplicationController
     }
 
     if current_user.character.completed_quests.exists?(@quest.id)
+      @quest.skills.each do |skill|
+        if character_skill = CharacterSkill.find_by(skill_id: skill.id)
+          current_user.character.character_skills.destroy(character_skill)
+        end
+      end
+
+      @quest.items.each do |item|
+        if character_item = CharacterItem.find_by(item_id: item.id)
+          current_user.character.character_items.destroy(character_item)
+        end
+      end
+
+      @quest.titles.each do |title|
+        if character_title = CharacterTitle.find_by(title_id: title.id)
+          current_user.character.character_titles.destroy(character_title)
+        end
+      end
+
+      @quest.achievements.each do |achievement|
+        achievement.items.each do |item|
+          if character_item = CharacterItem.find_by(item_id: item.id)
+            current_user.character.character_items.destroy(character_item)
+          end
+        end
+
+        achievement.titles.each do |title|
+          if character_title = CharacterTitle.find_by(title_id: title.id)
+            current_user.character.character_titles.destroy(character_title)
+          end
+        end
+
+        if character_achi = CharacterAchievement.find_by(achievement_id: achievement.id)
+          current_user.character.character_achievements.destroy(character_achi)
+        end
+      end
+
       current_user.character.completed_quests.destroy(@quest)
     else
       current_user.character.completed_quests << @quest
+
+      @quest.skills.each do |skill|
+        current_user.character.skills << skill
+      end
+
+      @quest.items.each do |item|
+        current_user.character.items << item
+      end
+
+      @quest.titles.each do |title|
+        current_user.character.titles << title
+      end
+
+      @quest.achievements.each do |achievement|
+        current_user.character.achievements << achievement
+
+        achievement.items.each do |item|
+          current_user.character.items << item
+        end
+
+        achievement.titles.each do |title|
+          current_user.character.titles << title
+        end
+      end
     end
 
     if @quest.save

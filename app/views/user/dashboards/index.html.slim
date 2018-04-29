@@ -28,15 +28,15 @@
         .progress-bar role="progressbar" style="width: #{@current_exp}%;" aria-valuenow="#{@current_exp}" aria-valuemin="0" aria-valuemax="60"
           = "#{@character.experience % 60}/60 (#{@character.experience} celkem)"
   .row.mt-3
-    .col-sm-8
+    .col-sm-7
       h3 Úkoly
       .card.mt-3
         .card-body
           - if @quests.any?
-            ul.pl-3
+            ul.pl-3.mb-1
               - @quests.each do |quest|
-                li class="align-middle"
-                  h4 class="d-inline-block m-0 quest-#{quest.difficulty}"
+                li.align-middle.clearfix
+                  h4 class="d-inline-block m-0 quest-name quest-#{quest.difficulty}"
                     - if quest.talent
                       a href="#{url_for user_quest_path(quest)}" class="quest-link quest-#{quest.difficulty}" = "[#{quest.talent.code}] #{quest.name}"
                     - elsif quest.specialization
@@ -46,10 +46,36 @@
                     - else
                       a href="#{url_for user_quest_path(quest)}" class="quest-link quest-#{quest.difficulty}" = "#{quest.name}"
                   - if quest.deadline
-                    p.d-inline-block.m-0.ml-4 = "(#{quest.deadline.strftime('%d.%m.%Y %H:%M')})"
+                    p.d-inline-block.m-0.ml-4.quest-deadline.float-right.text-muted = "(#{quest.deadline.strftime('%d.%m.%Y %H:%M')})"
           - else
             p.text-center.text-muted.mb-0 V příštích 14 dnech nemáte žádné úkoly!
-    .col-sm-4
+    .col-sm-5
       h3 Aktivita
       .card.mt-3
-        .card-body
+        - if @activities.any?
+          ul.list-group.list-group-flush
+            - @activities.each do |activity|
+              li.list-group-item
+                span.float-right.text-muted.activity-datetime = activity[:datetime].strftime('%d.%m.%Y %H:%M')
+                .media
+                  - if [:skill, :achievement, :item].include?(activity[:type])
+                    - if activity[:image].nil?
+                      = image_tag 'placeholder.png', class: 'mr-3 activity-image'
+                    - else
+                      img.activity-image.mr-3 src="data:image/png;base64, #{activity[:image]}"
+                  .media-body
+                    h4.activity-name.mt-0
+                      - case activity[:type]
+                      - when :skill
+                        a href="#{url_for user_skill_path(activity[:attr_id])}" = activity[:name]
+                      - when :achievement
+                        a href="#{url_for user_achievement_path(activity[:category_id])}" = activity[:name]
+                      - when :item
+                        a href="#{url_for user_items_path}" = activity[:name]
+                      - when :title
+                        a href="#{url_for user_titles_path}" = activity[:name]
+                      - else
+                        = activity[:name]
+        - else
+          .card-body
+            p.text-center.text-muted.mb-0 Nemáte žádnou aktivitu!

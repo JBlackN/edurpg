@@ -5,6 +5,7 @@ class User::DashboardsController < ApplicationController
     refresh_character
     @character = current_user.character
     @current_exp = ((@character.experience % 60) / 60.0) * 100
+    @activities = build_activity_log
     @quests = courses_quests_given(student_courses, true).where.not(
       deadline: nil
     ).where(
@@ -305,6 +306,30 @@ class User::DashboardsController < ApplicationController
           classifications[quest.talent.code].key?(quest.completion_check_id) &&
           classifications[quest.talent.code][quest.completion_check_id]
         current_user.character.completed_quests << quest
+
+        quest.skills.each do |skill|
+          current_user.character.skills << skill
+        end
+
+        quest.items.each do |item|
+          current_user.character.items << item
+        end
+
+        quest.titles.each do |title|
+          current_user.character.titles << title
+        end
+
+        quest.achievements.each do |achievement|
+          current_user.character.achievements << achievement
+
+          achievement.items.each do |item|
+            current_user.character.items << item
+          end
+
+          achievement.titles.each do |title|
+            current_user.character.titles << title
+          end
+        end
       end
     end
 
@@ -328,6 +353,51 @@ class User::DashboardsController < ApplicationController
     current_user.character.level = (credits / 60.0).ceil
     current_user.character.experience = credits
     current_user.character.save
+  end
+
+  def build_activity_log(count = 5)
+    activity_log = []
+
+    current_user.character.character_skills.each do |skill|
+      activity_log << {
+        type: :skill,
+        attr_id: skill.skill.character_attribute.id,
+        name: skill.skill.name,
+        image: skill.skill.image,
+        datetime: skill.created_at
+      }
+    end
+
+    current_user.character.character_achievements.each do |achi|
+      activity_log << {
+        type: :achievement,
+        category_id: achi.achievement.achievement_category.id,
+        name: achi.achievement.name,
+        image: achi.achievement.image,
+        datetime: achi.created_at
+      }
+    end
+
+    current_user.character.character_items.each do |item|
+      activity_log << {
+        type: :item,
+        name: item.item.name,
+        image: item.item.image,
+        datetime: item.created_at
+      }
+    end
+
+    current_user.character.character_titles.each do |title|
+      activity_log << {
+        type: :title,
+        name: title.title.title,
+        datetime: title.created_at
+      }
+    end
+
+    activity_log.sort_by do |activity|
+      activity[:datetime]
+    end.reverse.take(count)
   end
 
   def courses_quests_given(student_courses, include_class_spec = false)
