@@ -3,7 +3,7 @@ class Item < ApplicationRecord
   belongs_to :specialization, optional: true
   has_many :item_attributes, dependent: :destroy
   has_many :character_attributes, through: :item_attributes
-  has_one :talent_tree
+  has_many :talent_trees
   has_and_belongs_to_many :quests
   has_and_belongs_to_many :achievements
   has_many :character_items

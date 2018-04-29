@@ -16,7 +16,7 @@ class Admin::DashboardsController < ApplicationController
       courses[:branch]['BI'].each do |branch, data|
         spec = class_bc.specializations.find_or_create_by(name: branch, code: data['id'],
                                                           abbr: data['code'])
-        tree = spec.create_talent_tree(width: 1920, height: 1080, talent_size: 50)
+        tree = spec.talent_trees.create(width: 1920, height: 1080, talent_size: 50)
         data['courses'].each do |course|
           talent = Talent.find_or_create_by(
             name: course['name'], description: course['description'],
@@ -31,7 +31,7 @@ class Admin::DashboardsController < ApplicationController
       courses[:branch]['MI'].each do |branch, data|
         spec = class_ing.specializations.find_or_create_by(name: branch, code: data['id'],
                                                            abbr: data['code'])
-        tree = spec.create_talent_tree(width: 1920, height: 1080, talent_size: 50)
+        tree = spec.talent_trees.create(width: 1920, height: 1080, talent_size: 50)
         data['courses'].each do |course|
           talent = Talent.find_or_create_by(
             name: course['name'], description: course['description'],
@@ -45,8 +45,8 @@ class Admin::DashboardsController < ApplicationController
 
       # Talent trees for classes
 
-      tree_bc = class_bc.create_talent_tree(width: 1920, height: 1080, talent_size: 50)
-      tree_ing = class_ing.create_talent_tree(width: 1920, height: 1080, talent_size: 50)
+      tree_bc = class_bc.talent_trees.create(width: 1920, height: 1080, talent_size: 50)
+      tree_ing = class_ing.talent_trees.create(width: 1920, height: 1080, talent_size: 50)
 
       courses[:programme]['BI'].each do |course|
         talent = Talent.find_or_create_by(
@@ -89,9 +89,9 @@ class Admin::DashboardsController < ApplicationController
       artifact_ing = Item.create(name: "#{class_ing.name} - artefakt",
                                  rarity: 'artifact')
 
-      artifact_bc_tree = artifact_bc.create_talent_tree(
+      artifact_bc_tree = artifact_bc.talent_trees.create(
         width: 1920, height: 1080, talent_size: 50)
-      artifact_ing_tree = artifact_ing.create_talent_tree(
+      artifact_ing_tree = artifact_ing.talent_trees.create(
         width: 1920, height: 1080, talent_size: 50)
 
       courses[:programme]['BI'].each do |course|
@@ -112,7 +112,7 @@ class Admin::DashboardsController < ApplicationController
         artifact_spec = Item.find_or_create_by(
           name: "#{branch} (BI) - artefakt",
           rarity: 'artifact')
-        tree_artifact_spec = artifact_spec.create_talent_tree(
+        tree_artifact_spec = artifact_spec.talent_trees.create(
           width: 1920, height: 1080, talent_size: 50)
 
         data['courses'].each do |course|
@@ -129,7 +129,7 @@ class Admin::DashboardsController < ApplicationController
         artifact_spec = Item.find_or_create_by(
           name: "#{branch} (MI) - artefakt",
           rarity: 'artifact')
-        tree_artifact_spec = artifact_spec.create_talent_tree(
+        tree_artifact_spec = artifact_spec.talent_trees.create(
           width: 1920, height: 1080, talent_size: 50)
 
         data['courses'].each do |course|

@@ -65,11 +65,13 @@ class User::DashboardsController < ApplicationController
           old_spec_tree.destroy if old_spec_tree
 
           spec = current_user.character.specialization
-          spec_tree = spec.talent_tree.dup
+          spec_tree = spec.talent_trees.where(character_id: nil).take.dup
           spec_tree.specialization_id = spec.id
           spec_tree.save
 
-          spec.talent_tree.talent_tree_talents.each do |talent|
+          spec.talent_trees.where(
+            character_id: nil
+          ).take.talent_tree_talents.each do |talent|
             next unless @student_courses.any? do |course|
               course['code'] == talent.talent.code
             end
@@ -101,11 +103,13 @@ class User::DashboardsController < ApplicationController
 
           item = spec.item
 
-          item_tree = item.talent_tree.dup
+          item_tree = item.talent_trees.where(character_id: nil).take.dup
           item_tree.item_id = item.id
           item_tree.save
 
-          item.talent_tree.talent_tree_talents.each do |talent|
+          item.talent_trees.where(
+            character_id: nil
+          ).take.talent_tree_talents.each do |talent|
             next unless @student_courses.any? do |course|
               course['code'] == talent.talent.code
             end
@@ -170,11 +174,13 @@ class User::DashboardsController < ApplicationController
       if current_user.character.specialization
         # spec tree
         spec = current_user.character.specialization
-        spec_tree = spec.talent_tree.dup
+        spec_tree = spec.talent_trees.where(character_id: nil).take.dup
         spec_tree.specialization_id = spec.id
         spec_tree.save
 
-        spec.talent_tree.talent_tree_talents.each do |talent|
+        spec.talent_trees.where(
+          character_id: nil
+        ).take.talent_tree_talents.each do |talent|
           next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
@@ -197,11 +203,13 @@ class User::DashboardsController < ApplicationController
         # spec item + its tree
         item = spec.item
 
-        item_tree = item.talent_tree.dup
+        item_tree = item.talent_trees.where(character_id: nil).take.dup
         item_tree.item_id = item.id
         item_tree.save
 
-        item.talent_tree.talent_tree_talents.each do |talent|
+        item.talent_trees.where(
+          character_id: nil
+        ).take.talent_tree_talents.each do |talent|
           next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
@@ -224,11 +232,14 @@ class User::DashboardsController < ApplicationController
       else
         # class tree
         character_class = current_user.character.character_class
-        character_class_tree = character_class.talent_tree.dup
+        character_class_tree = character_class.talent_trees.where(
+          character_id: nil).take.dup
         character_class_tree.character_class_id = character_class.id
         character_class_tree.save
 
-        character_class.talent_tree.talent_tree_talents.each do |talent|
+        character_class.talent_trees.where(
+          character_id: nil
+        ).take.talent_tree_talents.each do |talent|
           next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
@@ -251,11 +262,13 @@ class User::DashboardsController < ApplicationController
         # class item + its tree
         item = character_class.item
 
-        item_tree = item.talent_tree.dup
+        item_tree = item.talent_trees.where(character_id: nil).take.dup
         item_tree.item_id = item.id
         item_tree.save
 
-        item.talent_tree.talent_tree_talents.each do |talent|
+        item.talent_trees.where(
+          character_id: nil
+        ).take.talent_tree_talents.each do |talent|
           next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end

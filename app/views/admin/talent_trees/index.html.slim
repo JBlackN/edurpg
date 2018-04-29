@@ -12,11 +12,11 @@
           ul.pl-3
             - @classes.each do |character_class|
               li
-                a href="#{url_for edit_admin_talent_tree_path(character_class.talent_tree)}" data-turbolinks="false" = character_class.name
+                a href="#{url_for edit_admin_talent_tree_path(character_class.talent_trees.where(character_id: nil).take)}" data-turbolinks="false" = character_class.name
                 ul.pl-3
                   - character_class.specializations.each do |spec|
                     li
-                      a href="#{url_for edit_admin_talent_tree_path(spec.talent_tree)}" data-turbolinks="false" = spec.name
+                      a href="#{url_for edit_admin_talent_tree_path(spec.talent_trees.where(character_id: nil).take)}" data-turbolinks="false" = spec.name
     .col-sm-6
       .card
         .card-body
@@ -24,4 +24,4 @@
           ul.pl-3
             - @items.each do |item|
               li
-                a href="#{url_for edit_admin_talent_tree_path(item.talent_tree)}" data-turbolinks="false" = item.name
+                a href="#{url_for edit_admin_talent_tree_path(item.talent_trees.where(character_id: nil).take)}" data-turbolinks="false" = item.name
