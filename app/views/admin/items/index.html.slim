@@ -15,7 +15,9 @@
                   - else
                     img.mr-3.item-image src="#{item.image}"
                   .media-body
-                    h3 class="d-inline-block mt-0 item-#{item.rarity}" = "#{item.name}"
+                    h3 class="d-inline-block mt-0 item-name item-#{item.rarity}" = "#{item.name}"
+                    - if item_tree = item.talent_trees.where(character_id: nil).take
+                      a.btn.btn-outline-primary.btn-sm.ml-3.item-tree href="#{url_for edit_admin_talent_tree_path(item_tree)}" data-turbolinks="false" role="button" Talentový strom
                     .d-inline-block.ml-3
                       = link_to 'U', edit_admin_item_path(item),
                         class: 'mr-2'

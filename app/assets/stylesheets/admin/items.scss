@@ -7,6 +7,10 @@ img.item-image {
   width: 3em;
 }
 
+.item-name {
+  font-size: 1.35em;
+}
+
 .item-poor {
   color: #6c757d;
 }
@@ -29,4 +33,9 @@ img.item-image {
 
 .item-artifact {
   color: #ffd740;
+}
+
+.item-tree {
+  line-height: 1.2 !important;
+  vertical-align: baseline !important;
 }
