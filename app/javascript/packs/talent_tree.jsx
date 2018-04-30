@@ -124,7 +124,7 @@ class TalentTree extends React.Component {
     );
 
     const bgUrl = image ? (
-      "data:image/png;base64," + image
+      image
     ) : (
       "https://i.imgur.com/4KeO1m5.jpg"
     );
@@ -185,7 +185,7 @@ class Talent extends React.Component {
           <pattern id={"talent" + id} x={0} y={0} height="100%" width="100%"
                    patternContentUnits="objectBoundingBox">
             <image height={1} width={1} preserveAspectRatio="none"
-              xlinkHref={"data:image/png;base64," + talent.image} />
+              xlinkHref={talent.image} />
           </pattern>
         </defs>
         <rect x={x} y={y} width={size} height={size}

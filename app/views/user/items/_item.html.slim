@@ -4,7 +4,7 @@
       - if item.image.nil?
         = image_tag 'placeholder.png', class: 'mr-3 item-image'
       - else
-        img.mr-3.item-image src="data:image/png;base64, #{item.image}"
+        img.mr-3.item-image src="#{item.image}"
       .media-body
         h3 class="mt-0 item-#{item.rarity}" = "#{item.name}"
         p = item.description

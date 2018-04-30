@@ -1,5 +1,3 @@
-require 'base64'
-
 class Admin::SkillsController < ApplicationController
   before_action :authorize_admin_manage_skills, except: [:index]
   before_action :authorize_admin, only: [:index]
@@ -31,7 +29,7 @@ class Admin::SkillsController < ApplicationController
 
     # Process image
     if params[:skill].key?(:image)
-      @skill.image = Base64.encode64(params[:skill][:image].read)
+      @skill.image = img_encode_base64(params[:skill][:image])
     end
 
     # Asign attribute
@@ -56,7 +54,7 @@ class Admin::SkillsController < ApplicationController
 
     # Process image
     if params[:skill].key?(:image)
-      @skill.image = Base64.encode64(params[:skill][:image].read)
+      @skill.image = img_encode_base64(params[:skill][:image])
     end
 
     if @skill.save && @skill.update(skill_params_update)

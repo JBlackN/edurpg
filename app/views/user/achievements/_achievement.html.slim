@@ -7,7 +7,7 @@
       - if achievement.image.nil?
         = image_tag 'placeholder.png', class: 'mr-3 achi-image'
       - else
-        img.mr-3.achi-image src="data:image/png;base64, #{achievement.image}"
+        img.mr-3.achi-image src="#{achievement.image}"
       .media-body
         h4.mt-0 = achievement.name
         p = achievement.description

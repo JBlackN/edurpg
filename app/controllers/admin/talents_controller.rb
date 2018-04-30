@@ -26,7 +26,7 @@ class Admin::TalentsController < ApplicationController
 
       # Process image
       if params[:talent].key?(:image)
-        @talent.image = Base64.encode64(params[:talent][:image].read)
+        @talent.image = img_encode_base64(params[:talent][:image])
       end
 
       # Process attributes
@@ -55,7 +55,7 @@ class Admin::TalentsController < ApplicationController
 
     # Process image
     if params[:talent].key?(:image)
-      @talent.image = Base64.encode64(params[:talent][:image].read)
+      @talent.image = img_encode_base64(params[:talent][:image])
     end
 
     # Process attributes

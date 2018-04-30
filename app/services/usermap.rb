@@ -37,7 +37,7 @@ class Usermap
 
   def self.get_user_photo(username, token)
     begin
-      Base64.encode64(
+      'data:image/png;base64, ' + Base64.encode64(
         conn(token, 'image/png')["people/#{username}/photo"].get.body)
     rescue RestClient::ExceptionWithResponse
       nil

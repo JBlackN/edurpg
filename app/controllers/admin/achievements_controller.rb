@@ -1,5 +1,3 @@
-require 'base64'
-
 class Admin::AchievementsController < ApplicationController
   before_action :authorize_admin, only: [:index]
   before_action :authorize_admin_manage_achievements, except: [:index]
@@ -30,7 +28,7 @@ class Admin::AchievementsController < ApplicationController
 
     # Process image
     if params[:achievement].key?(:image)
-      @achievement.image = Base64.encode64(params[:achievement][:image].read)
+      @achievement.image = img_encode_base64(params[:achievement][:image])
     end
 
     # Asign category
@@ -48,7 +46,7 @@ class Admin::AchievementsController < ApplicationController
 
     # Process image
     if params[:achievement].key?(:image)
-      @achievement.image = Base64.encode64(params[:achievement][:image].read)
+      @achievement.image = img_encode_base64(params[:achievement][:image])
     end
 
     if @achievement.save && @achievement.update(achi_params)

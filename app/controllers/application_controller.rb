@@ -1,3 +1,4 @@
+require 'base64'
 require 'rest-client'
 
 class ApplicationController < ActionController::Base
@@ -129,5 +130,13 @@ class ApplicationController < ActionController::Base
 
   def user_signed_in?
     !!current_user
+  end
+
+  def img_encode_base64(data)
+    content_type = data.content_type.split('/')
+    return nil unless content_type[0] == 'image' &&
+                      ['jpeg', 'png', 'gif'].include?(content_type[1])
+
+    "data:image/#{content_type[1]};base64, #{Base64.encode64(data.read)}"
   end
 end

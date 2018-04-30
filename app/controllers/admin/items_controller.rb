@@ -1,5 +1,3 @@
-require 'base64'
-
 class Admin::ItemsController < ApplicationController
   before_action :authorize_admin_manage_items, except: [:index]
   before_action :authorize_admin, only: [:index]
@@ -26,7 +24,7 @@ class Admin::ItemsController < ApplicationController
 
     # Process image
     if params[:item].key?(:image)
-      @item.image = Base64.encode64(params[:item][:image].read)
+      @item.image = img_encode_base64(params[:item][:image])
     end
 
     # Process attributes
@@ -48,7 +46,7 @@ class Admin::ItemsController < ApplicationController
 
     # Process image
     if params[:item].key?(:image)
-      @item.image = Base64.encode64(params[:item][:image].read)
+      @item.image = img_encode_base64(params[:item][:image])
     end
 
     # Process attributes

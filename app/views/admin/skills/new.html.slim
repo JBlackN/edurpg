@@ -20,7 +20,7 @@
                   - if skill.image.nil?
                     = image_tag 'placeholder.png', class: 'mr-3 skill-image'
                   - else
-                    img.mr-3.skill-image src="data:image/png;base64, #{skill.image}"
+                    img.mr-3.skill-image src="#{skill.image}"
                   .media-body
                     h5.mt-0 = "#{skill.name} (#{skill.rank})"
                     p = skill.description

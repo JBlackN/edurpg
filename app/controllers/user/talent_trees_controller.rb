@@ -31,7 +31,7 @@ class User::TalentTreesController < ApplicationController
 
     # Process image
     if params[:talent_tree].key?(:image)
-      @tree.image = Base64.encode64(params[:talent_tree][:image].read)
+      @tree.image = img_encode_base64(params[:talent_tree][:image])
     end
 
     # Process talent positions

@@ -13,7 +13,7 @@
             - if @character.image.nil?
               = image_tag 'user.png', class: 'mr-4 character-image'
             - else
-              img.mr-4.character_image src="data:image/png;base64, #{@character.image}"
+              img.mr-4.character_image src="#{@character.image}"
             .media-body
               h2.mt-0.mb-0 = @character.name_with_titles
               h3.mt-1.mb-0.ml-1.character-level-class
@@ -63,7 +63,7 @@
                     - if activity[:image].nil?
                       = image_tag 'placeholder.png', class: 'mr-3 activity-image'
                     - else
-                      img.activity-image.mr-3 src="data:image/png;base64, #{activity[:image]}"
+                      img.activity-image.mr-3 src="#{activity[:image]}"
                   .media-body
                     h4.activity-name.mt-0
                       - case activity[:type]

@@ -19,7 +19,7 @@ class User::UsersController < ApplicationController
 
     # Process image
     if params[:character].key?(:image)
-      @character.image = Base64.encode64(params[:character][:image].read)
+      @character.image = img_encode_base64(params[:character][:image])
     end
 
     if @character.save

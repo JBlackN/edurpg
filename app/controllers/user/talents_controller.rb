@@ -1,3 +1,5 @@
+require 'mime/types'
+
 class User::TalentsController < ApplicationController
   before_action :authorize_user
   before_action -> {
@@ -26,7 +28,7 @@ class User::TalentsController < ApplicationController
 
       # Process image
       if params[:talent].key?(:image)
-        @talent.image = Base64.encode64(params[:talent][:image].read)
+        @talent.image = img_encode_base64(params[:talent][:image])
       end
     end
 
@@ -48,7 +50,7 @@ class User::TalentsController < ApplicationController
 
     # Process image
     if params[:talent].key?(:image)
-      @talent.image = Base64.encode64(params[:talent][:image].read)
+      @talent.image = img_encode_base64(params[:talent][:image])
     end
 
     if @talent.save && @talent.update(talent_params)

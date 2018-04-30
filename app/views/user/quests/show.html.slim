@@ -39,7 +39,7 @@
         - if @quest.character.image.nil?
           = image_tag 'user.png', class: 'card-img-top'
         - else
-          img.card-img-top src="data:image/png;base64, #{@quest.character.image}"
+          img.card-img-top src="#{@quest.character.image}"
         .card-body
           h4.card-title = @quest.character.name
       h3.mt-3 Odměny
@@ -59,7 +59,7 @@
                   - if skill.image.nil?
                     = image_tag 'placeholder.png', class: 'mr-3 reward-image'
                   - else
-                    img.mr-3.reward-image src="data:image/png;base64, #{skill.image}"
+                    img.mr-3.reward-image src="#{skill.image}"
                   .media-body
                     h4 class="d-inline-block mt-0" = "#{skill.name} (#{skill.rank})"
                     p.float-right.text-muted = "(Dovednost)"
@@ -70,7 +70,7 @@
                   - if achi.image.nil?
                     = image_tag 'placeholder.png', class: 'mr-3 reward-image'
                   - else
-                    img.mr-3.reward-image src="data:image/png;base64, #{achi.image}"
+                    img.mr-3.reward-image src="#{achi.image}"
                   .media-body
                     h4 class="d-inline-block mt-0" = "#{achi.name}"
                     p.float-right.text-muted = "(Úspěch)"
@@ -81,7 +81,7 @@
                   - if item.image.nil?
                     = image_tag 'placeholder.png', class: 'mr-3 reward-image'
                   - else
-                    img.mr-3.reward-image src="data:image/png;base64, #{item.image}"
+                    img.mr-3.reward-image src="#{item.image}"
                   .media-body
                     h4 class="d-inline-block mt-0 item-#{item.rarity}" = "#{item.name}"
                     p.float-right.text-muted = "(Předmět)"

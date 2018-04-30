@@ -21,7 +21,7 @@
                   - if achi.image.nil?
                     = image_tag 'placeholder.png', class: 'mr-3 achi-image'
                   - else
-                    img.mr-3.achi-image src="data:image/png;base64, #{achi.image}"
+                    img.mr-3.achi-image src="#{achi.image}"
                   .media-body
                     h4.d-inline-block.mt-0 = "#{achi.name} (#{achi.points})"
                     .d-inline-block.ml-3
