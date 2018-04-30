@@ -18,7 +18,8 @@
               h2.mt-0.mb-0 = @character.name_with_titles
               h3.mt-1.mb-0.ml-1.character-level-class
                 = "Úroveň #{@character.level} #{@character.character_class.name}"
-              h3.mt-0.character-guild = "<#{@character.specialization.name}>"
+              - if @character.specialization
+                h3.mt-0.character-guild = "<#{@character.specialization.name}>"
               ul.character-attributes
                 - @character.character_character_attributes.each do |attr|
                   li.mt-1.mr-4.d-inline-block

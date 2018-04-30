@@ -214,11 +214,17 @@ class User::QuestsController < ApplicationController
       Talent.find_by(code: course['code']).id
     end
 
-    Quest.where(talent_id: @courses).or(
-      Quest.where(
-        specialization_id: current_user.character.specialization.id).or(
-          Quest.where(character_class_id: current_user.character.character_class.id)
-        )
-    )
+    if current_user.character.specialization
+      Quest.where(talent_id: @courses).or(
+        Quest.where(
+          specialization_id: current_user.character.specialization.id).or(
+            Quest.where(character_class_id: current_user.character.character_class.id)
+          )
+      )
+    else
+      Quest.where(talent_id: @courses).or(
+        Quest.where(character_class_id: current_user.character.character_class.id)
+      )
+    end
   end
 end

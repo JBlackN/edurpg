@@ -441,12 +441,22 @@ class User::DashboardsController < ApplicationController
     end
 
     quests = Quest.where(talent_id: courses)
-    quests = quests.or(
-      Quest.where(
-        specialization_id: current_user.character.specialization.id).or(
+
+    if include_class_spec
+      if current_user.character.specialization
+        quests = quests.or(
+          Quest.where(
+            specialization_id: current_user.character.specialization.id).or(
+              Quest.where(character_class_id: current_user.character.character_class.id)
+            )
+        )
+      else
+        quests = quests.or(
           Quest.where(character_class_id: current_user.character.character_class.id)
         )
-    ) if include_class_spec
+      end
+    end
+
     quests
   end
 

@@ -8,6 +8,10 @@ class User::GuildsController < ApplicationController
       @characters = characters(current_user.character.character_class,
                                params[:order] ? params[:order] : :achi_points)
     when 1
+      unless current_user.character.specialization
+        redirect_to user_dashboards_index_path
+      end
+
       @name = current_user.character.specialization.name
       @characters = characters(current_user.character.specialization,
                                params[:order] ? params[:order] : :achi_points)
