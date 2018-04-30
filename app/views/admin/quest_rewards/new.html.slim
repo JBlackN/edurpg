@@ -11,13 +11,6 @@
       .col
         .card
           .card-body
-            h3.mb-3 Zkušenosti
-            - if @quest.quest_exp_reward
-              = form.number_field 'exp', min: 0, step: 1,
-                class: 'form-control', value: @quest.quest_exp_reward.points
-            - else
-              = form.number_field 'exp', min: 0, step: 1,
-                class: 'form-control'
             h3.mb-3 Dovednosti
             - @skills.each do |skill|
               .card.d-inline-block.mr-3.mb-3

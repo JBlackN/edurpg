@@ -128,7 +128,6 @@ ActiveRecord::Schema.define(version: 20180425222211) do
   create_table "characters", force: :cascade do |t|
     t.string "name"
     t.text "image"
-    t.integer "health"
     t.integer "experience"
     t.integer "level"
     t.bigint "user_id"
@@ -213,14 +212,6 @@ ActiveRecord::Schema.define(version: 20180425222211) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_permissions_on_user_id"
-  end
-
-  create_table "quest_exp_rewards", force: :cascade do |t|
-    t.string "points"
-    t.bigint "quest_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["quest_id"], name: "index_quest_exp_rewards_on_quest_id"
   end
 
   create_table "quests", force: :cascade do |t|
@@ -382,7 +373,6 @@ ActiveRecord::Schema.define(version: 20180425222211) do
   add_foreign_key "items", "character_classes"
   add_foreign_key "items", "specializations"
   add_foreign_key "permissions", "users"
-  add_foreign_key "quest_exp_rewards", "quests"
   add_foreign_key "quests", "character_classes"
   add_foreign_key "quests", "characters"
   add_foreign_key "quests", "specializations"

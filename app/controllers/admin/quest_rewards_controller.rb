@@ -12,17 +12,10 @@ class Admin::QuestRewardsController < ApplicationController
   def create
     @quest = Quest.find(params[:quest_id])
 
-    if @quest.quest_exp_reward
-      @quest.quest_exp_reward.destroy
-    end
     @quest.skills.clear
     @quest.achievements.clear
     @quest.items.clear
     @quest.titles.clear
-
-    if !params[:exp].empty? && params[:exp].to_i > 0
-      @quest.create_quest_exp_reward(points: params[:exp].to_i)
-    end
 
     if params.key?(:skills)
       params[:skills].each do |skill_id, value|

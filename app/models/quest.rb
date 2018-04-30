@@ -7,7 +7,6 @@ class Quest < ApplicationRecord
   has_and_belongs_to_many :achievements
   has_and_belongs_to_many :items
   has_and_belongs_to_many :titles
-  has_one :quest_exp_reward, dependent: :destroy
 
   has_many :character_quests
   has_many :characters, through: :character_quests
