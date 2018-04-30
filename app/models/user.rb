@@ -8,6 +8,10 @@ class User < ApplicationRecord
     DateTime.now > consents.first.created_at + 30.days # TODO: -> app settings
   end
 
+  def admin?
+    admin_permissions.any?
+  end
+
   def admin_only?
     !permission.use_app && admin_permissions.any?
   end
@@ -18,6 +22,10 @@ class User < ApplicationRecord
 
   def both_user_and_admin?
     permission.use_app && admin_permissions.any?
+  end
+
+  def user?
+    permission.use_app
   end
 
   def user_only?

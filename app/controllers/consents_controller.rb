@@ -11,6 +11,22 @@ class ConsentsController < ApplicationController
     @consent.raw_post_data = request.raw_post
     @consent.save
 
+    if current_user.character
+      current_user.character.name =
+        if @consent.name
+          Usermap.get_user_name(current_user.username, session[:user]['token'])
+        else
+          'Anonym'
+        end
+      current_user.character.image =
+        if @consent.photo
+          Usermap.get_user_photo(current_user.username, session[:user]['token'])
+        else
+          nil
+        end
+      current_user.character.save
+    end
+
     current_user.consents << @consent
     current_user.save
 
@@ -20,8 +36,7 @@ class ConsentsController < ApplicationController
   private
 
   def consent_params
-    params.require(:consent).permit(:username, :name, :year, :study_plan,
-                                    :grades, :titles, :roles, :classes,
-                                    :events, :exams, :photo, :guilds)
+    params.require(:consent).permit(:username, :name, :grades, :info,
+                                    :roles, :classes, :photo, :guilds)
   end
 end

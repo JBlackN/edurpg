@@ -6,14 +6,10 @@ class CreateConsents < ActiveRecord::Migration[5.1]
       t.boolean :username
       t.boolean :name
       t.boolean :photo
-      t.boolean :year
-      t.boolean :study_plan
       t.boolean :grades
-      t.boolean :titles
+      t.boolean :info
       t.boolean :roles
       t.boolean :classes
-      t.boolean :events
-      t.boolean :exams
       t.boolean :guilds
       t.references :user, foreign_key: true
 

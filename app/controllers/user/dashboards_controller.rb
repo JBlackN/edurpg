@@ -16,11 +16,12 @@ class User::DashboardsController < ApplicationController
   private
 
   def refresh_character
-    student_info = Kos.get_student_info(current_user.username, session[:user]['token'])
+    student_info = if current_user.consents.first.info
+                     Kos.get_student_info(current_user.username, session[:user]['token'])
+                   else
+                     { 'programme' => 'BI', 'branch' => '', 'titles' => [] }
+                   end
     student_courses
-    student_semesters = @student_courses.map do |course|
-      course['semester']
-    end.sort.uniq
 
     current_semester = Kos.get_current_semester(session[:user]['token'])
     all_courses = Kos.get_courses_by_programme(session[:user]['token'])[student_info['programme']]
@@ -155,19 +156,21 @@ class User::DashboardsController < ApplicationController
         end
       end
 
-      talent_trees.each do |tree|
-        destroy_queue = []
+      if current_user.consents.first.classes
+        talent_trees.each do |tree|
+          destroy_queue = []
 
-        tree.talent_tree_talents.each do |tree_talent|
-          unless @student_courses.any? do |course|
-            course['code'] == tree_talent.talent.code
+          tree.talent_tree_talents.each do |tree_talent|
+            unless @student_courses.any? do |course|
+              course['code'] == tree_talent.talent.code
+            end
+             destroy_queue << tree_talent
+            end
           end
-           destroy_queue << tree_talent
-          end
-        end
 
-        destroy_queue.each do |tree_talent|
-          tree.talent_tree_talents.destroy(tree_talent)
+          destroy_queue.each do |tree_talent|
+            tree.talent_tree_talents.destroy(tree_talent)
+          end
         end
       end
     else
@@ -292,55 +295,57 @@ class User::DashboardsController < ApplicationController
     end
 
     # Quests
-    classifications = {}
+    if current_user.consents.first.grades
+      classifications = {}
 
-    courses_quests_given(@student_courses).each do |quest|
-      next if current_user.character.character_quests.exists?(
-        quest_id: quest.id)
-      next if quest.completion_check_id.nil? || quest.completion_check_id.empty?
+      courses_quests_given(@student_courses).each do |quest|
+        next if current_user.character.character_quests.exists?(
+          quest_id: quest.id)
+        next if quest.completion_check_id.nil? || quest.completion_check_id.empty?
 
-      courses = @student_courses.select do |course|
-        course['code'] == quest.talent.code
-      end.sort_by { |course| course['semester'] }.reverse
+        courses = @student_courses.select do |course|
+          course['code'] == quest.talent.code
+        end.sort_by { |course| course['semester'] }.reverse
 
-      if courses.first['semester'] == 'invalid'
-        next if courses.count == 1
-        semester = courses[1]['semester']
-        code = courses[1]['code_full']
-      else
-        semester = courses.first['semester']
-        code = courses.first['code_full']
-      end
-
-      classifications[quest.talent.code] ||= Grades.get_student_classifications(
-        current_user.username, session[:user]['token'], semester, code)
-
-      if !classifications[quest.talent.code].nil? &&
-          classifications[quest.talent.code].key?(quest.completion_check_id) &&
-          classifications[quest.talent.code][quest.completion_check_id]
-        current_user.character.completed_quests << quest
-
-        quest.skills.each do |skill|
-          current_user.character.skills << skill
+        if courses.first['semester'] == 'invalid'
+          next if courses.count == 1
+          semester = courses[1]['semester']
+          code = courses[1]['code_full']
+        else
+          semester = courses.first['semester']
+          code = courses.first['code_full']
         end
 
-        quest.items.each do |item|
-          current_user.character.items << item
-        end
+        classifications[quest.talent.code] ||= Grades.get_student_classifications(
+          current_user.username, session[:user]['token'], semester, code)
 
-        quest.titles.each do |title|
-          current_user.character.titles << title
-        end
+        if !classifications[quest.talent.code].nil? &&
+            classifications[quest.talent.code].key?(quest.completion_check_id) &&
+            classifications[quest.talent.code][quest.completion_check_id]
+          current_user.character.completed_quests << quest
 
-        quest.achievements.each do |achievement|
-          current_user.character.achievements << achievement
+          quest.skills.each do |skill|
+            current_user.character.skills << skill
+          end
 
-          achievement.items.each do |item|
+          quest.items.each do |item|
             current_user.character.items << item
           end
 
-          achievement.titles.each do |title|
+          quest.titles.each do |title|
             current_user.character.titles << title
+          end
+
+          quest.achievements.each do |achievement|
+            current_user.character.achievements << achievement
+
+            achievement.items.each do |item|
+              current_user.character.items << item
+            end
+
+            achievement.titles.each do |title|
+              current_user.character.titles << title
+            end
           end
         end
       end
@@ -461,8 +466,13 @@ class User::DashboardsController < ApplicationController
   end
 
   def student_courses
-    @student_courses ||= Kos.get_student_courses(current_user.username,
-                                                 session[:user]['token'])
+    if current_user.consents.first.classes
+      @student_courses ||= Kos.get_student_courses(current_user.username,
+                                                   session[:user]['token'])
+    else
+      @student_courses = []
+    end
+
     @student_courses
   end
 end

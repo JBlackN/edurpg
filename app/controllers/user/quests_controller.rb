@@ -209,9 +209,13 @@ class User::QuestsController < ApplicationController
   end
 
   def quests_given
-    @courses ||= Kos.get_student_courses(current_user.username,
-                                         session[:user]['token']).map do |course|
-      Talent.find_by(code: course['code']).id
+    if current_user.consents.first.classes
+      @courses ||= Kos.get_student_courses(current_user.username,
+                                           session[:user]['token']).map do |course|
+        Talent.find_by(code: course['code']).id
+      end
+    else
+      @courses = []
     end
 
     if current_user.character.specialization

@@ -1,88 +1,76 @@
 .container
   .row
     .col
-      h1 Information about personal data processing
-      p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus. Suspendisse molestie tortor eget faucibus scelerisque. Phasellus sed sapien sit amet sapien porttitor finibus. Vivamus hendrerit molestie leo sit amet consectetur. Praesent vitae ullamcorper felis, in bibendum ipsum. Etiam rhoncus pharetra lorem, ac aliquam dui ultricies sit amet. Ut tempus ex eu massa lacinia, quis imperdiet enim placerat. Vestibulum elementum iaculis augue, eget congue odio pellentesque ut. Aenean eu aliquet ligula, ac pulvinar dui. Suspendisse potenti. Nulla augue augue, vestibulum id lobortis ut, congue at arcu. Phasellus fermentum a quam et pretium. Vestibulum pellentesque sit amet libero mattis varius. Sed eget neque vel odio malesuada molestie.
+      h1 Informace o zpracování osobních údajů
+      p.text-justify Na základě &bdquo;Nařízení Evropského parlamentu a Rady (EU) 2016/679 ze dne 27. dubna 2016 o ochraně fyzických osob v souvislosti se zpracováním osobních údajů a o volném pohybu těchto údajů a o zrušení směrnice 95/46/ES (obecné nařízení o ochraně osobních údajů)&rdquo; je třeba Vašeho souhlasu se zpracováním osobních údajů aplikací. Položky níže popisují, jaké údaje aplikace zpracovává, jakým způsobem a z jakých důvodů. Tučně jsou uvedeny dopady na funkcionalitu aplikace v důsledku neudělení některých souhlasů.
   = form_with scope: :consent, url: consents_path, local: true, id: 'consent_new' do |form|
     .row.mt-3
       .col-sm-6
-        h2 FIT CTU username
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
+        h2 ČVUT uživatelské jméno
+        p.text-justify
+          | Aplikace ukládá Vaše FIT ČVUT uživatelské jméno, které používá k Vaší identifikaci a ke komunikaci s KOSapi, Usermap API a Klasifikace API Vaším jménem dle souhlasů (ne)udělených v dalších bodech tohoto formuláře.
+          strong
+            |  Neudělením tohoto souhlasu přijde aplikace o možnost Vás identifikovat a Váš účet tak bude odstraněn.
         .form-check.text-right
           = form.check_box :username, class: 'form-check-input'
-          = form.label :username, 'I agree', class: 'form-check-label gdpr-label'
+          = form.label :username, 'Souhlasím se zpracováním', class: 'form-check-label gdpr-label', style: 'text-decoration: underline;'
       .col-sm-6
-        h2 Name
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
-        .form-check.text-right
-          = form.check_box :name, class: 'form-check-input'
-          = form.label :name, 'I agree', class: 'form-check-label gdpr-label'
-    .row.mt-3
-      .col-sm-6
-        h2 Study year
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
-        .form-check.text-right
-          = form.check_box :year, class: 'form-check-input'
-          = form.label :year, 'I agree', class: 'form-check-label gdpr-label'
-      .col-sm-6
-        h2 Study plan
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
-        .form-check.text-right
-          = form.check_box :study_plan, class: 'form-check-input'
-          = form.label :study_plan, 'I agree', class: 'form-check-label gdpr-label'
-    .row.mt-3
-      .col-sm-6
-        h2 Grades
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
-        .form-check.text-right
-          = form.check_box :grades, class: 'form-check-input'
-          = form.label :grades, 'I agree', class: 'form-check-label gdpr-label'
-      .col-sm-6
-        h2 Titles
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
-        .form-check.text-right
-          = form.check_box :titles, class: 'form-check-input'
-          = form.label :titles, 'I agree', class: 'form-check-label gdpr-label'
-    .row.mt-3
-      .col-sm-6
-        h2 Roles
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
+        h2
+          | (FIT) ČVUT uživatelské role
+        p.text-justify
+          | Vaše ČVUT business role a FIT ČVUT předmětové role jsou načteny z Usermap API a použity k přiřazení pravomocí a předmětových omezení v rámci aplikace.
+          strong
+            |  Přihlašujete-li se poprvé, neudělením tohoto souhlasu Vám nebudou přiřazena žádná práva a nebude Vás tak možné zaregistrovat.
         .form-check.text-right
           = form.check_box :roles, class: 'form-check-input'
-          = form.label :roles, 'I agree', class: 'form-check-label gdpr-label'
-      .col-sm-6
-        h2 Classes
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
-        .form-check.text-right
-          = form.check_box :classes, class: 'form-check-input'
-          = form.label :classes, 'I agree', class: 'form-check-label gdpr-label'
+          = form.label :roles, 'Souhlasím se zpracováním', class: 'form-check-label gdpr-label', style: 'text-decoration: underline;'
     .row.mt-3
       .col-sm-6
-        h2 Events
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
+        h2 Jméno a příjmení
+        p.text-justify K vytvoření postavy, která Vás v rámci aplikace reprezentuje aplikace použije Vaše jméno a příjmení načtené z Usermap API. Neudělením souhlasu bude Vaše postava pojmenována 'Anonym'.
         .form-check.text-right
-          = form.check_box :events, class: 'form-check-input'
-          = form.label :events, 'I agree', class: 'form-check-label gdpr-label'
+          = form.check_box :name, class: 'form-check-input'
+          = form.label :name, 'Souhlasím se zpracováním', class: 'form-check-label gdpr-label', style: 'text-decoration: underline;'
       .col-sm-6
-        h2 Exams
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
-        .form-check.text-right
-          = form.check_box :exams, class: 'form-check-input'
-          = form.label :exams, 'I agree', class: 'form-check-label gdpr-label'
-    .row.mt-3
-      .col
-        h2 Photo
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
+        h2 Fotografie
+        p.text-justify Aplikace načte Vaši fotografii z Usermap API (je-li dostupná) a použije ji pro obrázek postavy, která Vás v rámci aplikace reprezentuje. Neudělením souhlasu bude použit zástupný obrázek &ndash; silueta neurčité postavy.
         .form-check.text-right
           = form.check_box :photo, class: 'form-check-input'
-          = form.label :photo, 'I agree', class: 'form-check-label gdpr-label'
-    .row.mt-3
-      .col
-        h2 Guilds
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lacus sit amet orci pharetra dapibus. Aliquam blandit mi at urna pharetra, id laoreet orci maximus.
-        .form-check.text-right
-          = form.check_box :guilds, class: 'form-check-input'
-          = form.label :guilds, 'I agree', class: 'form-check-label gdpr-label'
+          = form.label :photo, 'Souhlasím se zpracováním', class: 'form-check-label gdpr-label', style: 'text-decoration: underline;'
+    - if current_user.user?
+      .row.mt-3
+        .col-sm-6
+          h2 Informace o studiu
+          p.text-justify
+            | Aplikace bude načítat Váš studijní program, studijní obor a tituly před jménem z KOSapi. Studijní program a obor použije k přiřazení tzv. povolání a specializace postavě, která Vás v rámci aplikace reprezentuje. Tituly budou využity k automatickému odemčení titulů v aplikaci. Studijní program je dále použit pro výpočet zkušeností Vaší postavy (studenti 
+            abbr title="magisterského studijního programu" MSP
+            |  automaticky získávají 180 bodů zkušeností = kreditů, za své předchozí bakalářské studium) &ndash;
+            strong
+              |  neudělením tohoto souhlasu Vaší postavě nebude přiřazena specializace a výpočty bodů zkušeností a úrovně budou nepřesné.
+          .form-check.text-right
+            = form.check_box :info, class: 'form-check-input'
+            = form.label :info, 'Souhlasím se zpracováním', class: 'form-check-label gdpr-label', style: 'text-decoration: underline;'
+        .col
+          h2 Pořadí v žebříčcích studentů
+          p.text-justify Aplikace Vás přiřadí do skupin (tzv. cechů) na základě Vašeho studijního programu a oboru. Neudělením tohoto souhlasu se Vaše jméno nebude zobrazovat v žebříčcích příslušných cechů.
+          .form-check.text-right
+            = form.check_box :guilds, class: 'form-check-input'
+            = form.label :guilds, 'Souhlasím se zařazením do žebříčků', class: 'form-check-label gdpr-label', style: 'text-decoration: underline;'
+      .row.mt-3
+        .col-sm-6
+          h2 Zapsané předměty
+          p.text-justify Aplikace použije Vaše zapsané předměty načtené z KOSapi (ve všech semestrech) k vygenerování talentových stromů (= vizuální reprezentace Vašeho studijního plánu) a odemčení příslušných talentů dle uzavřených předmětů, k určení úkolů, které jsou Vám zadány a k výpočtu úrovně a zkušeností postavy, která Vás v rámci aplikace reprezentuje. Neudělením souhlasu bude možné přes tato omezení aplikaci používat.
+          .form-check.text-right
+            = form.check_box :classes, class: 'form-check-input'
+            = form.label :classes, 'Souhlasím se zpracováním', class: 'form-check-label gdpr-label', style: 'text-decoration: underline;'
+        .col-sm-6
+          h2 Klasifikace
+          p.text-justify Aplikace bude načítat Vaše studijní výsledky z Klasifikace API a použije je k automatickému označení příslušných úkolů v rámci aplikace jako splněných.
+          .form-check.text-right
+            = form.check_box :grades, class: 'form-check-input'
+            = form.label :grades, 'Souhlasím se zpracováním', class: 'form-check-label gdpr-label', style: 'text-decoration: underline;'
     .row.mt-5.mb-5
       .col.text-center
-        = form.submit 'Submit', class: 'btn btn-danger'
+        - if current_user.character
+          a.btn.btn-outline-success.mr-3 href="#{url_for :back}" role="button" Zrušit
+        = form.submit 'Odeslat', class: 'btn btn-danger'

@@ -4,6 +4,10 @@ class SessionsController < ApplicationController
   def index
     if current_user.consent_invalid?
       redirect_to '/consents/new'
+    elsif !current_user.consents.first.username ||
+          !current_user.consents.first.roles
+      current_user.destroy
+      redirect_to :logout
     elsif current_user.character.nil?
       current_user.build_character
       current_user.character.init(session[:user]['token'])

@@ -18,9 +18,13 @@ class User::AchievementsController < ApplicationController
   private
 
   def codes
-    @codes ||= Kos.get_student_courses(current_user.username,
-                                       session[:user]['token']).map do |course|
-      course['code']
+    if current_user.consents.first.classes
+      @codes ||= Kos.get_student_courses(current_user.username,
+                                         session[:user]['token']).map do |course|
+        course['code']
+      end
+    else
+      []
     end
   end
 end

@@ -29,20 +29,19 @@ class Usermap
     roles
   end
 
-  def self.get_info(username, token)
+  def self.get_user_name(username, token)
     response_user = conn(token)["people/#{username}"].get
     raw_user_data = JSON.parse(response_user.body)
-    photo = begin
-              Base64.encode64(
-                conn(token, 'image/png')["people/#{username}/photo"].get.body)
-            rescue RestClient::ExceptionWithResponse
-              nil
-            end
+    "#{raw_user_data['firstName']} #{raw_user_data['lastName']}"
+  end
 
-    {
-      name: "#{raw_user_data['firstName']} #{raw_user_data['lastName']}",
-      photo: photo
-    }
+  def self.get_user_photo(username, token)
+    begin
+      Base64.encode64(
+        conn(token, 'image/png')["people/#{username}/photo"].get.body)
+    rescue RestClient::ExceptionWithResponse
+      nil
+    end
   end
 
   private

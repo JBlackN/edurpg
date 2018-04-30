@@ -25,15 +25,16 @@ class Character < ApplicationRecord
   has_many :completed_quests, through: :character_quests, source: :quest
 
   def init(token)
-    info = Usermap.get_info(user.username, token)
-
-    self.name = user.consents.first.name ? info[:name] : 'Anonymous'
-    self.image = user.consents.first.photo ? info[:photo] : nil
-
-    if user.permission.use_app
-      # TODO: health, experience, level
-    end
-
+    self.name = if user.consents.first.name
+                  Usermap.get_user_name(user.username, token)
+                else
+                  'Anonym'
+                end
+    self.image = if user.consents.first.photo
+                  Usermap.get_user_photo(user.username, token)
+                 else
+                   nil
+                 end
     save
   end
 
