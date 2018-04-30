@@ -53,67 +53,123 @@ class User::QuestsController < ApplicationController
     }
 
     if current_user.character.completed_quests.exists?(@quest.id)
+      current_user.character.completed_quests.destroy(@quest)
+
       @quest.skills.each do |skill|
-        if character_skill = CharacterSkill.find_by(skill_id: skill.id)
-          current_user.character.character_skills.destroy(character_skill)
+        if character_skill = current_user.character.character_skills.find_by(
+            skill_id: skill.id)
+          unless current_user.character.completed_quests.any? { |quest|
+            quest.skills.exists?(skill.id)
+          } || current_user.character.achievements.any? { |achi|
+            achi.skills.exists?(skill.id)
+          }
+            current_user.character.character_skills.destroy(character_skill)
+          end
         end
       end
 
       @quest.items.each do |item|
-        if character_item = CharacterItem.find_by(item_id: item.id)
-          current_user.character.character_items.destroy(character_item)
-        end
-      end
-
-      @quest.titles.each do |title|
-        if character_title = CharacterTitle.find_by(title_id: title.id)
-          current_user.character.character_titles.destroy(character_title)
-        end
-      end
-
-      @quest.achievements.each do |achievement|
-        achievement.items.each do |item|
-          if character_item = CharacterItem.find_by(item_id: item.id)
+        if character_item = current_user.character.character_items.find_by(
+            item_id: item.id)
+          unless current_user.character.completed_quests.any? { |quest|
+            quest.items.exists?(item.id)
+          } || current_user.character.achievements.any? { |achi|
+            achi.items.exists?(item.id)
+          }
             current_user.character.character_items.destroy(character_item)
           end
         end
-
-        achievement.titles.each do |title|
-          if character_title = CharacterTitle.find_by(title_id: title.id)
-            current_user.character.character_titles.destroy(character_title)
-          end
-        end
-
-        if character_achi = CharacterAchievement.find_by(achievement_id: achievement.id)
-          current_user.character.character_achievements.destroy(character_achi)
-        end
-      end
-
-      current_user.character.completed_quests.destroy(@quest)
-    else
-      current_user.character.completed_quests << @quest
-
-      @quest.skills.each do |skill|
-        current_user.character.skills << skill
-      end
-
-      @quest.items.each do |item|
-        current_user.character.items << item
       end
 
       @quest.titles.each do |title|
-        current_user.character.titles << title
+        if character_title = current_user.character.character_titles.find_by(
+            title_id: title.id)
+          unless current_user.character.completed_quests.any? { |quest|
+            quest.titles.exists?(title.id)
+          } || current_user.character.achievements.any? { |achi|
+            achi.titles.exists?(title.id)
+          }
+            current_user.character.character_titles.destroy(character_title)
+          end
+        end
       end
 
       @quest.achievements.each do |achievement|
-        current_user.character.achievements << achievement
+        if character_achi = current_user.character.character_achievements.find_by(
+            achievement_id: achievement.id)
+          unless current_user.character.completed_quests.any? { |quest|
+            quest.achievements.exists?(achievement.id)
+          } || current_user.character.achievements.any? { |achi|
+            achi.achievements.exists?(achievement.id)
+          }
+            current_user.character.character_achievements.destroy(character_achi)
+          end
+        end
 
         achievement.items.each do |item|
-          current_user.character.items << item
+          if character_item = current_user.character.character_items.find_by(
+              item_id: item.id)
+            unless current_user.character.completed_quests.any? { |quest|
+              quest.items.exists?(item.id)
+            } || current_user.character.achievements.any? { |achi|
+              achi.items.exists?(item.id)
+            }
+              current_user.character.character_items.destroy(character_item)
+            end
+          end
         end
 
         achievement.titles.each do |title|
+          if character_title = current_user.character.character_titles.find_by(
+              title_id: title.id)
+            unless current_user.character.completed_quests.any? { |quest|
+              quest.titles.exists?(title.id)
+            } || current_user.character.achievements.any? { |achi|
+              achi.titles.exists?(title.id)
+            }
+              current_user.character.character_titles.destroy(character_title)
+            end
+          end
+        end
+      end
+    else
+      unless current_user.character.completed_quests.exists?(@quest.id)
+        current_user.character.completed_quests << @quest
+      end
+
+      @quest.skills.each do |skill|
+        unless current_user.character.skills.exists?(skill.id)
+          current_user.character.skills << skill
+        end
+      end
+
+      @quest.items.each do |item|
+        unless current_user.character.items.exists?(item.id)
+          current_user.character.items << item
+        end
+      end
+
+      @quest.titles.each do |title|
+        unless current_user.character.titles.exists?(title.id)
           current_user.character.titles << title
+        end
+      end
+
+      @quest.achievements.each do |achievement|
+        unless current_user.character.achievements.exists?(achievement.id)
+          current_user.character.achievements << achievement
+        end
+
+        achievement.items.each do |item|
+          unless current_user.character.items.exists?(item.id)
+            current_user.character.items << item
+          end
+        end
+
+        achievement.titles.each do |title|
+          unless current_user.character.titles.exists?(title.id)
+            current_user.character.titles << title
+          end
         end
       end
     end
