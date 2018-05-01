@@ -44,6 +44,74 @@ class Grades
     classifications
   end
 
+  def self.get_student_classifications_all(username, token, semester, course)
+    begin
+      response = conn(token)[
+        "courses/#{course}/student-classifications/#{username}"
+      ].get({
+        params: {
+          semester: semester,
+          lang: 'cs',
+          showHidden: false
+        }
+      })
+    rescue RestClient::Exception
+      return nil
+    end
+
+    return nil unless response.code == 200
+    data = JSON.parse(response.body)['studentClassificationFullDtos']
+    return nil if data.empty?
+
+    classifications = []
+
+    data.each do |item|
+      next unless ['HOMEWORK', 'SEMESTRAL_TEST'].include?(
+        item['classificationType'])
+      next if item['calculated']
+
+      classifications << {
+        'name' => item['classificationTextDtos'][0]['name'],
+        'id' => item['identifier']
+      }
+    end
+
+    classifications
+  end
+
+  def self.get_teacher_courses(token, course)
+    begin
+      response = conn(token)[
+        "courses/#{course}/classifications"
+      ].get({
+        params: {
+          lang: 'cs'
+        }
+      })
+    rescue RestClient::Exception
+      return nil
+    end
+
+    return nil unless response.code == 200
+    data = JSON.parse(response.body)
+    return nil if data.empty?
+
+    classifications = []
+
+    data.each do |item|
+      next unless ['HOMEWORK', 'SEMESTRAL_TEST'].include?(
+        item['classificationType'])
+      next if item['calculated']
+
+      classifications << {
+        'name' => item['classificationTextDtos'][0]['name'],
+        'id' => item['identifier']
+      }
+    end
+
+    classifications
+  end
+
   private
 
   def self.conn(token, accept = 'application/json')

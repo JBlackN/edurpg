@@ -149,6 +149,25 @@ class Admin::DashboardsController < ApplicationController
 
       Title.create(title: 'Bc.', after_name: false)
       Title.create(title: 'Ing.', after_name: false)
+
+      # Quests
+      current_user.permission.class_restrictions.each do |cr|
+        talent = Talent.find_by(code: cr['code'])
+        next if !talent || talent.quests.any?
+        talent_id = talent.id
+
+        data = Grades.get_teacher_courses(session[:user]['token'],
+                                          cr['code_full'])
+
+        unless data.nil?
+          data.each do |quest_data|
+            Quest.create(name: quest_data['name'], difficulty: 'medium',
+                         completion_check_id: quest_data['id'],
+                         character_id: current_user.character.id,
+                         talent_id: talent_id)
+          end
+        end
+      end
     end
   end
 end

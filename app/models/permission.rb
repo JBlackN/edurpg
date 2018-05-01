@@ -10,7 +10,8 @@ class Permission < ApplicationRecord
 
     assign_teacher unless roles[:teacher].empty?
     roles[:teacher].each do |role|
-      class_restrictions << ClassRestriction.create(code: role)
+      class_restrictions << ClassRestriction.create(code: role['code'],
+                                                    code_full: role['code_full'])
     end
     assign_student unless roles[:student].nil?
 

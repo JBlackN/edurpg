@@ -11,14 +11,17 @@ class Usermap
     roles = { student: [], teacher: [] }
 
     raw_roles.each do |role|
-      # FIXME: course codes not in ..-... format?
-      matches = role.match(/^P-(..-...)-(STUDENT|UCITEL).*$/)
+      matches = role.match(/^P-(.+)-(STUDENT|UCITEL).*$/)
       next if matches.nil?
 
       if matches[2] == 'STUDENT'
         roles[:student] << matches[1]
       else
-        roles[:teacher] << matches[1]
+        roles[:teacher] << {
+          'code_full' => matches[1],
+          'code' => matches[1].gsub(/^(B|M|F)I(|K|E)-([A-Z0-9]+)(\..+)?$/,
+                                    '\1I-\3')
+        }
       end
     end
 

@@ -31,6 +31,35 @@ class User::DashboardsController < ApplicationController
       'credits' => course['credits']
     }] }]
 
+    # Use student classifications to load quests (on 1st login only)
+    if !current_user.character.character_class && current_user.consents.first.grades
+      first_character = Character.find(1)
+      first_character_id = first_character.id if first_character
+
+      @student_courses.sort_by do |course|
+        course['semester']
+      end.reverse.each do |course|
+        next if course['semester'] == 'invalid'
+
+        talent = Talent.find_by(code: course['code'])
+        next if !talent || talent.quests.any?
+        talent_id = talent.id
+
+        data = Grades.get_student_classifications_all(current_user.username,
+                                                      session[:user]['token'],
+                                                      course['semester'],
+                                                      course['code_full'])
+        unless data.nil?
+          data.each do |quest_data|
+            Quest.create(name: quest_data['name'], difficulty: 'medium',
+                         completion_check_id: quest_data['id'],
+                         character_id: first_character_id,
+                         talent_id: talent_id)
+          end
+        end
+      end
+    end
+
     # Titles
     unless current_user.character.titles.any?
       active_title_set = false

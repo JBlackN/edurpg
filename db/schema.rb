@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(version: 20180425222211) do
 
   create_table "class_restrictions", force: :cascade do |t|
     t.string "code"
+    t.string "code_full"
     t.bigint "permission_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
