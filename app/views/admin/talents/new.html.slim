@@ -18,10 +18,12 @@
             = form.label :name, 'Název', class: 'col-form-label'
             = form.text_field :name, class: 'form-control'
           .col-sm-2
-            = form.label :code, 'Kód předmětu', class: 'col-form-label'
+            = form.label :code, 'Kód předmětu', class: 'col-form-label d-inline-block'
+            span.d-inline-block.ml-3 data-toggle="popover" data-content="Vyplníte-li platný kód předmětu, <em>název</em>, <em>popis</em> a <em>počet bodů</em> budou načteny automaticky." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true" W
             = form.text_field :code, class: 'form-control'
           .col-sm-2
-            = form.label :points, 'Počet bodů', class: 'col-form-label'
+            = form.label :points, 'Počet bodů', class: 'col-form-label d-inline-block'
+            span.d-inline-block.ml-3 data-toggle="popover" data-content="Odpovídá počtu <em>ECTS kreditů</em>" data-container="body" data-trigger="click hover" data-placement="auto" data-html="true" H
             = form.number_field :points, min: 0, step: 1, class: 'form-control'
         = form.label :description, 'Popis', class: 'col-form-label'
         = form.text_area :description, class: 'form-control'
@@ -32,7 +34,8 @@
           .col-sm-6
             = form.label :pos_y, 'Pozice Y', class: 'col-form-label'
             = form.text_field :pos_y, value: 0, class: 'form-control'
-        h3.mt-3 Atributy
+        h3.d-inline-block.mt-3 Atributy
+        span.d-inline-block.ml-3 data-toggle="popover" data-content="Atributy slouží jako <u>kategorie</u> pro dovednosti (např. <em>Programování</em>, <em>Matematika</em>). Kromě toho mají <u>číselné ohodnocení</u>, které mohou navyšovat talenty a předměty. Atributy jsou <u>indikátory pokroku studenta</u> v příslušných oblastech." data-container="body" data-trigger="click hover" data-html="true" H
         .form-row
           .col
             .form-group.form-inline.mt-3

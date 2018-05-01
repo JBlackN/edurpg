@@ -5,18 +5,17 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
 
   #navbarSupportedContent.collapse.navbar-collapse
     ul.navbar-nav.mr-auto
+      li.nav-item
+        a.nav-link href="#{url_for admin_talent_trees_path}" Talentové stromy
+      li.nav-item
+        a.nav-link href="#{url_for admin_quests_path}" Úkoly
       li.nav-item.dropdown
-        a.nav-link.dropdown-toggle#navbarDropdownCharacter href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" Postava
-        .dropdown-menu aria-labelledby="navbarDropdownCharacter"
+        a.nav-link.dropdown-toggle#navbarDropdownRewards href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" Odměny
+        .dropdown-menu aria-labelledby="navbarDropdownRewards"
           a.dropdown-item href="#{url_for admin_character_attributes_path}" Atributy a dovednosti
           a.dropdown-item href="#{url_for admin_achievement_categories_path}" Úspěchy
           a.dropdown-item href="#{url_for admin_items_path}" Předměty
           a.dropdown-item href="#{url_for admin_titles_path}" Tituly
-      li.nav-item.dropdown
-        a.nav-link.dropdown-toggle#navbarDropdownClass href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" Povolání
-        .dropdown-menu aria-labelledby="navbarDropdownClass"
-          a.dropdown-item href="#{url_for admin_quests_path}" Úkoly
-          a.dropdown-item href="#{url_for admin_talent_trees_path}" Talentové stromy
     ul.navbar-nav
       li.nav-item.dropdown
         a.nav-link.dropdown-toggle#navbarDropdownUser href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" = current_user.username

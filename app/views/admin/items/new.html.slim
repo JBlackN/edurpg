@@ -20,6 +20,8 @@
                   @rarities.map { |rarity| [rarity, rarity] },
                   { class: 'custom-select w-25 d-inline-block' }
                 = form.text_area :description, class: 'form-control my-1'
+                h3.d-inline-block.mt-2 Atributy
+                span.d-inline-block.ml-3 data-toggle="popover" data-content="Atributy slouží jako <u>kategorie</u> pro dovednosti (např. <em>Programování</em>, <em>Matematika</em>). Kromě toho mají <u>číselné ohodnocení</u>, které mohou navyšovat talenty a předměty. Atributy jsou <u>indikátory pokroku studenta</u> v příslušných oblastech." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true" H
                 .form-group
                   - @attributes.each do |attribute|
                     label for="item_attributes_#{attribute.id}" = attribute.name
