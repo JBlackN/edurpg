@@ -27,7 +27,7 @@ class TalentTreeContainer extends React.Component {
         {(({width, height}) => width === 0 || height === 0 ? null : (
           <ReactSVGPanZoom width={width} height={height} detectAutoPan={false} onZoom={this.handleZoom}>
             <svg width={this.props.tree.width} height={this.props.tree.height}>
-              <TalentTree tree={this.props.tree} scale={this.state.scale} />
+              <TalentTree tree={this.props.tree} scale={this.state.scale} defaultBg={this.props.defaultBg} />
             </svg>
           </ReactSVGPanZoom>
         ))}
@@ -126,7 +126,7 @@ class TalentTree extends React.Component {
     const bgUrl = image ? (
       image
     ) : (
-      "https://i.imgur.com/4KeO1m5.jpg"
+      this.props.defaultBg
     );
 
     return (
@@ -193,7 +193,7 @@ class Talent extends React.Component {
       </svg>
     ) : (
       <rect x={x} y={y} width={size} height={size}
-            style={{fill: 'pink', stroke: 'black', strokeWidth: '0.2em'}} />
+            style={{fill: '#c0c7ea', stroke: 'black', strokeWidth: '0.2em'}} />
     );
 
     return (
@@ -207,14 +207,14 @@ class Talent extends React.Component {
         <svg x={x} y={y} width={size} height={size}>
           <a xlinkHref={updatePath}
              data-confirm="Neuložené změny budou ztraceny. Pokračovat?">
-            <text x='10%' y='2%' dominantBaseline="hanging" textAnchor="start"
-                  style={{fontSize: '0.67em', fontWeight: 'bold'}}>U</text>
+            <text x='10%' y='5%' dominantBaseline="hanging" textAnchor="start"
+                  style={{fontSize: '0.67em', fontWeight: 'bold'}}>&#xf044;</text>
           </a>
           <a xlinkHref={deletePath}
              data-confirm="Neuložené změny budou ztraceny. Smazat talent?"
              data-method="delete" rel="nofollow">
-            <text x='90%' y='2%' dominantBaseline="hanging" textAnchor="end"
-                  style={{fontSize: '0.67em', fontWeight: 'bold'}}>X</text>
+            <text x='90%' y='4%' dominantBaseline="hanging" textAnchor="end"
+                  style={{fontSize: '0.67em', fontWeight: 'bold'}}>&#xf00d;</text>
           </a>
         </svg>
       </g>
@@ -228,9 +228,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const container = document.getElementById('talent-tree');
   const tree = JSON.parse(container.getAttribute('data-talent-tree'));
+  const defaultBg = container.getAttribute('data-default-bg');
 
   ReactDOM.render(
-    <TalentTreeContainer tree={tree} />,
+    <TalentTreeContainer tree={tree} defaultBg={defaultBg} />,
     container
   )
 })

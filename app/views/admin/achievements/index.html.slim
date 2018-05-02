@@ -7,7 +7,8 @@
       .card.mt-3
         .card-body
           h3.achievement-category-selected
-            a.mr-2 href="#{url_for admin_achievement_categories_path}" 🡰
+            a.mr-2 href="#{url_for admin_achievement_categories_path}"
+              i.fa.fa-arrow-left
             = @category.name
           ul.pl-0.achievement-categories
             = render partial: 'category', collection: @categories
@@ -25,10 +26,10 @@
                   .media-body
                     h4.d-inline-block.mt-0 = "#{achi.name} (#{achi.points})"
                     .d-inline-block.ml-3
-                      = link_to 'U', edit_admin_achievement_category_achievement_path(@category, achi),
-                        class: 'mr-2'
-                      = link_to 'X', admin_achievement_category_achievement_path(@category, achi),
-                        method: :delete, data: { confirm: 'Smazat úspěch?' }
+                      a.mr-2 href="#{url_for edit_admin_achievement_category_achievement_path(@category, achi)}"
+                        i.fa.fa-edit
+                      a href="#{url_for admin_achievement_category_achievement_path(@category, achi)}" data-method="delete" data-confirm="Smazat úspěch?"
+                        i.fa.fa-times
                     p = achi.description
                     .btn-group role="group"
                       - achi.items.each do |item|
@@ -41,6 +42,7 @@
                           = title.title
                           span.badge.badge-info.ml-2
                             | Titul
-          .text-center
+          .text-center.mt-3
             h4
-              = link_to '+', new_admin_achievement_category_achievement_path
+              a.mr-2 href="#{url_for new_admin_achievement_category_achievement_path}"
+                i.fa.fa-plus

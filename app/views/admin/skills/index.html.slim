@@ -7,11 +7,13 @@
   .row
     .col-sm-3
       h3.d-inline-block Atributy
-      span.d-inline-block.ml-3 data-toggle="popover" data-content="Atributy slouží jako <u>kategorie</u> pro dovednosti (např. <em>Programování</em>, <em>Matematika</em>). Kromě toho mají <u>číselné ohodnocení</u>, které mohou navyšovat talenty a předměty. Atributy jsou <u>indikátory pokroku studenta</u> v příslušných oblastech." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true" H
+      span.d-inline-block.ml-2 data-toggle="popover" data-content="Atributy slouží jako <u>kategorie</u> pro dovednosti (např. <em>Programování</em>, <em>Matematika</em>). Kromě toho mají <u>číselné ohodnocení</u>, které mohou navyšovat talenty a předměty. Atributy jsou <u>indikátory pokroku studenta</u> v příslušných oblastech." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true"
+        i.fa.fa-question-circle.text-info
       .card.mt-3
         .card-body
           h4
-            a.mr-2 href="#{url_for admin_character_attributes_path}" 🡰
+            a.mr-2 href="#{url_for admin_character_attributes_path}"
+              i.fa.fa-arrow-left
             = @attribute.name
           - @attributes.each do |attribute|
             h4
@@ -30,11 +32,12 @@
                   .media-body
                     h5.d-inline-block.mt-0 = "#{skill.name} (#{skill.rank})"
                     .d-inline-block.ml-3
-                      = link_to 'U', edit_admin_character_attribute_skill_path(@attribute, skill),
-                        class: 'mr-2'
-                      = link_to 'X', admin_character_attribute_skill_path(@attribute, skill),
-                        method: :delete, data: { confirm: 'Smazat dovednost?' }
+                      a.mr-2 href="#{url_for edit_admin_character_attribute_skill_path(@attribute, skill)}"
+                        i.fa.fa-edit
+                      a href="#{url_for admin_character_attribute_skill_path(@attribute, skill)}" data-method="delete" data-confirm="Smazat dovednost?"
+                        i.fa.fa-times
                     p = skill.description
           .text-center
             h5
-              = link_to '+', new_admin_character_attribute_skill_path
+              a href="#{url_for new_admin_character_attribute_skill_path}"
+                i.fa.fa-plus

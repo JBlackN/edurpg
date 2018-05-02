@@ -16,5 +16,5 @@
               { class: 'custom-select form-control mr-3', disabled: false }
             = form.submit 'Zobrazit', class: 'btn btn-outline-success'
   .row.mt-3.mb-3 style="height: 90%;"
-    .col#talent-tree data-talent-tree="#{@tree.to_json(include: {talent_tree_talents: {include: {talent: {include: {talent_attributes: {include: :character_attribute}}}}}})}"
+    .col#talent-tree data-talent-tree="#{@tree.to_json(include: {talent_tree_talents: {include: {talent: {include: {talent_attributes: {include: :character_attribute}}}}}})}" data-default-bg="#{asset_path 'talent_tree.png'}"
       = javascript_pack_tag 'talent_tree_view', 'data-turbolinks-track': true

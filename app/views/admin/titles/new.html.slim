@@ -15,10 +15,10 @@
                   = form.check_box :after_name, class: 'form-check-input'
                   = form.label :after_name, 'Umístění za jménem?', class: 'form-check-label'
                 .text-right
-                  = link_to 'X', admin_titles_path,
+                  = link_to 'Zrušit', admin_titles_path,
                             class: 'btn btn-outline-danger mr-1',
                             role: 'button'
-                  = form.submit 'S', class: 'btn btn-outline-success'
+                  = form.submit 'Uložit', class: 'btn btn-outline-success'
           - @titles.each do |title|
             .card.d-inline-block.mr-3.mb-3
               .card-body.text-center

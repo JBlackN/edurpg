@@ -7,7 +7,8 @@
   .row
     .col-sm-3
       h3.d-inline-block Atributy
-      span.d-inline-block.ml-3 data-toggle="popover" data-content="Atributy slouží jako <u>kategorie</u> pro dovednosti (např. <em>Programování</em>, <em>Matematika</em>). Kromě toho mají <u>číselné ohodnocení</u>, které mohou navyšovat talenty a předměty. Atributy jsou <u>indikátory pokroku studenta</u> v příslušných oblastech." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true" H
+      span.d-inline-block.ml-2 data-toggle="popover" data-content="Atributy slouží jako <u>kategorie</u> pro dovednosti (např. <em>Programování</em>, <em>Matematika</em>). Kromě toho mají <u>číselné ohodnocení</u>, které mohou navyšovat talenty a předměty. Atributy jsou <u>indikátory pokroku studenta</u> v příslušných oblastech." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true"
+        i.fa.fa-question-circle.text-info
       .card.mt-3
         .card-body
           h4 = @attribute.name
@@ -39,7 +40,7 @@
                   class: 'form-control w-25 d-inline-block'
                 = form.text_area :description, class: 'form-control my-1'
                 .text-right
-                  = link_to 'X', admin_character_attribute_skills_path,
+                  = link_to 'Zrušit', admin_character_attribute_skills_path,
                             class: 'btn btn-outline-danger mr-1',
                             role: 'button'
-                  = form.submit 'S', class: 'btn btn-outline-success'
+                  = form.submit 'Uložit', class: 'btn btn-outline-success'

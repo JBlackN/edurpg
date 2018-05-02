@@ -8,8 +8,8 @@ class Admin::DashboardsController < ApplicationController
 
       # Classes
 
-      class_bc = CharacterClass.create(name: 'Student FIT (Bc)', code: 'BI')
-      class_ing = CharacterClass.create(name: 'Student FIT (Ing)', code: 'MI')
+      class_bc = CharacterClass.create(name: 'Student FIT (BSP)', code: 'BI')
+      class_ing = CharacterClass.create(name: 'Student FIT (MSP)', code: 'MI')
 
       # Specializations, talents & talent trees
 

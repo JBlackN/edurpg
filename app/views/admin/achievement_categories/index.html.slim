@@ -10,7 +10,8 @@
             = render partial: 'category', collection: @categories
           .text-center
             h3
-              = link_to '+', new_admin_achievement_category_path
+              a.mr-2 href="#{url_for new_admin_achievement_category_path}"
+                i.fa.fa-plus
     .col-sm-8
       .card style="height: 100%;"
         .card-body

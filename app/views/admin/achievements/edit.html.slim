@@ -37,10 +37,10 @@
                 .text-center.mt-3
                   a.btn.btn-primary href="#{url_for new_admin_achievement_category_achievement_achi_reward_path(@category.id, @achievement.id)}" role="button" Nastavit odměny
                 .text-right
-                  = link_to 'X', admin_achievement_category_achievements_path,
+                  = link_to 'Zrušit', admin_achievement_category_achievements_path,
                             class: 'btn btn-outline-danger mr-1',
                             role: 'button'
-                  = form.submit 'S', class: 'btn btn-outline-success'
+                  = form.submit 'Uložit', class: 'btn btn-outline-success'
           - @achievements.each do |achi|
             .card
               .card-body

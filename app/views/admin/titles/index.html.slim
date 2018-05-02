@@ -17,10 +17,11 @@
                     strong = title.title
                     = " #{current_user.character.name}"
                 .d-inline-block.ml-3
-                  = link_to 'U', edit_admin_title_path(title),
-                    class: 'mr-2'
-                  = link_to 'X', admin_title_path(title),
-                    method: :delete, data: { confirm: 'Smazat titul?' }
+                  a.mr-2 href="#{url_for edit_admin_title_path(title)}"
+                    i.fa.fa-edit
+                  a href="#{url_for admin_title_path(title)}" data-method="delete" data-confirm="Smazat titul?"
+                    i.fa.fa-times
           .text-center
             h3
-              = link_to '+', new_admin_title_path
+              a.mr-2 href="#{url_for new_admin_title_path}"
+                i.fa.fa-plus

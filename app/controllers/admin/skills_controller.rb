@@ -25,6 +25,7 @@ class Admin::SkillsController < ApplicationController
       skill.rank
     end
     min_rank = ((1..ranks.max+1).to_a - ranks).first rescue 1
+    @skill.rank ||= 1
     @skill.rank = min_rank if @skill.rank > min_rank
 
     # Process image
@@ -50,7 +51,8 @@ class Admin::SkillsController < ApplicationController
       skill.rank
     end - [@skill.rank]
     min_rank = ((1..ranks.max+1).to_a - ranks).first rescue 1
-    @skill.rank = min_rank if params[:skill][:rank].to_i > min_rank
+    rank = params[:skill][:rank].to_i if params[:skill][:rank]
+    @skill.rank = min_rank if rank > min_rank
 
     # Process image
     if params[:skill].key?(:image)

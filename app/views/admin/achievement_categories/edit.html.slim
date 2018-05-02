@@ -15,7 +15,7 @@
               .col
                 .form-row
                   .col-sm-2
-                    = form.label :parent
+                    = form.label :parent, 'Rodič'
                   .col-sm-10
                     = form.select :parent,
                       AchievementCategory.all.map { |c| [c.name, c.id] },
@@ -26,10 +26,10 @@
                 = form.text_field :name, class: 'form-control'
             .row.mt-1.text-right
               .col
-                = link_to 'X', admin_achievement_categories_path,
+                = link_to 'Zrušit', admin_achievement_categories_path,
                           class: 'btn btn-outline-danger mr-1',
                           role: 'button'
-                = form.submit 'S', class: 'btn btn-outline-success'
+                = form.submit 'Uložit', class: 'btn btn-outline-success'
     .col-sm-8
       .card style="height: 100%;"
         .card-body

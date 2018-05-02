@@ -13,8 +13,13 @@
  *= require_tree .
  *= require_self
  *= require bootstrap/dist/css/bootstrap.min.css
+ *= require font-awesome
  */
 
 html, body {
   height: 100%;
+}
+
+.fa-exclamation-triangle, .fa-question-circle {
+  cursor: pointer;
 }

@@ -27,7 +27,7 @@ class TalentTreeContainer extends React.Component {
         {(({width, height}) => width === 0 || height === 0 ? null : (
           <ReactSVGPanZoom width={width} height={height} detectAutoPan={false} onZoom={this.handleZoom}>
             <svg width={this.props.tree.width} height={this.props.tree.height}>
-              <TalentTree tree={this.props.tree} scale={this.state.scale} />
+              <TalentTree tree={this.props.tree} scale={this.state.scale} defaultBg={this.props.defaultBg} />
             </svg>
           </ReactSVGPanZoom>
         ))}
@@ -48,7 +48,7 @@ class TalentTree extends React.Component {
     const bgUrl = image ? (
       image
     ) : (
-      "https://i.imgur.com/4KeO1m5.jpg"
+      this.props.defaultBg
     );
 
     return (
@@ -105,7 +105,7 @@ class Talent extends React.Component {
       </svg>
     ) : (
       <rect x={x} y={y} width={size} height={size}
-            style={{fill: 'pink', stroke: 'black', strokeWidth: '0.2em'}}
+            style={{fill: '#c0c7ea', stroke: 'black', strokeWidth: '0.2em'}}
             data-toggle="popover" data-container="body" data-html="true"
             title={talent.name + ' (' + points + '/' + talent.points + ')'}
             data-content={content} data-placement="auto"
@@ -130,9 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const container = document.getElementById('talent-tree');
   const tree = JSON.parse(container.getAttribute('data-talent-tree'));
+  const defaultBg = container.getAttribute('data-default-bg');
 
   ReactDOM.render(
-    <TalentTreeContainer tree={tree} />,
+    <TalentTreeContainer tree={tree} defaultBg={defaultBg} />,
     container
   )
 })

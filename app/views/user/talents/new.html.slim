@@ -19,11 +19,13 @@
             = form.text_field :name, class: 'form-control'
           .col-sm-2
             = form.label :code, 'Kód předmětu', class: 'col-form-label d-inline-block'
-            span.d-inline-block.ml-3 data-toggle="popover" data-content="Vyplníte-li platný kód předmětu, <em>název</em>, <em>popis</em> a <em>počet bodů</em> budou načteny automaticky." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true" W
+            span.d-inline-block.ml-2 data-toggle="popover" data-content="Vyplníte-li platný kód předmětu, <em>název</em>, <em>popis</em> a <em>počet bodů</em> budou načteny automaticky." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true"
+              i.fa.fa-exclamation-triangle.text-warning
             = form.text_field :code, class: 'form-control'
           .col-sm-2
             = form.label :points, 'Počet bodů', class: 'col-form-label d-inline-block'
-            span.d-inline-block.ml-3 data-toggle="popover" data-content="Odpovídá počtu <em>ECTS kreditů</em>" data-container="body" data-trigger="click hover" data-placement="auto" data-html="true" H
+            span.d-inline-block.ml-2 data-toggle="popover" data-content="Odpovídá počtu <em>ECTS kreditů</em>" data-container="body" data-trigger="click hover" data-placement="auto" data-html="true"
+              i.fa.fa-question-circle.text-info
             = form.number_field :points, min: 0, step: 1, class: 'form-control'
         = form.label :description, 'Popis', class: 'col-form-label'
         = form.text_area :description, class: 'form-control'

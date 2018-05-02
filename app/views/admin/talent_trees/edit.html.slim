@@ -5,19 +5,23 @@
     .col
       - if @tree.item
         h2.d-inline-block
-          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' 🡰
+          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?'
+            i.fa.fa-arrow-left
           = "Talentový strom: #{@tree.item.name}"
       - elsif @tree.specialization
         h2.d-inline-block
-          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' 🡰
+          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?'
+            i.fa.fa-arrow-left
           = "Talentový strom: #{@tree.specialization.name}"
       - elsif @tree.character_class
         h2.d-inline-block
-          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' 🡰
+          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?'
+            i.fa.fa-arrow-left
           = "Talentový strom: #{@tree.character_class.name}"
       - else
         h2.d-inline-block
-          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?' 🡰
+          a.mr-2#talent-tree-back href="#{url_for admin_talent_trees_path}" data-confirm='Neuložené změny budou ztraceny. Pokračovat?'
+            i.fa.fa-arrow-left
           | Talentový strom
       = form_with model: @tree, url: admin_talent_tree_path, local: true,
         class: 'form-inline', id: 'talent-tree-form' do |form|
@@ -38,5 +42,5 @@
             class: 'custom-file-label'
         = form.submit 'Uložit', class: 'btn btn-outline-success'
   .row.mt-3.mb-3 style="height: 90%;"
-    .col#talent-tree data-talent-tree="#{@tree.to_json(include: {talent_tree_talents: {include: :talent}})}"
+    .col#talent-tree data-talent-tree="#{@tree.to_json(include: {talent_tree_talents: {include: :talent}})}" data-default-bg="#{asset_path 'talent_tree.png'}"
       = javascript_pack_tag 'talent_tree', 'data-turbolinks-track': true

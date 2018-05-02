@@ -25,10 +25,10 @@
                 = form.text_area :description, class: 'form-control my-1'
                 p.text-muted Pro nastavení odměn je třeba úspěch nejprve uložit.
                 .text-right
-                  = link_to 'X', admin_achievement_category_achievements_path,
+                  = link_to 'Zrušit', admin_achievement_category_achievements_path,
                             class: 'btn btn-outline-danger mr-1',
                             role: 'button'
-                  = form.submit 'S', class: 'btn btn-outline-success'
+                  = form.submit 'Uložit', class: 'btn btn-outline-success'
           - @category.achievements.each do |achi|
             .card
               .card-body
