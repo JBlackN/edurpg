@@ -60,6 +60,7 @@ class TalentTree extends React.Component {
       talentTreeForm.addEventListener('submit', this.handleFormSubmit);
     }
     window.formSubmitAttached = true;
+    window.unsavedChanges = false;
   }
 
   componentWillUnmount() {
@@ -107,6 +108,7 @@ class TalentTree extends React.Component {
     state[this.movingId].y = this.startY + dy;
 
     this.setState(prevState => (state));
+    if (!window.unsavedChanges) window.unsavedChanges = true;
   }
 
   handleMoveEnd() {
@@ -205,14 +207,12 @@ class Talent extends React.Component {
                 style={{fontSize: '0.67em'}}>{talent.code}</text>
         </svg>
         <svg x={x} y={y} width={size} height={size}>
-          <a xlinkHref={updatePath}
-             data-confirm="Neuložené změny budou ztraceny. Pokračovat?">
+          <a xlinkHref={updatePath} className="watch-unsaved">
             <text x='10%' y='5%' dominantBaseline="hanging" textAnchor="start"
                   style={{fontSize: '0.67em', fontWeight: 'bold'}}>&#xf044;</text>
           </a>
-          <a xlinkHref={deletePath}
-             data-confirm="Neuložené změny budou ztraceny. Smazat talent?"
-             data-method="delete" rel="nofollow">
+          <a xlinkHref={deletePath} className="watch-unsaved" data-method="delete" rel="nofollow"
+             data-confirm="Odstranit talent?">
             <text x='90%' y='4%' dominantBaseline="hanging" textAnchor="end"
                   style={{fontSize: '0.67em', fontWeight: 'bold'}}>&#xf00d;</text>
           </a>

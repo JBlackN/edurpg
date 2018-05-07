@@ -1,0 +1,10 @@
+.modal.fade#unsaved-alert tabindex="-1" role="dialog" aria-labelledby="Unsaved Alert" aria-hidden="true"
+  .modal-dialog.modal-dialog-centered role="document"
+    .modal-content
+      .modal-header
+        h5.modal-title Máte neuložené změny
+        button.close type="button" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+      .modal-footer
+        button.btn.btn-danger#modal-tree-nosave type="button" data-dismiss="modal" Neukládat
+        button.btn.btn-success#modal-tree-save type="button" Uložit změny
