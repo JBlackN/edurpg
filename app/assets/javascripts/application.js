@@ -16,3 +16,16 @@
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
+
+// Source: https://github.com/twbs/bootstrap/issues/24995
+$(document).on('turbolinks:load', function() {
+  $('input[type=file]').change(function () {
+    var value = $(this).val();
+    value = value.replace('C:\\fakepath\\', ''); // Remove fake path (Chrome)
+
+    if (value != undefined || value != '') {
+      $(this).next(".custom-file-label").attr('data-content', value);
+      $(this).next(".custom-file-label").text(value);
+    }
+  });
+});

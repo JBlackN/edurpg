@@ -23,3 +23,7 @@ html, body {
 .fa-exclamation-triangle, .fa-question-circle {
   cursor: pointer;
 }
+
+.custom-file-label {
+  overflow: hidden;
+}
