@@ -13,6 +13,9 @@ class TalentTreeContainer extends React.Component {
     };
 
     this.handleZoom = this.handleZoom.bind(this);
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
   handleZoom(scale) {
@@ -21,11 +24,37 @@ class TalentTreeContainer extends React.Component {
     }));
   };
 
+  handleMouseDown(e) {
+    if (e.originalEvent.button == 1) {
+      this.mouseX = e.originalEvent.pageX;
+      this.mouseY = e.originalEvent.pageY;
+      window.talentTreePan = true;
+    }
+  }
+
+  handleMouseMove(e) {
+    if (window.talentTreePan) {
+      var dx = (e.originalEvent.pageX - this.mouseX) / e.scaleFactor;
+      var dy = (e.originalEvent.pageY - this.mouseY) / e.scaleFactor;
+      this.Viewer.pan(dx, dy);
+      this.mouseX = e.originalEvent.pageX;
+      this.mouseY = e.originalEvent.pageY;
+    }
+  }
+
+  handleMouseUp(e) {
+    if (e.originalEvent.button == 1) {
+      window.talentTreePan = false;
+    }
+  }
+
   render() {
     return (
       <AutoSizer>
         {(({width, height}) => width === 0 || height === 0 ? null : (
-          <ReactSVGPanZoom width={width} height={height} detectAutoPan={false} onZoom={this.handleZoom}>
+          <ReactSVGPanZoom width={width} height={height} detectAutoPan={false} onZoom={this.handleZoom}
+                           onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}
+                           onMouseMove={this.handleMouseMove} ref={Viewer => this.Viewer = Viewer}>
             <svg width={this.props.tree.width} height={this.props.tree.height}>
               <TalentTree tree={this.props.tree} scale={this.state.scale} defaultBg={this.props.defaultBg} />
             </svg>
