@@ -58,7 +58,9 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Added gems
+gem 'active_model_otp'
 gem 'font-awesome-rails'
+gem 'figaro'
 gem 'icalendar'
 gem 'nokogiri'
 gem 'omniauth-fitcvut-oauth2'

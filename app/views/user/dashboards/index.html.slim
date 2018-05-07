@@ -10,7 +10,7 @@
               i.fa.fa-trophy.mr-1
               span.font-weight-bold.ml-1 = @character.achi_points
           .media
-            - if @character.image.nil?
+            - if @character.image.nil? || @character.image.empty?
               = image_tag 'user.png', class: 'mr-4 character-image'
             - else
               img.mr-4.character_image src="#{@character.image}"

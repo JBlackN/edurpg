@@ -13,6 +13,19 @@ class SessionsController < ApplicationController
       current_user.character.init(session[:user]['token'])
       current_user.save
       redirect_to sessions_index_path
+    elsif current_user.consents.first.photo &&
+          current_user.character.image.nil?
+      sent = send_photo_consent_mail
+      current_user.character.image = ''
+      current_user.character.save
+      if sent
+        redirect_to edit_consent_path(current_user.consents.first)
+      else
+        consent = current_user.consents.first
+        consent.photo = false
+        consent.save
+        redirect_to sessions_index_path
+      end
     elsif current_user.admin_only?
       redirect_to admin_dashboards_index_path
     elsif current_user.user_only?

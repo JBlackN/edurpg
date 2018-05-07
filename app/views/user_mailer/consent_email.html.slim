@@ -1,0 +1,14 @@
+h1 = "Souhlas se zpracováním Vaší fotografie aplikací #{Rails.application.class.parent}"
+p.text-justify
+  | Protože fotografie je citlivý údaj, je vyžadováno dvoufázové ověření Vašeho souhlasu.
+  strong
+    |  Souhlasíte-li se 
+    u zpracováním
+    |  a 
+    u ukládáním
+    = " Vaší fotografie aplikací #{Rails.application.class.parent}, zadejte v aplikaci tento kód: "
+  strong
+    u = @code
+  |  a souhlas potvrďte. Autorizační kód je platný
+  strong  10 minut
+  | .

@@ -13,6 +13,12 @@ class ApplicationController < ActionController::Base
     redirect_to :login unless user_signed_in?
   end
 
+  def authorize_consent_edit(id)
+    unless current_user.consents.exists?(id.to_i)
+      redirect_back fallback_location: root_path
+    end
+  end
+
   def authorize_user
     redirect_to :login unless current_user.permission.use_app
   end
@@ -138,5 +144,12 @@ class ApplicationController < ActionController::Base
                       ['jpeg', 'png', 'gif'].include?(content_type[1])
 
     "data:image/#{content_type[1]};base64, #{Base64.encode64(data.read)}"
+  end
+
+  def send_photo_consent_mail
+    UserMailer.with(user: current_user).consent_email.deliver_now!
+    return true
+  rescue Exception
+    return false
   end
 end

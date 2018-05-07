@@ -26,3 +26,6 @@ yarn-debug.log*
 # Added
 /lib/generators/slim/
 /vendor
+
+# Ignore application configuration
+/config/application.yml

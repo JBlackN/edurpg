@@ -6,7 +6,7 @@
       .card
         .card-body
           .media
-            - if current_user.character.image.nil?
+            - if current_user.character.image.nil? || current_user.character.image.empty?
               = image_tag 'user.png', class: 'mr-4 character-image'
             - else
               img.mr-4.character_image src="#{current_user.character.image}"

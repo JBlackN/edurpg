@@ -1,0 +1,29 @@
+.container
+  .row
+    .col
+      h1 Souhlas se zpracováním fotografie
+      p.text-justify
+        | Protože fotografie je citlivý údaj, je vyžadováno dvoufázové ověření Vašeho souhlasu. Na Vaši e-mailovou adresu
+        strong = " #{@email} "
+        | jsme Vám odeslali
+        strong  autorizační kód
+        | .
+        strong
+          |  Souhlasíte-li se 
+          u zpracováním
+          |  a 
+          u ukládáním
+          |  Vaší fotografie aplikací,
+        |  zadejte tento kód do textového pole níže a souhlas potvrďte. Autorizační kód je platný
+        strong  10 minut
+        | .
+
+  = form_with model: @consent, url: consent_path, local: true do |form|
+    .row.mt-3
+      .col
+        = form.label :code, 'Autorizační kód', class: 'col-form-label'
+        = form.text_field :code, class: 'form-control'
+    .row.mt-5.mb-5
+      .col.text-center
+        a.btn.btn-outline-success.mr-3 href="#{url_for consent_path(@consent)}" data-method="patch" role="button" Nesouhlasím
+        = form.submit 'Souhlasím', class: 'btn btn-danger'
