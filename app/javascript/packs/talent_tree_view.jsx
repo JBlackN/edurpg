@@ -117,7 +117,7 @@ class Talent extends React.Component {
         {bg}
         <svg x={x} y={y} width={size} height={size} style={{pointerEvents: 'none'}}>
           <text x='50%' y='55%' alignmentBaseline="middle" textAnchor="middle"
-                style={{fontSize: '0.67em'}}>{talent.code}</text>
+                style={{fontSize: size / 4.5}}>{talent.code}</text>
         </svg>
       </g>
     );

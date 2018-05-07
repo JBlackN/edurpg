@@ -204,17 +204,17 @@ class Talent extends React.Component {
         {bg}
         <svg x={x} y={y} width={size} height={size}>
           <text x='50%' y='55%' alignmentBaseline="middle" textAnchor="middle"
-                style={{fontSize: '0.67em'}}>{talent.code}</text>
+                style={{fontSize: size / 4.5}}>{talent.code}</text>
         </svg>
         <svg x={x} y={y} width={size} height={size}>
           <a xlinkHref={updatePath} className="watch-unsaved">
             <text x='10%' y='5%' dominantBaseline="hanging" textAnchor="start"
-                  style={{fontSize: '0.67em', fontWeight: 'bold'}}>&#xf044;</text>
+                  style={{fontSize: size / 4.5, fontWeight: 'bold'}}>&#xf044;</text>
           </a>
           <a xlinkHref={deletePath} className="watch-unsaved" data-method="delete" rel="nofollow"
              data-confirm="Odstranit talent?">
             <text x='90%' y='4%' dominantBaseline="hanging" textAnchor="end"
-                  style={{fontSize: '0.67em', fontWeight: 'bold'}}>&#xf00d;</text>
+                  style={{fontSize: size / 4.5, fontWeight: 'bold'}}>&#xf00d;</text>
           </a>
         </svg>
       </g>
