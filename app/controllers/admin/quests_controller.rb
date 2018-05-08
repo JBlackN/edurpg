@@ -84,7 +84,7 @@ class Admin::QuestsController < ApplicationController
     @quest.character_id = current_user.character.id
 
     if @quest.save
-      redirect_to admin_quests_path(params: @params)
+      redirect_to edit_admin_quest_path(@quest, params: @params)
     else
       render 'new' # TODO: errors -> view
     end

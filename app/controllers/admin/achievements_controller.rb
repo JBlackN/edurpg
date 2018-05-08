@@ -35,7 +35,7 @@ class Admin::AchievementsController < ApplicationController
     @achievement.achievement_category_id = params[:achievement_category_id]
 
     if @achievement.save
-      redirect_to admin_achievement_category_achievements_path
+      redirect_to edit_admin_achievement_category_achievement_path(params[:achievement_category_id], @achievement)
     else
       render 'new' # TODO: errors -> view
     end
