@@ -163,11 +163,11 @@ class Admin::QuestsController < ApplicationController
 
   def difficulties
     [
-      ['Velmi jednoduchý', 'very_easy'],
-      ['Jednoduchý', 'easy'],
-      ['Středně obtížný', 'medium'],
-      ['Obtížný', 'hard'],
-      ['Velmi obtížný', 'very_hard']
+      ['Velmi jednoduchý', 'very_easy', { class: 'quest-very_easy' }],
+      ['Jednoduchý', 'easy', { class: 'quest-easy' }],
+      ['Středně obtížný', 'medium', { class: 'quest-medium' }],
+      ['Obtížný', 'hard', { class: 'quest-hard' }],
+      ['Velmi obtížný', 'very_hard', { class: 'quest-very_hard' }]
     ]
   end
 
