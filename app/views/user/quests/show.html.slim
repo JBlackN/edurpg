@@ -35,14 +35,6 @@
         - else
           a.btn.btn-outline-success href="#{url_for user_quest_path(@quest, params: @params)}" data-method="patch" role="button" Splnit úkol
     .col-sm-4
-      h3 Zadavatel
-      .card
-        - if @quest.character.image.nil?
-          = image_tag 'user.png', class: 'card-img-top'
-        - else
-          img.card-img-top src="#{@quest.character.image}"
-        .card-body
-          h4.card-title = @quest.character.name
       h3.mt-3 Odměny
       .card.mt-3.mb-3
         .card-body
@@ -86,3 +78,11 @@
                   .media-body
                     h4.d-inline-block.mt-0 = "#{title.title}"
                     p.float-right.text-muted = "(Titul)"
+      h3 Zadavatel
+      .card
+        - if @quest.character.image.nil?
+          = image_tag 'user.png', class: 'card-img-top'
+        - else
+          img.card-img-top src="#{@quest.character.image}"
+        .card-body
+          h4.card-title = @quest.character.name
