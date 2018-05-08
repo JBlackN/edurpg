@@ -17,9 +17,14 @@
             .media-body
               h2.mt-0.mb-0 = @character.name_with_titles
               h3.mt-1.mb-0.ml-1.character-level-class
-                = "Úroveň #{@character.level} #{@character.character_class.name}"
+                | Úroveň 
+                span.badge.badge-success = @character.level
+                span.ml-2 Povolání 
+                a.badge.badge-info href="#{url_for user_guild_path(0)}" = @character.character_class.name
               - if @character.specialization
-                h3.mt-0.character-guild = "<#{@character.specialization.name}>"
+                h3.mt-0.ml-1.character-guild
+                  | Specializace 
+                  a.badge.badge-info href="#{url_for user_guild_path(1)}" = @character.specialization.name
               ul.character-attributes
                 - @character.character_character_attributes.each do |attr|
                   li.mt-1.mr-4.d-inline-block
