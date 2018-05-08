@@ -3,7 +3,7 @@
 .container
   .row.mt-3
     .col
-      h2 = "<#{@name}>"
+      h2 = "Cech: #{@name}"
       .card.mt-3
         .card-body
           = form_with url: user_guild_path, method: :get, local: true,
@@ -18,7 +18,7 @@
           li.list-group-item.list-group-item-primary.d-flex.justify-content-between.align-items-center
             = "#{@characters[:position]}/#{@characters[:total]}"
             span.font-weight-bold = @characters[:name]
-            span.badge.badge-info
+            span.badge.badge-info.guild-score
               - if params.key?(:order)
                 = @characters[params[:order].to_sym]
               - else
@@ -34,7 +34,7 @@
               li.list-group-item.list-group-item-primary.d-flex.justify-content-between.align-items-center
                 = "#{character[:position]}/#{character[:total]}"
                 span.font-weight-bold = character[:name]
-                span.badge.badge-info
+                span.badge.badge-info.guild-score
                   - if params.key?(:order)
                     = character[params[:order].to_sym]
                   - else
@@ -43,7 +43,7 @@
               li.list-group-item.d-flex.justify-content-between.align-items-center
                 = "#{character[:position]}/#{character[:total]}"
                 span.font-weight-bold = character[:name]
-                span.badge.badge-info
+                span.badge.badge-info.guild-score
                   - if params.key?(:order)
                     = character[params[:order].to_sym]
                   - else
