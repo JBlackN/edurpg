@@ -27,7 +27,9 @@
                     - else
                       img.mr-3.skill-image src="#{skill.image}"
                     .media-body
-                      h5.mt-0 = "#{skill.name} (#{skill.rank})"
+                      h5.mt-0
+                        = "#{skill.name} (#{skill.rank})"
+                        i.fa.fa-check.ml-2
                       p = skill.description
           - @unobtained_skills.each do |skill|
             .card.d-inline-block.mr-3.mb-3 style="opacity: 0.5;"

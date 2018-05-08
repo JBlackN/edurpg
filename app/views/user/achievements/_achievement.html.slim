@@ -9,7 +9,10 @@
       - else
         img.mr-3.achi-image src="#{achievement.image}"
       .media-body
-        h4.d-inline-block.mt-0.mr-3 = achievement.name
+        h4.d-inline-block.mt-0.mr-3
+          = achievement.name
+          - if opacity == 1
+            i.fa.fa-check.ml-2
         - if current_user.character.character_achievements.exists?(achievement_id: achievement.id)
           a.btn.btn-outline-danger.btn-sm.achi-toggle href="#{url_for user_achievement_path(achievement)}" data-method="patch" role="button" Označit jako nedosažený
         - else

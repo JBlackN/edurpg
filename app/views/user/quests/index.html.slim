@@ -31,6 +31,8 @@
             - @quests.each do |quest|
               li class="align-middle#{' quest-completed' if current_user.character.completed_quests.exists?(quest.id)}"
                 h4 class="d-inline-block m-0 quest-#{quest.difficulty}"
+                  - if current_user.character.completed_quests.exists?(quest.id)
+                    i.fa.fa-check.mr-2
                   - if quest.talent
                     a href="#{url_for user_quest_path(quest, params: @params)}" class="quest-link quest-#{quest.difficulty}" = "[#{quest.talent.code}] #{quest.name}"
                   - elsif quest.specialization

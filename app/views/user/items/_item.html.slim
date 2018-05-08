@@ -6,7 +6,10 @@
       - else
         img.mr-3.item-image src="#{item.image}"
       .media-body
-        h3 class="d-inline-block mt-0 item-name item-#{item.rarity}" = "#{item.name}"
+        h3 class="d-inline-block mt-0 item-name item-#{item.rarity}"
+          = "#{item.name}"
+          - if opacity == 1
+            i.fa.fa-check.ml-2
         - if item_tree = current_user.character.talent_trees.where(item_id: item.id).take
           a.btn.btn-outline-primary.btn-sm.ml-3.item-tree href="#{url_for user_talent_tree_path(item_tree)}" data-turbolinks="false" role="button" Talentový strom
         p = item.description
