@@ -15,7 +15,10 @@
                 id: 'item_image'
               = form.label :image, 'Vybrat obrázek', for: "item_image",
                 class: 'custom-file-label'
-            = form.text_field :name, class: 'form-control mb-2'
+            .input-group.mb-1
+              .input-group-prepend
+                a.btn.btn-outline-secondary href="#{url_for user_titles_path}" role="button" Nastavit tituly
+              = form.text_field :name, class: 'form-control'
             .text-right
               = form.submit 'Uložit', class: 'btn btn-outline-success'
     .col-sm-4
