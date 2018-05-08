@@ -5,20 +5,31 @@
     .col
       h2 Dovednosti
   .row
-    .col-sm-3
+    .col-sm-4
       h3.d-inline-block Atributy
       span.d-inline-block.ml-2 data-toggle="popover" data-content="Atributy slouží jako <u>kategorie</u> pro dovednosti (např. <em>Programování</em>, <em>Matematika</em>). Kromě toho mají <u>číselné ohodnocení</u>, které mohou navyšovat talenty a předměty. Atributy jsou <u>indikátory pokroku studenta</u> v příslušných oblastech." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true"
         i.fa.fa-question-circle.text-info
       .card.mt-3
         .card-body
-          h4
+          h4.d-inline-block
             a.mr-2 href="#{url_for admin_character_attributes_path}"
               i.fa.fa-arrow-left
             = @attribute.name
+          div.d-inline-block.ml-3
+            a.mr-2 href="#{url_for edit_admin_character_attribute_path(@attribute)}"
+              i.fa.fa-edit
+            a href="#{url_for admin_character_attribute_path(@attribute)}" data-method="delete" data-confirm="Smazat atribut?"
+              i.fa.fa-times
           - @attributes.each do |attribute|
-            h4
+            br
+            h4.d-inline-block
               = link_to attribute.name, admin_character_attribute_path(attribute)
-    .col-sm-9
+            div.d-inline-block.ml-3
+              a.mr-2 href="#{url_for edit_admin_character_attribute_path(@attribute)}"
+                i.fa.fa-edit
+              a href="#{url_for admin_character_attribute_path(@attribute)}" data-method="delete" data-confirm="Smazat atribut?"
+                i.fa.fa-times
+    .col-sm-8
       .card style="height: 100%;"
         .card-body
           - @attribute.skills.each do |skill|
