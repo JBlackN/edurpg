@@ -27,3 +27,13 @@ html, body {
 .custom-file-label {
   overflow: hidden;
 }
+
+#user-menu {
+  min-width: 0;
+  /*left: -11px;*/
+}
+
+#user-menu a {
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+}
