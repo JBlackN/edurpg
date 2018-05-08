@@ -15,11 +15,13 @@
                     id: 'item_image'
                   = form.label :image, 'Vybrat obrázek', for: "item_image",
                     class: 'custom-file-label'
-                = form.text_field :name, class: 'form-control w-75 d-inline-block'
-                = form.select :rarity,
-                  @rarities.map { |rarity| [rarity, rarity] },
+                = form.text_field :name, class: 'form-control w-75 d-inline-block',
+                  placeholder: 'Název'
+                = form.label :rarity, 'Kvalita', class: 'col-form-label ml-4 mr-3'
+                = form.select :rarity, @rarities,
                   { class: 'custom-select w-25 d-inline-block' }
-                = form.text_area :description, class: 'form-control my-1'
+                = form.text_area :description, class: 'form-control my-1',
+                  placeholder: 'Popis'
                 h3.d-inline-block.mt-2 Atributy
                 span.d-inline-block.ml-2 data-toggle="popover" data-content="Atributy slouží jako <u>kategorie</u> pro dovednosti (např. <em>Programování</em>, <em>Matematika</em>). Kromě toho mají <u>číselné ohodnocení</u>, které mohou navyšovat talenty a předměty. Atributy jsou <u>indikátory pokroku studenta</u> v příslušných oblastech." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true"
                   i.fa.fa-question-circle.text-info

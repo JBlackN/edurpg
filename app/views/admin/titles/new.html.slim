@@ -10,11 +10,12 @@
             .card-body
               = form_with scope: :title,
                 url: admin_titles_path, local: true do |form|
-                = form.text_field :title, class: 'form-control'
-                .form-check.text-right
+                = form.text_field :title, class: 'form-control',
+                  placeholder: 'Titul'
+                .form-check.text-right.mt-2
                   = form.check_box :after_name, class: 'form-check-input'
                   = form.label :after_name, 'Umístění za jménem?', class: 'form-check-label'
-                .text-right
+                .text-right.mt-2
                   = link_to 'Zrušit', admin_titles_path,
                             class: 'btn btn-outline-danger mr-1',
                             role: 'button'

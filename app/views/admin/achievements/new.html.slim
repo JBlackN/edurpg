@@ -19,10 +19,13 @@
                     id: 'achi_image'
                   = form.label :image, 'Vybrat obrázek', for: "achi_image",
                     class: 'custom-file-label'
-                = form.text_field :name, class: 'form-control w-75 d-inline-block'
+                = form.text_field :name, class: 'form-control w-75 d-inline-block',
+                  placeholder: 'Název'
                 = form.number_field :points, min: 0, step: 1,
-                  class: 'form-control w-25 d-inline-block'
-                = form.text_area :description, class: 'form-control my-1'
+                  class: 'form-control w-25 d-inline-block',
+                  placeholder: 'Počet bodů'
+                = form.text_area :description, class: 'form-control my-1',
+                  placeholder: 'Popis'
                 p.text-muted Pro nastavení odměn je třeba úspěch nejprve uložit.
                 .text-right
                   = link_to 'Zrušit', admin_achievement_category_achievements_path,

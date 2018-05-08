@@ -6,8 +6,6 @@
       h2 Úspěchy
       .card.mt-3
         .card-body
-          ul.pl-0.achievement-categories
-            = render partial: 'category_no_links', collection: @categories
           = form_with scope: :achievement_category,
             url: admin_achievement_categories_path, local: true do |form|
             .row.mt-2
@@ -22,13 +20,16 @@
                       { class: 'custom-select', disabled: false }
             .row.mt-1
               .col
-                = form.text_field :name, class: 'form-control'
+                = form.text_field :name, class: 'form-control',
+                  placeholder: 'Název kategorie'
             .row.mt-1.text-right
               .col
                 = link_to 'Zrušit', admin_achievement_categories_path,
                           class: 'btn btn-outline-danger mr-1',
                           role: 'button'
                 = form.submit 'Uložit', class: 'btn btn-outline-success'
+          ul.pl-0.achievement-categories
+            = render partial: 'category_no_links', collection: @categories
     .col-sm-8
       .card style="height: 100%;"
         .card-body

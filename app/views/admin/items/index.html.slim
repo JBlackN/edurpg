@@ -6,6 +6,10 @@
       h2 Předměty
       .card.mt-3 style="height: 100%;"
         .card-body
+          .text-center
+            h3
+              a.mr-2 href="#{new_admin_item_path}"
+                i.fa.fa-plus
           - @items.each do |item|
             .card.d-inline-block.mr-3.mb-3
               .card-body
@@ -30,7 +34,3 @@
                           item_id: item.id).points
                         - if !points.nil? && points > 0
                           li.list-group-item = "+ #{points} #{attribute.name}"
-          .text-center
-            h3
-              a.mr-2 href="#{new_admin_item_path}"
-                i.fa.fa-plus

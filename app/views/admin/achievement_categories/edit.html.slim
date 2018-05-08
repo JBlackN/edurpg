@@ -7,8 +7,6 @@
       h2 Úspěchy
       .card.mt-3
         .card-body
-          ul.pl-0.achievement-categories
-            = render partial: 'category_edit', collection: @categories
           = form_with model: @category, url: admin_achievement_category_path,
             local: true do |form|
             .row.mt-2
@@ -30,6 +28,8 @@
                           class: 'btn btn-outline-danger mr-1',
                           role: 'button'
                 = form.submit 'Uložit', class: 'btn btn-outline-success'
+          ul.pl-0.achievement-categories
+            = render partial: 'category_edit', collection: @categories
     .col-sm-8
       .card style="height: 100%;"
         .card-body

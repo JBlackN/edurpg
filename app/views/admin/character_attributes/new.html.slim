@@ -18,7 +18,7 @@
                       local: true do |form|
             .row.mt-2
               .col
-                = form.text_field :name, class: 'form-control'
+                = form.text_field :name, class: 'form-control', placeholder: 'Název atributu'
             .row.mt-1.text-right
               .col
                 = link_to 'Zrušit', admin_character_attributes_path,

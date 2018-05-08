@@ -78,6 +78,14 @@ class Admin::ItemsController < ApplicationController
   end
 
   def rarities
-    ['poor', 'common', 'uncommon', 'rare', 'epic', 'legendary', 'artifact']
+    [
+      ['mizerná', 'poor'],
+      ['běžná', 'common'],
+      ['neobvyklá', 'uncommon'],
+      ['vzácná', 'rare'],
+      ['epická', 'epic'],
+      ['legendární', 'legendary'],
+      ['artefakt', 'artifact']
+    ]
   end
 end
