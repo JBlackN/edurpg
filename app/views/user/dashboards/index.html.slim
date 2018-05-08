@@ -66,6 +66,18 @@
           ul.list-group.list-group-flush
             - @activities.each do |activity|
               li.list-group-item
+                h6.text-muted
+                  - case activity[:type]
+                  - when :skill
+                    = "Získal(a) jste dovednost:"
+                  - when :achievement
+                    = "Dosáhl(a) jste úspěchu:"
+                  - when :item
+                    = "Získal(a) jste předmět:"
+                  - when :title
+                    = "Získal(a) jste titul:"
+                  - else
+                    = "Máte aktivitu"
                 span.float-right.text-muted.activity-datetime = activity[:datetime].strftime('%d.%m.%Y %H:%M')
                 .media
                   - if [:skill, :achievement, :item].include?(activity[:type])
