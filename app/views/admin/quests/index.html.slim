@@ -8,7 +8,7 @@
         .card-body
           = form_with url: admin_quests_path, method: :get, local: true,
             class: 'form-inline' do |form|
-            = form.label :groups, 'Skupiny', class: 'mr-2'
+            = form.label :groups, 'Kategorie', class: 'mr-2'
             = form.select :groups, grouped_options_for_select(@groups, params[:groups]),
               { include_blank: true },
               { class: 'custom-select w-25 mr-3', disabled: false }

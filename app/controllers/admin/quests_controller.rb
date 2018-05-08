@@ -202,12 +202,12 @@ class Admin::QuestsController < ApplicationController
 
   def quest_groups
     [
-      ['Povolání', CharacterClass.all.map { |c| [c.name, "c#{c.id}"] }],
-      ['Specializace', Specialization.all.order(name: :asc).map do |s|
+      ['Program', CharacterClass.all.map { |c| [c.name, "c#{c.id}"] }],
+      ['Obor', Specialization.all.order(name: :asc).map do |s|
         ["#{s.name} (#{s.character_class.code})", "s#{s.id}"]
       end
       ],
-      ['Talent', talents_with_class_restrictions],
+      ['Předmět', talents_with_class_restrictions],
     ]
   end
 

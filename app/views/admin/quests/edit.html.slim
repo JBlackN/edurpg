@@ -75,14 +75,7 @@
             p Identifikátor hodnocení z aplikace Klasifikace.
             = form.text_field :completion_check_id, class: 'form-control'
             h3.mt-3 Kategorie
-            p
-              | Úkol může patřit ke studijnímu programu (
-              em povolání
-              | ), oboru (
-              em specializaci
-              | ), nebo předmětu (
-              em talentu
-              | ).
+            p Studijní program, obor, nebo předmět.
             = form.select :groups, grouped_options_for_select(@groups, @group),
               { include_blank: true },
               { class: 'custom-select', disabled: false }
