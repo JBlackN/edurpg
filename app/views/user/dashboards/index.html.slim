@@ -5,10 +5,11 @@
     .col
       .card#user-infobox
         .card-body
-          .card.float-right
+          .card.float-right title="Body úspěchů"
             .card-body.p-3
-              i.fa.fa-trophy.mr-1
-              span.font-weight-bold.ml-1 = @character.achi_points
+              a href="#{url_for user_achievements_path}"
+                i.fa.fa-trophy.mr-1.text-warning
+                span.font-weight-bold.ml-1 = @character.achi_points
           .media
             - if @character.image.nil? || @character.image.empty?
               = image_tag 'user.png', class: 'mr-4 character-image'
@@ -28,11 +29,14 @@
               ul.character-attributes
                 - @character.character_character_attributes.each do |attr|
                   li.mt-1.mr-4.d-inline-block
-                    span.character-attribute = "#{attr.character_attribute.name}: "
-                    = attr.points
+                    a.character-attribute href="#{url_for user_skill_path(attr.id)}" = "#{attr.character_attribute.name}:"
+                    = " #{attr.points}"
       .progress#user-experience
-        .progress-bar role="progressbar" style="width: #{@current_exp}%;" aria-valuenow="#{@current_exp}" aria-valuemin="0" aria-valuemax="60"
-          = "#{@character.experience % 60}/60 (#{@character.experience} celkem)"
+        .progress-bar.d-block role="progressbar" style="width: #{@current_exp}%;" aria-valuenow="#{@current_exp}" aria-valuemin="0" aria-valuemax="60"
+          abbr title="Body zkušeností" XP
+          = " #{@character.experience % 60}/60 (#{@character.experience} celkem)"
+          span.d-inline-block.ml-1 data-toggle="popover" data-content="Body zkušeností kopírují ECTS kredity v poměru 1:1." data-container="body" data-trigger="click hover" data-placement="auto" data-html="true"
+            i.fa.fa-question-circle.text-light
   .row.mt-3
     .col-sm-7
       h3 Úkoly
