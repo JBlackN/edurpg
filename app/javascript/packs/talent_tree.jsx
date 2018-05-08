@@ -234,7 +234,7 @@ class Talent extends React.Component {
 
     return (
       <g onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}
-         onDragStart={this.handleDragStart} className="talent">
+         onDragStart={this.handleDragStart} className="talent-edit">
         {bg}
         <svg x={x} y={y} width={size} height={size}>
           <text x='50%' y='55%' alignmentBaseline="middle" textAnchor="middle"
