@@ -52,6 +52,8 @@ group :development do
   gem 'rails-erd'
   # Seed Dump
   gem 'seed_dump'
+  # SDoc
+  gem 'sdoc'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,7 +1,14 @@
+# Permission model
 class Permission < ApplicationRecord
   belongs_to :user
   has_many :class_restrictions, dependent: :destroy
 
+  # Assign permissions using Usermap (including course resctictions).
+  #
+  # === Parameters
+  #
+  # [+all+ :: TrueClass|FalseClass] Override Usermap and assign all?
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
   def assign(all, token)
     assign_init
     return assign_all_and_save if all
@@ -18,6 +25,11 @@ class Permission < ApplicationRecord
     save
   end
 
+  # Refresh permissions including course restrictions.
+  #
+  # === Parameters
+  #
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
   def refresh(token)
     return true if user.admin_full?
     class_restrictions.clear

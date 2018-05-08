@@ -1,3 +1,4 @@
+# User talent trees controller
 class User::TalentTreesController < ApplicationController
   before_action :authorize_user
   before_action -> {
@@ -5,6 +6,7 @@ class User::TalentTreesController < ApplicationController
   }, except: [:index]
 
   def index
+    # Handle tree selection (which one to show) + defaults
     if params.key?(:tree)
       if current_user.character.talent_trees.exists?(params[:tree].to_i)
         redirect_to user_talent_tree_path(params[:tree].to_i)
@@ -12,7 +14,7 @@ class User::TalentTreesController < ApplicationController
         redirect_to user_talent_trees_path
       end
     else
-      # FIXME: choose initial tree (app settings)
+      # TODO: choose initial tree (app settings)
       redirect_to user_talent_tree_path(current_user.character.talent_trees.first)
     end
   end

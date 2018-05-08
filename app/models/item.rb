@@ -1,3 +1,4 @@
+# Item model
 class Item < ApplicationRecord
   belongs_to :character_class, optional: true
   belongs_to :specialization, optional: true
@@ -11,6 +12,12 @@ class Item < ApplicationRecord
 
   default_scope { order(name: :asc) }
 
+  # Add attribute to item.
+  #
+  # === Parameters
+  #
+  # [+attribute+ :: CharacterAttribute] Attribute to add.
+  # [+points+ :: Integer] Points to set.
   def add_attribute(attribute, points)
     self.item_attributes.build(character_attribute: attribute,
                                points: points)

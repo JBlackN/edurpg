@@ -1,3 +1,4 @@
+# Admin items controller
 class Admin::ItemsController < ApplicationController
   before_action :authorize_admin_manage_items, except: [:index]
   before_action :authorize_admin, only: [:index]

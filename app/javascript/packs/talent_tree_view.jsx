@@ -8,22 +8,13 @@ import {ReactSVGPanZoom} from 'react-svg-pan-zoom';
 class TalentTreeContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      scale: 1.0
-    };
 
-    this.handleZoom = this.handleZoom.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
-  handleZoom(scale) {
-    this.setState(prevState => ({
-      scale: scale.a
-    }));
-  };
-
+  // Talent tree pan start
   handleMouseDown(e) {
     if (e.originalEvent.button == 1) {
       this.mouseX = e.originalEvent.pageX;
@@ -32,6 +23,7 @@ class TalentTreeContainer extends React.Component {
     }
   }
 
+  // Talent tree pan
   handleMouseMove(e) {
     if (window.talentTreePan) {
       var dx = (e.originalEvent.pageX - this.mouseX) / e.scaleFactor;
@@ -42,6 +34,7 @@ class TalentTreeContainer extends React.Component {
     }
   }
 
+  // Talent tree pan end
   handleMouseUp(e) {
     if (e.originalEvent.button == 1) {
       window.talentTreePan = false;
@@ -56,7 +49,7 @@ class TalentTreeContainer extends React.Component {
                            onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}
                            onMouseMove={this.handleMouseMove} ref={Viewer => this.Viewer = Viewer}>
             <svg width={this.props.tree.width} height={this.props.tree.height}>
-              <TalentTree tree={this.props.tree} scale={this.state.scale} defaultBg={this.props.defaultBg} />
+              <TalentTree tree={this.props.tree} defaultBg={this.props.defaultBg} />
             </svg>
           </ReactSVGPanZoom>
         ))}
@@ -71,7 +64,7 @@ class TalentTree extends React.Component {
     const talents = this.props.tree.talent_tree_talents.map((talent) =>
       <Talent x={talent.pos_x} y={talent.pos_y} size={talent_size}
               talent={talent.talent} unlocked={talent.unlocked} treeId={this.props.tree.id}
-              scale={this.props.scale} id={talent.id} key={talent.id} />
+              id={talent.id} key={talent.id} />
     );
 
     const bgUrl = image ? (
@@ -103,6 +96,7 @@ class Talent extends React.Component {
     const points = unlocked ? talent.points : 0;
     const questsPath = "/user/quests?groups=t" + talent.id;
 
+    // Generate talent content popover
     var content = '<p class="mb-2">' + talent.description + '</p>' +
       '<ul class="list-group">';
     for (var i = 0; i < talent.talent_attributes.length; i++) {

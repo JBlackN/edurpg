@@ -1,3 +1,4 @@
+# Admin achievements controller
 class Admin::AchievementsController < ApplicationController
   before_action :authorize_admin, only: [:index]
   before_action :authorize_admin_manage_achievements, except: [:index]

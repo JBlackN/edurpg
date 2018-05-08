@@ -1,3 +1,4 @@
+# Class model
 class CharacterClass < ApplicationRecord
   has_many :specializations, dependent: :destroy
   has_one :item

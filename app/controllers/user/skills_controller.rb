@@ -1,3 +1,4 @@
+# User skills controller
 class User::SkillsController < ApplicationController
   before_action :authorize_user
 

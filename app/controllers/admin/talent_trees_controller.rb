@@ -1,3 +1,4 @@
+# Admin talent trees controller
 class Admin::TalentTreesController < ApplicationController
   before_action :authorize_admin_manage_talent_trees, except: [:index]
   before_action :authorize_admin_manage_talents, except: [:index, :edit]

@@ -1,3 +1,6 @@
+# Admin dashboard controller
+#
+# Currently also initializes application on first admin login.
 class Admin::DashboardsController < ApplicationController
   before_action :authorize_admin
 
@@ -11,7 +14,7 @@ class Admin::DashboardsController < ApplicationController
       class_bc = CharacterClass.create(name: 'Student FIT (BSP)', code: 'BI')
       class_ing = CharacterClass.create(name: 'Student FIT (MSP)', code: 'MI')
 
-      # Specializations, talents & talent trees
+      # Specializations + their talents & talent trees
 
       courses[:branch]['BI'].each do |branch, data|
         spec = class_bc.specializations.find_or_create_by(name: branch, code: data['id'],
@@ -82,7 +85,7 @@ class Admin::DashboardsController < ApplicationController
                                                  code: course['code'])
       end
 
-      # Items & their talent trees
+      # Items (artifact weapons) & their talent trees
 
       artifact_bc = Item.create(name: "#{class_bc.name} - artefakt",
                                 rarity: 'artifact')
@@ -152,6 +155,8 @@ class Admin::DashboardsController < ApplicationController
 
       # Quests
       current_user.permission.class_restrictions.each do |cr|
+        # Skip if talent (= course) has some quests already
+        # (-> no duplicates/overwrites)
         talent = Talent.find_by(code: cr['code'])
         next if !talent || talent.quests.any?
         talent_id = talent.id

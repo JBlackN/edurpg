@@ -1,3 +1,6 @@
+# User dashboard controller
+#
+# Currently also handles character sync & refresh.
 class User::DashboardsController < ApplicationController
   before_action :authorize_user
 
@@ -16,6 +19,7 @@ class User::DashboardsController < ApplicationController
   private
 
   def refresh_character
+    # Load data from external APIs
     student_info = if current_user.consents.first.info
                      Kos.get_student_info(current_user.username, session[:user]['token'])
                    else
@@ -33,6 +37,7 @@ class User::DashboardsController < ApplicationController
 
     # Use student classifications to load quests (on 1st login only)
     if !current_user.character.character_class && current_user.consents.first.grades
+      # Use main admin (= 1st character) as quest giver
       first_character = Character.find(1)
       first_character_id = first_character.id if first_character
 
@@ -41,6 +46,8 @@ class User::DashboardsController < ApplicationController
       end.reverse.each do |course|
         next if course['semester'] == 'invalid'
 
+        # Skip if talent (= course) has some quests already
+        # (-> no duplicates/overwrites)
         talent = Talent.find_by(code: course['code'])
         next if !talent || talent.quests.any?
         talent_id = talent.id
@@ -83,25 +90,30 @@ class User::DashboardsController < ApplicationController
 
     # Talent trees & artifact weapons
     if current_user.character.talent_trees.any?
+      # If has any talent tree: check branch selection/change + sync
       if current_user.character.specialization
+        # Assign spec on branch selection/change
         old_spec_tree = current_user.character.talent_trees.where.not(
           specialization_id: nil).take
         if !old_spec_tree ||
             old_spec_tree.specialization_id != current_user.character.specialization.id
-          # replace class/old spec tree with new spec tree
+          # Replace class/old spec tree with new spec tree
           character_class_tree = current_user.character.talent_trees.where.not(
             character_class_id: nil).take
           character_class_tree.destroy if character_class_tree
           old_spec_tree.destroy if old_spec_tree
 
+          # Create new spec's talent tree from template
           spec = current_user.character.specialization
           spec_tree = spec.talent_trees.where(character_id: nil).take.dup
           spec_tree.specialization_id = spec.id
           spec_tree.save
 
+          # Populate the tree with talents
           spec.talent_trees.where(
             character_id: nil
           ).take.talent_tree_talents.each do |talent|
+            # Only add talents corresponding to student's enrolled courses
             next unless @student_courses.any? do |course|
               course['code'] == talent.talent.code
             end
@@ -109,6 +121,7 @@ class User::DashboardsController < ApplicationController
             new_talent = talent.dup
             new_talent.talent_tree_id = spec_tree.id
             new_talent.talent_id = talent.talent.id
+            # Unlock talent if course completed
             new_talent.unlocked = @student_courses.select do |course|
               course['code'] == talent.talent.code
             end.first['completed']
@@ -121,7 +134,7 @@ class User::DashboardsController < ApplicationController
           current_user.character.talent_trees << spec_tree
           current_user.character.save
 
-          # replace class item with spec item + its tree
+          # Replace class/old spec item with spec item + its tree
           current_item_tree = current_user.character.talent_trees.where.not(
             item_id: nil).take
           current_item = current_item_tree.item
@@ -133,13 +146,16 @@ class User::DashboardsController < ApplicationController
 
           item = spec.item
 
+          # Create new item's talent tree from template
           item_tree = item.talent_trees.where(character_id: nil).take.dup
           item_tree.item_id = item.id
           item_tree.save
 
+          # Populate the tree with talents
           item.talent_trees.where(
             character_id: nil
           ).take.talent_tree_talents.each do |talent|
+            # Only add talents corresponding to student's enrolled courses
             next unless @student_courses.any? do |course|
               course['code'] == talent.talent.code
             end
@@ -147,6 +163,7 @@ class User::DashboardsController < ApplicationController
             new_talent = talent.dup
             new_talent.talent_tree_id = item_tree.id
             new_talent.talent_id = talent.talent.id
+            # Unlock talent if course completed
             new_talent.unlocked = @student_courses.select do |course|
               course['code'] == talent.talent.code
             end.first['completed']
@@ -162,7 +179,7 @@ class User::DashboardsController < ApplicationController
         end
       end
 
-      # sync talents (current semester only)
+      # Sync & unlock talents in trees (current semester only)
       talent_trees = current_user.character.talent_trees
       talent_trees = talent_trees.where.not(character_class_id: nil).or(
         talent_trees.where.not(specialization_id: nil).or(
@@ -173,6 +190,7 @@ class User::DashboardsController < ApplicationController
         course['semester'] == current_semester
       end
 
+      # Add to trees & unlock if course completed
       current_courses.each do |course|
         talent = Talent.find_by(code: course['code'])
         next unless talent
@@ -185,6 +203,7 @@ class User::DashboardsController < ApplicationController
         end
       end
 
+      # Remove from trees (unenrolled courses)
       if current_user.consents.first.classes
         talent_trees.each do |tree|
           destroy_queue = []
@@ -203,16 +222,19 @@ class User::DashboardsController < ApplicationController
         end
       end
     else
+      # Does not have any talent tree -> init
       if current_user.character.specialization
-        # spec tree
+        # Student has spec -> create its talent tree from template
         spec = current_user.character.specialization
         spec_tree = spec.talent_trees.where(character_id: nil).take.dup
         spec_tree.specialization_id = spec.id
         spec_tree.save
 
+        # Populate the tree with talents
         spec.talent_trees.where(
           character_id: nil
         ).take.talent_tree_talents.each do |talent|
+          # Only add talents corresponding to student's enrolled courses
           next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
@@ -220,6 +242,7 @@ class User::DashboardsController < ApplicationController
           new_talent = talent.dup
           new_talent.talent_tree_id = spec_tree.id
           new_talent.talent_id = talent.talent.id
+          # Unlock talent if course completed
           new_talent.unlocked = @student_courses.select do |course|
             course['code'] == talent.talent.code
           end.first['completed']
@@ -232,16 +255,19 @@ class User::DashboardsController < ApplicationController
         current_user.character.talent_trees << spec_tree
         current_user.character.save
 
-        # spec item + its tree
+        # Student has spec -> create corresponding item and its talent tree
+        # from template
         item = spec.item
 
         item_tree = item.talent_trees.where(character_id: nil).take.dup
         item_tree.item_id = item.id
         item_tree.save
 
+        # Populate the tree with talents
         item.talent_trees.where(
           character_id: nil
         ).take.talent_tree_talents.each do |talent|
+          # Only add talents corresponding to student's enrolled courses
           next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
@@ -249,6 +275,7 @@ class User::DashboardsController < ApplicationController
           new_talent = talent.dup
           new_talent.talent_tree_id = item_tree.id
           new_talent.talent_id = talent.talent.id
+          # Unlock talent if course completed
           new_talent.unlocked = @student_courses.select do |course|
             course['code'] == talent.talent.code
           end.first['completed']
@@ -262,16 +289,19 @@ class User::DashboardsController < ApplicationController
         current_user.character.talent_trees << item_tree
         current_user.character.save
       else
-        # class tree
+        # Student has class (no spec yet) -> create class' talent tree from
+        # template
         character_class = current_user.character.character_class
         character_class_tree = character_class.talent_trees.where(
           character_id: nil).take.dup
         character_class_tree.character_class_id = character_class.id
         character_class_tree.save
 
+        # Populate the tree with talents
         character_class.talent_trees.where(
           character_id: nil
         ).take.talent_tree_talents.each do |talent|
+          # Only add talents corresponding to student's enrolled courses
           next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
@@ -279,6 +309,7 @@ class User::DashboardsController < ApplicationController
           new_talent = talent.dup
           new_talent.talent_tree_id = character_class_tree.id
           new_talent.talent_id = talent.talent.id
+          # Unlock talent if course completed
           new_talent.unlocked = @student_courses.select do |course|
             course['code'] == talent.talent.code
           end.first['completed']
@@ -291,16 +322,19 @@ class User::DashboardsController < ApplicationController
         current_user.character.talent_trees << character_class_tree
         current_user.character.save
 
-        # class item + its tree
+        # Student has class (no spec yet) -> create class' corresponding item
+        # and its talent tree from template
         item = character_class.item
 
         item_tree = item.talent_trees.where(character_id: nil).take.dup
         item_tree.item_id = item.id
         item_tree.save
 
+        # Populate the tree with talents
         item.talent_trees.where(
           character_id: nil
         ).take.talent_tree_talents.each do |talent|
+          # Only add talents corresponding to student's enrolled courses
           next unless @student_courses.any? do |course|
             course['code'] == talent.talent.code
           end
@@ -308,6 +342,7 @@ class User::DashboardsController < ApplicationController
           new_talent = talent.dup
           new_talent.talent_tree_id = item_tree.id
           new_talent.talent_id = talent.talent.id
+          # Unlock talent if course completed
           new_talent.unlocked = @student_courses.select do |course|
             course['code'] == talent.talent.code
           end.first['completed']
@@ -325,17 +360,23 @@ class User::DashboardsController < ApplicationController
 
     # Quests
     if current_user.consents.first.grades
+      # Load from Grades if consent
       classifications = {}
 
       courses_quests_given(@student_courses).each do |quest|
+        # Skip if completed already or if has no Grades identifer
         next if current_user.character.character_quests.exists?(
           quest_id: quest.id)
         next if quest.completion_check_id.nil? || quest.completion_check_id.empty?
 
+        # Get all courses with given quest sorted by semester (
+        # newest to oldest)
         courses = @student_courses.select do |course|
           course['code'] == quest.talent.code
         end.sort_by { |course| course['semester'] }.reverse
 
+        # Use last quest version (from last semester)
+        # Multiple enrollments -> last considered valid
         if courses.first['semester'] == 'invalid'
           next if courses.count == 1
           semester = courses[1]['semester']
@@ -351,20 +392,25 @@ class User::DashboardsController < ApplicationController
         if !classifications[quest.talent.code].nil? &&
             classifications[quest.talent.code].key?(quest.completion_check_id) &&
             classifications[quest.talent.code][quest.completion_check_id]
+          # Complete quest if declared complete by Grades
           current_user.character.completed_quests << quest
 
+          # Give skill rewards
           quest.skills.each do |skill|
             current_user.character.skills << skill
           end
 
+          # Give item rewards
           quest.items.each do |item|
             current_user.character.items << item
           end
 
+          # Give title rewards
           quest.titles.each do |title|
             current_user.character.titles << title
           end
 
+          # Give achievement rewards + any of its rewards
           quest.achievements.each do |achievement|
             current_user.character.achievements << achievement
 
@@ -388,8 +434,10 @@ class User::DashboardsController < ApplicationController
     end
     current_user.character.save
     current_user.character.character_character_attributes.each do |attr|
+      # Compute current attribute values
       attr.points = 0
       current_user.character.items.each do |item|
+        # Include owned items' values
         item_attr = attr.character_attribute.item_attributes.find_by(
           character_attribute_id: attr.character_attribute.id, item_id: item.id)
         attr.points += item_attr.points if item_attr && !item_attr.points.nil?
@@ -397,7 +445,9 @@ class User::DashboardsController < ApplicationController
         item_tree = item.talent_trees.where(
           character_id: current_user.character.id).take
         if item_tree
+          # Include item's tree's talents' attribute values
           item_tree.talent_tree_talents.each do |talent|
+            # Only if talent unlocked
             next unless talent.unlocked
             talent_attr = talent.talent.talent_attributes.where(
               character_attribute_id: attr.character_attribute.id).take
@@ -470,12 +520,15 @@ class User::DashboardsController < ApplicationController
   end
 
   def courses_quests_given(student_courses, include_class_spec = false)
+    # Get talents by user's enrolled courses -> array of talent IDs
     courses = student_courses.map do |course|
       Talent.find_by(code: course['code']).id
     end
 
+    # Get quests for the talent
     quests = Quest.where(talent_id: courses)
 
+    # Include class/spec quests if demanded
     if include_class_spec
       if current_user.character.specialization
         quests = quests.or(

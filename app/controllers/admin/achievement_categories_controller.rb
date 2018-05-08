@@ -1,3 +1,4 @@
+# Admin achievement categories controller
 class Admin::AchievementCategoriesController < ApplicationController
   before_action :authorize_admin, only: [:index, :show]
   before_action -> {

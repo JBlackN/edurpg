@@ -1,3 +1,4 @@
+# User titles controller
 class User::TitlesController < ApplicationController
   before_action :authorize_user
 

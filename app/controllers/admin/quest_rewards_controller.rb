@@ -1,3 +1,4 @@
+# Admin quest rewards controller
 class Admin::QuestRewardsController < ApplicationController
   before_action :authorize_admin_manage_quests
 

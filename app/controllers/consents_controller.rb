@@ -1,3 +1,4 @@
+# Consents controller
 class ConsentsController < ApplicationController
   before_action :authorize, only: [:new, :create]
   before_action -> {
@@ -49,6 +50,8 @@ class ConsentsController < ApplicationController
   def update
     @consent = Consent.find(params[:id])
 
+    # If user inputted valid one-time authorization code for photo consent
+    # confirm the consent and load user's photo from Usermap.
     if params.key?(:consent) && params[:consent].key?(:code) &&
        !params[:consent][:code].nil? && !params[:consent][:code].empty? &&
        current_user.authenticate_otp(params[:consent][:code], drift: 600)

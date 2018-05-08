@@ -1,3 +1,4 @@
+# Admin user permission settings controller
 class Admin::PermissionsController < ApplicationController
   before_action :authorize_admin_manage_users
 

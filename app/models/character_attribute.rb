@@ -1,3 +1,4 @@
+# Attribute model
 class CharacterAttribute < ApplicationRecord
   has_many :skills, dependent: :destroy
   has_many :item_attributes, dependent: :destroy

@@ -1,3 +1,4 @@
+# Admin quests controller
 class Admin::QuestsController < ApplicationController
   before_action :authorize_admin_manage_quests, except: [:index]
   before_action :authorize_admin, only: [:index]

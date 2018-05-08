@@ -1,5 +1,6 @@
 require 'mime/types'
 
+# User talents controller
 class User::TalentsController < ApplicationController
   before_action :authorize_user
   before_action -> {

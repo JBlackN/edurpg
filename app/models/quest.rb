@@ -1,3 +1,4 @@
+# Quest model
 class Quest < ApplicationRecord
   belongs_to :character
   belongs_to :character_class, optional: true

@@ -1,9 +1,24 @@
 require 'json'
 require 'rest-client'
 
+# Grades API Service
+#
+# Class provides methods for obtaining data from Grades {API}[https://grades.fit.cvut.cz/].
 class Grades
   BASE_URL = 'https://grades.fit.cvut.cz/api/v1/public'
 
+  # Gets data about completed tasks from Grades API.
+  #
+  # === Parameters
+  #
+  # [+username+ :: String] Student's CTU username.
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
+  # [+semester+ :: String] Semester to get classifications from.
+  # [+course+ :: String] Course to get classifications for.
+  #
+  # === Return
+  #
+  # [Hash] Completed tasks (+identifier:+ +true+|+false+).
   def self.get_student_classifications(username, token, semester, course)
     response = conn(token)[
       "courses/#{course}/student-classifications/#{username}"
@@ -22,11 +37,13 @@ class Grades
     classifications = {}
 
     data.each do |item|
+      # Skip irrelevant entries
       next unless ['HOMEWORK', 'SEMESTRAL_TEST'].include?(
         item['classificationType'])
       next if item['calculated']
 
       classifications[item['identifier']] =
+        # Determine if task complete by its value type
         case item['valueType']
         when 'NUMBER'
           min = item['minimumRequiredValue']
@@ -44,6 +61,18 @@ class Grades
     classifications
   end
 
+  # Obtains student's classifications from Grades API.
+  #
+  # === Parameters
+  #
+  # [+username+ :: String] Student's CTU username.
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
+  # [+semester+ :: String] Semester to get classifications from.
+  # [+course+ :: String] Course to get classifications for.
+  #
+  # === Return
+  #
+  # [Array of Hash] Student's classifications (name, identifier).
   def self.get_student_classifications_all(username, token, semester, course)
     begin
       response = conn(token)[
@@ -66,6 +95,7 @@ class Grades
     classifications = []
 
     data.each do |item|
+      # Skip irrelevant entries
       next unless ['HOMEWORK', 'SEMESTRAL_TEST'].include?(
         item['classificationType'])
       next if item['calculated']
@@ -79,6 +109,16 @@ class Grades
     classifications
   end
 
+  # Obtains teacher's courses from Grades API.
+  #
+  # === Parameters
+  #
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
+  # [+course+ :: String] Course to get data for.
+  #
+  # === Return
+  #
+  # [Array of Hash] Teacher's courses (name, identifier).
   def self.get_teacher_courses(token, course)
     begin
       response = conn(token)[
@@ -99,6 +139,7 @@ class Grades
     classifications = []
 
     data.each do |item|
+      # Skip irrelevant entries
       next unless ['HOMEWORK', 'SEMESTRAL_TEST'].include?(
         item['classificationType'])
       next if item['calculated']

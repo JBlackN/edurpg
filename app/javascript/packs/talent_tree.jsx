@@ -8,6 +8,8 @@ import {ReactSVGPanZoom} from 'react-svg-pan-zoom';
 class TalentTreeContainer extends React.Component {
   constructor(props) {
     super(props);
+    // Store current zoom (needed for correct computation of
+    // talent move)
     this.state = {
       scale: 1.0
     };
@@ -18,12 +20,14 @@ class TalentTreeContainer extends React.Component {
     this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
+  // Update stored zoom in state
   handleZoom(scale) {
     this.setState(prevState => ({
       scale: scale.a
     }));
   }
 
+  // Talent tree pan start
   handleMouseDown(e) {
     if (e.originalEvent.button == 1) {
       this.mouseX = e.originalEvent.pageX;
@@ -32,6 +36,7 @@ class TalentTreeContainer extends React.Component {
     }
   }
 
+  // Talent tree pan
   handleMouseMove(e) {
     if (window.talentTreePan) {
       var dx = (e.originalEvent.pageX - this.mouseX) / e.scaleFactor;
@@ -42,6 +47,7 @@ class TalentTreeContainer extends React.Component {
     }
   }
 
+  // Talent tree pan end
   handleMouseUp(e) {
     if (e.originalEvent.button == 1) {
       window.talentTreePan = false;
@@ -84,20 +90,25 @@ class TalentTree extends React.Component {
   }
 
   componentDidMount() {
+    // Listen for talent tree changes save event (only once after load)
     if (!window.formSubmitAttached) {
       const talentTreeForm = document.getElementById('talent-tree-form');
       talentTreeForm.addEventListener('submit', this.handleFormSubmit);
     }
     window.formSubmitAttached = true;
+    // Init unsaved changes watcher
     window.unsavedChanges = false;
   }
 
   componentWillUnmount() {
+    // Stop listening for talent tree changes save event on leave
     const talentTreeForm = document.getElementById('talent-tree-form');
     talentTreeForm.removeEventListener('submit', this.handleFormSubmit);
   }
 
   handleFormSubmit(e) {
+    // Append new talent positions to the talent tree update form as
+    // hidden fields before submitting
     const talentTreeForm = document.getElementById('talent-tree-form');
     for (var id in this.state) {
       const {x, y} = this.state[id];
@@ -117,6 +128,7 @@ class TalentTree extends React.Component {
     }
   }
 
+  // Talent move start
   handleMoveStart(e, id) {
     this.mouseX = e.pageX;
     this.mouseY = e.pageY;
@@ -129,6 +141,7 @@ class TalentTree extends React.Component {
     }
   }
 
+  // Talent move
   handleMove(e, id) {
     e.preventDefault();
     var dx = (e.pageX - this.mouseX) / this.props.scale;
@@ -142,6 +155,7 @@ class TalentTree extends React.Component {
     if (!window.unsavedChanges) window.unsavedChanges = true;
   }
 
+  // Talent move end
   handleMoveEnd(e) {
     if (e.button == 0) {
       document.removeEventListener('mousemove', this.handleMove);
@@ -190,19 +204,23 @@ class Talent extends React.Component {
     this.handleDragStart = this.handleDragStart.bind(this);
   }
 
+  // Lift state up (to the parent component): talent move start
   handleMouseDown(e) {
     this.props.onMouseDown(e, this.props.id);
   }
 
+  // Lift state up (to the parent component): talent move
   handleMouseMove(e) {
     e.preventDefault();
     this.props.onMouseMove(e, this.props.id);
   }
 
+  // Lift state up (to the parent component): talent move end
   handleMouseUp(e) {
     this.props.onMouseUp(e);
   }
 
+  // Prevent drag 'animation' from showing on talent move
   handleDragStart(e) {
     e.preventDefault();
   }

@@ -1,3 +1,4 @@
+# User items controller
 class User::ItemsController < ApplicationController
   before_action :authorize_user
 

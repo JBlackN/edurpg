@@ -1,3 +1,4 @@
+# Admin skills controller
 class Admin::SkillsController < ApplicationController
   before_action :authorize_admin_manage_skills, except: [:index]
   before_action :authorize_admin, only: [:index]

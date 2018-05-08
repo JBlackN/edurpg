@@ -1,3 +1,4 @@
+# Admin titles controller
 class Admin::TitlesController < ApplicationController
   before_action :authorize_admin_manage_titles, except: [:index]
   before_action :authorize_admin, only: [:index]

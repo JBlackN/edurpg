@@ -17,6 +17,7 @@
 //= require turbolinks
 //= require_tree .
 
+// Show selected image's name in file upload input
 // Source: https://github.com/twbs/bootstrap/issues/24995
 $(document).on('turbolinks:load', function() {
   $('input[type=file]').change(function () {

@@ -1,3 +1,4 @@
+# Admin attributes controller
 class Admin::CharacterAttributesController < ApplicationController
   before_action :authorize_admin_manage_attrs, except: [:index, :show]
   before_action :authorize_admin, only: [:index, :show]

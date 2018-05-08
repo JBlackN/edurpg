@@ -1,3 +1,4 @@
+# Admin talents controller
 class Admin::TalentsController < ApplicationController
   before_action :authorize_admin_manage_talent_trees
   before_action :authorize_admin_manage_talents, only: [:new, :create]

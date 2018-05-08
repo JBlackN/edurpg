@@ -1,5 +1,6 @@
 require 'icalendar'
 
+# User quests controller
 class User::QuestsController < ApplicationController
   before_action :authorize_user
 
@@ -53,8 +54,11 @@ class User::QuestsController < ApplicationController
     }
 
     if current_user.character.completed_quests.exists?(@quest.id)
+      # Mark incomplete
       current_user.character.completed_quests.destroy(@quest)
 
+      # Take skill rewards from user (unless they're awarded by another
+      # completed quest)
       @quest.skills.each do |skill|
         if character_skill = current_user.character.character_skills.find_by(
             skill_id: skill.id)
@@ -68,6 +72,8 @@ class User::QuestsController < ApplicationController
         end
       end
 
+      # Take item rewards from user (unless they're awarded by another
+      # completed quest or achieved achievement)
       @quest.items.each do |item|
         if character_item = current_user.character.character_items.find_by(
             item_id: item.id)
@@ -81,6 +87,8 @@ class User::QuestsController < ApplicationController
         end
       end
 
+      # Take title rewards from user (unless they're awarded by another
+      # completed quest or achieved achievement)
       @quest.titles.each do |title|
         if character_title = current_user.character.character_titles.find_by(
             title_id: title.id)
@@ -94,6 +102,8 @@ class User::QuestsController < ApplicationController
         end
       end
 
+      # Take achievement rewards from user (unless they're awarded by another
+      # completed quest)
       @quest.achievements.each do |achievement|
         if character_achi = current_user.character.character_achievements.find_by(
             achievement_id: achievement.id)
@@ -106,6 +116,8 @@ class User::QuestsController < ApplicationController
           end
         end
 
+        # Also take that achievement's item rewards from user (unless they're
+        # awarded by another completed quest or achieved achievement)
         achievement.items.each do |item|
           if character_item = current_user.character.character_items.find_by(
               item_id: item.id)
@@ -119,6 +131,8 @@ class User::QuestsController < ApplicationController
           end
         end
 
+        # Also take that achievement's title rewards from user (unless they're
+        # awarded by another completed quest or achieved achievement)
         achievement.titles.each do |title|
           if character_title = current_user.character.character_titles.find_by(
               title_id: title.id)
@@ -133,39 +147,48 @@ class User::QuestsController < ApplicationController
         end
       end
     else
+      # Mark completed (unless already marked)
       unless current_user.character.completed_quests.exists?(@quest.id)
         current_user.character.completed_quests << @quest
       end
 
+      # Give skill rewards to user (unless already given)
       @quest.skills.each do |skill|
         unless current_user.character.skills.exists?(skill.id)
           current_user.character.skills << skill
         end
       end
 
+      # Give item rewards to user (unless already given)
       @quest.items.each do |item|
         unless current_user.character.items.exists?(item.id)
           current_user.character.items << item
         end
       end
 
+      # Give title rewards to user (unless already given)
       @quest.titles.each do |title|
         unless current_user.character.titles.exists?(title.id)
           current_user.character.titles << title
         end
       end
 
+      # Give achievement rewards to user (unless already given)
       @quest.achievements.each do |achievement|
         unless current_user.character.achievements.exists?(achievement.id)
           current_user.character.achievements << achievement
         end
 
+        # Also give that achievement's item rewards to user (unless
+        # already given)
         achievement.items.each do |item|
           unless current_user.character.items.exists?(item.id)
             current_user.character.items << item
           end
         end
 
+        # Also give that achievement's title rewards to user (unless
+        # already given)
         achievement.titles.each do |title|
           unless current_user.character.titles.exists?(title.id)
             current_user.character.titles << title
@@ -265,6 +288,8 @@ class User::QuestsController < ApplicationController
   end
 
   def quests_given
+    # Get talents by user's enrolled courses -> array of talent IDs or
+    # empty array if no consent
     if current_user.consents.first.classes
       @courses ||= Kos.get_student_courses(current_user.username,
                                            session[:user]['token']).map do |course|
@@ -274,6 +299,7 @@ class User::QuestsController < ApplicationController
       @courses = []
     end
 
+    # Get quests for the talent + include class/spec quests
     if current_user.character.specialization
       Quest.where(talent_id: @courses).or(
         Quest.where(

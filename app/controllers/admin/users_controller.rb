@@ -1,3 +1,4 @@
+# Admin management controller
 class Admin::UsersController < ApplicationController
   before_action :authorize_admin_manage_users, only: [:index]
   before_action :authorize_admin, except: [:index]

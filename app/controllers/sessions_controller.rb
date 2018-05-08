@@ -1,3 +1,4 @@
+# User session controller
 class SessionsController < ApplicationController
   before_action :authorize, only: :index
 
@@ -10,6 +11,7 @@ class SessionsController < ApplicationController
         current_user.destroy 
         redirect_to :logout
       else
+        # do not destroy user's data
         redirect_to '/consents/new'
       end
     elsif current_user.character.nil?

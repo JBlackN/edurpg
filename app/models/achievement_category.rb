@@ -1,3 +1,4 @@
+# Achievement category model
 class AchievementCategory < ApplicationRecord
   has_many :subcategories, class_name: 'AchievementCategory',
                            foreign_key: 'parent_id', dependent: :destroy

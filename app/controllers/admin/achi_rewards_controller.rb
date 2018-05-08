@@ -1,3 +1,4 @@
+# Admin achievement rewards controller
 class Admin::AchiRewardsController < ApplicationController
   before_action :authorize_admin_manage_achievements
   before_action -> {

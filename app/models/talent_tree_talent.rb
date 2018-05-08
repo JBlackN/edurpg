@@ -1,3 +1,4 @@
+# Talent tree's talent model
 class TalentTreeTalent < ApplicationRecord
   belongs_to :talent_tree
   belongs_to :talent

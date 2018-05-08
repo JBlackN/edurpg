@@ -1,12 +1,29 @@
 require 'nokogiri'
 require 'rest-client'
 
+# Kos API Service
+#
+# Class provides methods for obtaining data from {KOSapi}[https://kosapi.fit.cvut.cz/projects/kosapi/wiki].
 class Kos
   BASE_URL = 'https://kosapi.fit.cvut.cz/api/3'
   NS_ATOM = 'http://www.w3.org/2005/Atom'
   NS_KOS = 'http://kosapi.feld.cvut.cz/schema/3'
   NS_XLINK = 'http://www.w3.org/1999/xlink'
 
+  # Gets courses for each study programme and branch from KOSapi.
+  #
+  # === Parameters
+  #
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
+  #
+  # === Return
+  #
+  # [Hash] Courses by programme and branch (Hash keys: +programme+, +branch+).
+  #
+  # === See also
+  #
+  # - Kos.get_courses_by_programme
+  # - Kos.get_courses_by_branch
   def self.get_courses(token)
     courses_bi = get_courses_by_programme(token)['BI']
     courses_mi = get_courses_by_programme(token)['MI']
@@ -22,6 +39,15 @@ class Kos
     }
   end
 
+  # Gets courses for bachelor and master study programme from KOSapi.
+  #
+  # === Parameters
+  #
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
+  #
+  # === Return
+  #
+  # [Hash] Courses by programme (Hash keys: +BI+, +MI+).
   def self.get_courses_by_programme(token)
     response = conn(token)["/courses"].get({
       params: {
@@ -31,6 +57,7 @@ class Kos
       }
     })
 
+    # Extract array of courses from XML
     courses = Nokogiri::XML(response.body).xpath(
       '//atom:content', 'atom' => NS_ATOM
     ).map do |content|
@@ -90,6 +117,94 @@ class Kos
     results
   end
 
+  # Gets courses for each study programme's branch from KOSapi.
+  #
+  # === Parameters
+  #
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
+  # [+programme_code+ :: String] Study programme code.
+  # [+programme_courses+ :: Array] Study programme courses (see Kos.get_courses_by_programme).
+  #
+  # === Return
+  #
+  # [Hash] Courses by branch (Hash key: branch name, value: Hash w/ keys: +id+, +code+, +courses+)
+  #
+  # === See also
+  #
+  # - Kos.get_courses_by_programme
+  def self.get_courses_by_branch(token, programme_code, programme_courses)
+    response = conn(token)["/programmes/#{programme_code}/branches"].get({
+      params: {
+        limit: 1000
+      }
+    })
+
+    branch_list = Nokogiri::XML(response.body).xpath(
+      '//atom:entry', 'atom' => NS_ATOM
+    ).map do |content|
+      {
+        'id' => content.xpath('./atom:id', 'atom' => NS_ATOM).text.split(':').last,
+        'code' => content.xpath('./atom:content/kos:code',
+                                'atom' => NS_ATOM, 'kos' => NS_KOS).text,
+        'name' => content.xpath('./atom:content/kos:name[lang("cs")]',
+                                'atom' => NS_ATOM, 'kos' => NS_KOS).text,
+      }
+    end.sort_by { |branch| branch['name'] }.uniq
+
+    # Convert branches array to hash w/ branch name as key &
+    # initialize empty courses array within
+    branches = Hash[branch_list.map { |branch| [branch['name'], {
+      'id' => branch['id'],
+      'code' => branch['code'],
+      'courses' => []
+    }] }]
+
+    # Filter out unspecified branches
+    unspecified_branch = nil
+    branches.each do |branch, data|
+      unspecified_branch = branch if data['code'] == '---'
+    end
+    branches.except!(unspecified_branch) unless unspecified_branch.nil?
+
+    # For each programme course: find whether it belongs to branch
+    programme_courses.each do |course|
+      response = conn(token)["/courses/#{course['code']}/branches"].get({
+        params: {
+          limit: 1000
+        }
+      })
+
+      course_branches = Nokogiri::XML(response.body).xpath(
+        '//atom:entry', 'atom' => NS_ATOM
+      ).map do |content|
+        {
+          'id' => content.xpath('./atom:id', 'atom' => NS_ATOM).text.split(':').last,
+          'code' => content.xpath('./atom:content/kos:code',
+                                  'atom' => NS_ATOM, 'kos' => NS_KOS).text,
+          'name' => content.xpath('./atom:content/kos:name[lang("cs")]',
+                                  'atom' => NS_ATOM, 'kos' => NS_KOS).text,
+        }
+      end.sort_by { |branch| branch['name'] }.uniq
+
+      course_branches.each do |branch|
+        branches[branch['name']]['courses'] << course if branches.key?(branch['name'])
+      end
+    end
+
+    branches.each { |branch, data| data['courses'].sort_by! { |course| course['name'] } }
+    branches
+  end
+
+  # Gets student's study programme, branch & titles from KOSapi.
+  #
+  # === Parameters
+  #
+  # [+username+ :: String] Student's CTU username.
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
+  #
+  # === Return
+  #
+  # [Hash] Student information (Hash keys: +programme+, +branch+, +titles+).
   def self.get_student_info(username, token)
     response = conn(token)["/students/#{username}"].get
     xml = Nokogiri::XML(response.body)
@@ -111,6 +226,21 @@ class Kos
     }
   end
 
+  # Gets student's enrolled courses in specified semester from KOSapi
+  #
+  # === Parameters
+  #
+  # [+username+ :: String] Student's CTU username.
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
+  # [+semester+ :: String] Semester to get classifications from (default: _all_).
+  #
+  # === Return
+  #
+  # [Array of Hash] Student's enrolled courses. Hash keys:
+  # - +code+ - normalized course code: eg. MI-PDB.16 -> MI-PDB,
+  # - +code_full+ - original course code,
+  # - +semester+,
+  # - +completed+.
   def self.get_student_courses(username, token, semester = 'none')
     response = conn(token)["/students/#{username}/enrolledCourses"].get({
       params: {
@@ -156,6 +286,15 @@ class Kos
     end
   end
 
+  # Gets current semester from KOSapi.
+  #
+  # === Parameters
+  #
+  # [+token+ :: String] Access token ({Zuul OAAS}[https://github.com/cvut/zuul-oaas]).
+  #
+  # === Return
+  #
+  # [String] Current semester.
   def self.get_current_semester(token)
     response = conn(token)["/semesters/current"].get
     Nokogiri::XML(response.body).xpath('//kos:code', 'kos' => NS_KOS).text
@@ -168,64 +307,5 @@ class Kos
       authorization: "Bearer #{token}",
       accept: accept
     })
-  end
-
-  def self.get_courses_by_branch(token, programme_code, programme_courses)
-    response = conn(token)["/programmes/#{programme_code}/branches"].get({
-      params: {
-        limit: 1000
-      }
-    })
-
-    branch_list = Nokogiri::XML(response.body).xpath(
-      '//atom:entry', 'atom' => NS_ATOM
-    ).map do |content|
-      {
-        'id' => content.xpath('./atom:id', 'atom' => NS_ATOM).text.split(':').last,
-        'code' => content.xpath('./atom:content/kos:code',
-                                'atom' => NS_ATOM, 'kos' => NS_KOS).text,
-        'name' => content.xpath('./atom:content/kos:name[lang("cs")]',
-                                'atom' => NS_ATOM, 'kos' => NS_KOS).text,
-      }
-    end.sort_by { |branch| branch['name'] }.uniq
-
-    branches = Hash[branch_list.map { |branch| [branch['name'], {
-      'id' => branch['id'],
-      'code' => branch['code'],
-      'courses' => []
-    }] }]
-
-    unspecified_branch = nil
-    branches.each do |branch, data|
-      unspecified_branch = branch if data['code'] == '---'
-    end
-    branches.except!(unspecified_branch) unless unspecified_branch.nil?
-
-    programme_courses.each do |course|
-      response = conn(token)["/courses/#{course['code']}/branches"].get({
-        params: {
-          limit: 1000
-        }
-      })
-
-      course_branches = Nokogiri::XML(response.body).xpath(
-        '//atom:entry', 'atom' => NS_ATOM
-      ).map do |content|
-        {
-          'id' => content.xpath('./atom:id', 'atom' => NS_ATOM).text.split(':').last,
-          'code' => content.xpath('./atom:content/kos:code',
-                                  'atom' => NS_ATOM, 'kos' => NS_KOS).text,
-          'name' => content.xpath('./atom:content/kos:name[lang("cs")]',
-                                  'atom' => NS_ATOM, 'kos' => NS_KOS).text,
-        }
-      end.sort_by { |branch| branch['name'] }.uniq
-
-      course_branches.each do |branch|
-        branches[branch['name']]['courses'] << course if branches.key?(branch['name'])
-      end
-    end
-
-    branches.each { |branch, data| data['courses'].sort_by! { |course| course['name'] } }
-    branches
   end
 end

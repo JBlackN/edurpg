@@ -1,3 +1,4 @@
+# CharacterClass's specialization model
 class Specialization < ApplicationRecord
   belongs_to :character_class
   has_one :item
