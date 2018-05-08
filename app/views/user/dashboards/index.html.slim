@@ -39,7 +39,11 @@
             i.fa.fa-question-circle.text-light
   .row.mt-3
     .col-sm-7
-      h3 Úkoly
+      h3
+        | Úkoly
+        small
+          a href="#{url_for user_quests_path}"
+            i.fa.fa-external-link.ml-3
       .card.mt-3
         .card-body
           - if @quests.any?
