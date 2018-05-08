@@ -212,6 +212,7 @@ class Talent extends React.Component {
     const namespace = tree.character_id ? 'user' : 'admin';
     const updatePath = "/" + namespace + "/talent_trees/" + tree.id + "/talents/" + id + "/edit";
     const deletePath = "/" + namespace + "/talent_trees/" + tree.id + "/talents/" + id;
+    const questsPath = "/" + namespace + "/quests?groups=t" + talent.id;
 
     const bgUrl = "url(#talent" + id + ")";
     const bg = talent.image ? (
@@ -242,12 +243,16 @@ class Talent extends React.Component {
         <svg x={x} y={y} width={size} height={size}>
           <a xlinkHref={updatePath} className="watch-unsaved">
             <text x='10%' y='5%' dominantBaseline="hanging" textAnchor="start"
-                  style={{fontSize: size / 4.5, fontWeight: 'bold'}}>&#xf044;</text>
+                  style={{fontSize: size / 4.5, fontWeight: 'bold'}}>&#xf044;<title>Upravit talent</title></text>
           </a>
           <a xlinkHref={deletePath} className="watch-unsaved" data-method="delete" rel="nofollow"
              data-confirm="Odstranit talent?">
             <text x='90%' y='4%' dominantBaseline="hanging" textAnchor="end"
-                  style={{fontSize: size / 4.5, fontWeight: 'bold'}}>&#xf00d;</text>
+                  style={{fontSize: size / 4.5, fontWeight: 'bold'}}>&#xf00d;<title>Odstranit talent</title></text>
+          </a>
+          <a xlinkHref={questsPath} className="watch-unsaved">
+            <text x='90%' y='90%' dominantBaseline="baseline" textAnchor="end"
+                  style={{fontSize: size / 4.5, fill: '#6c757d'}}>&#xf061;<title>Přejít k úkolům</title></text>
           </a>
         </svg>
       </g>

@@ -4,20 +4,41 @@
   .row.mt-3
     .col
       h2 Úkoly
+      .card.mt-3
+        .card-body
+          = form_with url: admin_quests_path, method: :get, local: true,
+            class: 'form-inline' do |form|
+            = form.label :groups, 'Skupiny', class: 'mr-2'
+            = form.select :groups, grouped_options_for_select(@groups, params[:groups]),
+              { include_blank: true },
+              { class: 'custom-select w-25 mr-3', disabled: false }
+            = form.label :difficulty, 'Obtížnost', class: 'mr-2'
+            = form.select :difficulty, @difficulties,
+              { selected: params[:difficulty], include_blank: true },
+              { class: 'custom-select w-25 mr-3', disabled: false }
+            = form.submit 'Filtrovat', class: 'btn btn-outline-success'
       .card.mt-3 style="height: 100%;"
         .card-body
           .text-center
             h3
-              a href="#{url_for new_admin_quest_path}"
+              a href="#{url_for new_admin_quest_path(params: @params)}"
                 i.fa.fa-plus
           ul.pl-3
             - @quests.each do |quest|
               li.align-middle
-                h4 class="d-inline-block m-0 quest-#{quest.difficulty}" = quest.name
+                h4 class="d-inline-block m-0 quest-#{quest.difficulty}"
+                  - if quest.talent
+                    = "[#{quest.talent.code}] #{quest.name}"
+                  - elsif quest.specialization
+                    = "[#{quest.specialization.abbr}] #{quest.name}"
+                  - elsif quest.character_class
+                    = "[#{quest.character_class.code}] #{quest.name}"
+                  - else
+                    = quest.name
                 - if quest.deadline
                   p.d-inline-block.m-0.ml-4 = "(#{quest.deadline.strftime('%d.%m.%Y %H:%M')})"
                 .d-inline-block.ml-3
-                  a.mr-2 href="#{url_for edit_admin_quest_path(quest)}"
+                  a.mr-2 href="#{url_for edit_admin_quest_path(quest, params: @params)}"
                     i.fa.fa-edit
                   a href="#{url_for admin_quest_path(quest)}" data-method="delete" data-confirm="Smazat úkol?"
                     i.fa.fa-times

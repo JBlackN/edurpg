@@ -20,10 +20,10 @@
             = form.text_area :objectives, class: 'form-control', rows: 4
             h3.mt-3 Podrobně
             = form.text_area :description, class: 'form-control', rows: 12
+            = hidden_field_tag :groups, @params[:groups]
+            = hidden_field_tag :difficulty, @params[:difficulty]
             .text-center.mt-3
-              = link_to 'Zrušit', admin_quests_path,
-                        class: 'btn btn-outline-danger mr-3',
-                        role: 'button'
+              a.btn.btn-outline-danger.mr-3 href="#{url_for admin_quests_path(params: @params)}" role="button" Zrušit
               = form.submit 'Uložit úkol', class: 'btn btn-outline-success'
           .col-sm-5
             h3 Odměny

@@ -101,6 +101,7 @@ class Talent extends React.Component {
   render() {
     const {x, y, size, talent, unlocked} = this.props;
     const points = unlocked ? talent.points : 0;
+    const questsPath = "/user/quests?groups=t" + talent.id;
 
     var content = '<p class="mb-2">' + talent.description + '</p>' +
       '<ul class="list-group">';
@@ -147,6 +148,12 @@ class Talent extends React.Component {
         <svg x={x} y={y} width={size} height={size} style={{pointerEvents: 'none'}}>
           <text x='50%' y='55%' alignmentBaseline="middle" textAnchor="middle"
                 style={{fontSize: size / 4.5}}>{talent.code}</text>
+        </svg>
+        <svg x={x} y={y} width={size} height={size}>
+          <a xlinkHref={questsPath}>
+            <text x='90%' y='90%' dominantBaseline="baseline" textAnchor="end"
+                  style={{fontSize: size / 4.5, fill: '#6c757d'}}>&#xf061;<title>Přejít k úkolům</title></text>
+          </a>
         </svg>
       </g>
     );

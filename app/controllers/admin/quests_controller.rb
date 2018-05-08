@@ -4,12 +4,27 @@ class Admin::QuestsController < ApplicationController
 
   def index
     @quests = Quest.all
+    @difficulties = difficulties
+    @groups = quest_groups
+    @params = {
+      groups: params[:groups],
+      difficulty: params[:difficulty]
+    }
+
+    filter_by_difficulty(params[:difficulty]) unless !params.key?(
+      :difficulty) || params[:difficulty].empty?
+    filter_by_groups(params[:groups]) unless !params.key?(
+      :groups) || params[:groups].empty?
   end
 
   def new
     @quests = Quest.all
     @difficulties = difficulties
     @groups = quest_groups
+    @params = {
+      groups: params[:groups],
+      difficulty: params[:difficulty]
+    }
   end
 
   def edit
@@ -26,10 +41,18 @@ class Admin::QuestsController < ApplicationController
              else
                ''
              end
+    @params = {
+      groups: params[:groups],
+      difficulty: params[:difficulty]
+    }
   end
 
   def create
     @quest = Quest.new(quest_params)
+    @params = {
+      groups: params[:groups],
+      difficulty: params[:difficulty]
+    }
 
     if params[:quest].key?(:groups) && !params[:quest][:groups].empty?
       group_id_type = params[:quest][:groups][0]
@@ -61,7 +84,7 @@ class Admin::QuestsController < ApplicationController
     @quest.character_id = current_user.character.id
 
     if @quest.save
-      redirect_to admin_quests_path
+      redirect_to admin_quests_path(params: @params)
     else
       render 'new' # TODO: errors -> view
     end
@@ -69,6 +92,10 @@ class Admin::QuestsController < ApplicationController
 
   def update
     @quest = Quest.find(params[:id])
+    @params = {
+      groups: params[:groups],
+      difficulty: params[:difficulty]
+    }
 
     if params[:quest].key?(:groups) && !params[:quest][:groups].empty?
       group_id_type = params[:quest][:groups][0]
@@ -114,7 +141,7 @@ class Admin::QuestsController < ApplicationController
     @quest.character_id = current_user.character.id
 
     if @quest.save && @quest.update(quest_params)
-      redirect_to admin_quests_path
+      redirect_to admin_quests_path(params: @params)
     else
       render 'edit' # TODO: errors -> view
     end
@@ -142,6 +169,35 @@ class Admin::QuestsController < ApplicationController
       ['Obtížný', 'hard'],
       ['Velmi obtížný', 'very_hard']
     ]
+  end
+
+  def filter_by_difficulty(difficulty)
+    filtered = []
+    @quests.each do |quest|
+      filtered << quest if quest.difficulty == difficulty
+    end
+    @quests = filtered
+  end
+
+  def filter_by_groups(id)
+    filtered = []
+    id_type = id[0]
+    id = id[1..-1].to_i
+
+    @quests.each do |quest|
+      case id_type
+      when 'c'
+        filtered << quest if quest.character_class == CharacterClass.find(id)
+      when 's'
+        filtered << quest if quest.specialization == Specialization.find(id)
+      when 't'
+        filtered << quest if quest.talent == Talent.find(id)
+      else
+        filtered << quest
+      end
+    end
+
+    @quests = filtered
   end
 
   def quest_groups
