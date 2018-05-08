@@ -13,6 +13,10 @@
               { selected: params[:order] ? params[:order] : :achi_points, include_blank: false },
               { class: 'custom-select form-control mr-3', disabled: false }
             = form.submit 'Uložit', class: 'btn btn-outline-success'
+      p.mt-3.text-muted
+        | Uživatelé, kteří nesouhlasili se zobrazením svých údajů na této stránce, jsou
+        em  skryti
+        | .
       ul.list-group.mt-3
         - if @characters.is_a?(Hash)
           li.list-group-item.list-group-item-primary.d-flex.justify-content-between.align-items-center
