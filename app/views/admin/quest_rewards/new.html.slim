@@ -5,8 +5,7 @@
     local: true do |form|
     .row.mt-3
       .col
-        h2.d-inline-block = "Nastavení odměn pro úkol: #{@quest.name}"
-        = form.submit 'Uložit', class: 'btn btn-primary float-right'
+        h2 = "Nastavení odměn pro úkol: #{@quest.name}"
     .row.mt-3
       .col
         .card
@@ -55,3 +54,6 @@
                     - else
                       = form.check_box "titles[#{title.id}]", class: 'form-check-input'
                     = form.label "titles[#{title.id}]", 'Vybrat', class: 'form-check-label'
+    .row.mt-3.mb-4
+      .col.text-center
+        = form.submit 'Uložit', class: 'btn btn-primary'
