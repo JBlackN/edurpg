@@ -252,7 +252,7 @@ class Talent extends React.Component {
           </a>
           <a xlinkHref={questsPath} className="watch-unsaved">
             <text x='90%' y='90%' dominantBaseline="baseline" textAnchor="end"
-                  style={{fontSize: size / 4.5, fill: '#6c757d'}}>&#xf061;<title>Přejít k úkolům</title></text>
+                  style={{fontSize: size / 4.5, fill: '#6c757d'}}>&#xf08e;<title>Přejít k úkolům</title></text>
           </a>
         </svg>
       </g>

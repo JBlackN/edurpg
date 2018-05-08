@@ -152,7 +152,7 @@ class Talent extends React.Component {
         <svg x={x} y={y} width={size} height={size}>
           <a xlinkHref={questsPath}>
             <text x='90%' y='90%' dominantBaseline="baseline" textAnchor="end"
-                  style={{fontSize: size / 4.5, fill: '#6c757d'}}>&#xf061;<title>Přejít k úkolům</title></text>
+                  style={{fontSize: size / 4.5, fill: '#6c757d'}}>&#xf08e;<title>Přejít k úkolům</title></text>
           </a>
         </svg>
       </g>
