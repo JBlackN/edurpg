@@ -9,7 +9,7 @@
         h2 ČVUT uživatelské jméno
         p.text-justify
           | Aplikace ukládá Vaše FIT ČVUT uživatelské jméno, které používá k Vaší identifikaci a ke komunikaci s KOSapi, Usermap API a Klasifikace API Vaším jménem dle souhlasů (ne)udělených v dalších bodech tohoto formuláře.
-          strong
+          strong.text-danger
             |  Neudělením tohoto souhlasu přijde aplikace o možnost Vás identifikovat a Váš účet tak bude odstraněn.
         .form-check.text-right
           = form.check_box :username, class: 'form-check-input'
@@ -19,7 +19,7 @@
           | (FIT) ČVUT uživatelské role
         p.text-justify
           | Vaše ČVUT business role a FIT ČVUT předmětové role jsou načteny z Usermap API a použity k přiřazení pravomocí a předmětových omezení v rámci aplikace.
-          strong
+          strong.text-danger
             |  Přihlašujete-li se poprvé, neudělením tohoto souhlasu Vám nebudou přiřazena žádná práva a nebude Vás tak možné zaregistrovat.
         .form-check.text-right
           = form.check_box :roles, class: 'form-check-input'
@@ -45,7 +45,7 @@
             | Aplikace bude načítat Váš studijní program, studijní obor a tituly před jménem z KOSapi. Studijní program a obor použije k přiřazení tzv. povolání a specializace postavě, která Vás v rámci aplikace reprezentuje. Tituly budou využity k automatickému odemčení titulů v aplikaci. Studijní program je dále použit pro výpočet zkušeností Vaší postavy (studenti 
             abbr title="magisterského studijního programu" MSP
             |  automaticky získávají 180 bodů zkušeností = kreditů, za své předchozí bakalářské studium) &ndash;
-            strong
+            strong.text-danger
               |  neudělením tohoto souhlasu Vaší postavě nebude přiřazena specializace a výpočty bodů zkušeností a úrovně budou nepřesné.
           .form-check.text-right
             = form.check_box :info, class: 'form-check-input'
