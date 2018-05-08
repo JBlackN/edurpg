@@ -143,7 +143,7 @@ class Talent extends React.Component {
     );
 
     return (
-      <g className="talent" style={{opacity: unlocked ? 1 : 0.33}}>
+      <g className="talent" style={{opacity: unlocked ? 1 : 0.5}}>
         {bg}
         <svg x={x} y={y} width={size} height={size} style={{pointerEvents: 'none'}}>
           <text x='50%' y='55%' alignmentBaseline="middle" textAnchor="middle"

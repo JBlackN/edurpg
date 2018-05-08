@@ -17,7 +17,7 @@
         .card-body
           - if @character_achievements.any? || @unobtained_achievements.any?
             = render partial: 'achievement', collection: @character_achievements, locals: { opacity: 1 }
-            = render partial: 'achievement', collection: @unobtained_achievements, locals: { opacity: 0.33 }
+            = render partial: 'achievement', collection: @unobtained_achievements, locals: { opacity: 0.5 }
           - else
             .container.d-flex.h-100
               .container
