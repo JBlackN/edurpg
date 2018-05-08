@@ -28,6 +28,14 @@ html, body {
   overflow: hidden;
 }
 
+input[type='checkbox'] {
+  position: initial !important;
+  width: 20px;
+  height: 20px;
+  margin: 0 0.75em 0 0 !important;
+  vertical-align: bottom;
+}
+
 #user-menu {
   min-width: 0;
   /*left: -11px;*/
