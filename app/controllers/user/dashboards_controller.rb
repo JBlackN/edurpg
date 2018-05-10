@@ -197,7 +197,7 @@ class User::DashboardsController < ApplicationController
         talent_trees.each do |tree|
           tree_talent = tree.talent_tree_talents.find_by(talent_id: talent.id)
           tree.talent_tree_talents << talent unless tree_talent
-          tree_talent.completed = true if course['completed']
+          tree_talent.unlocked = true if course['completed']
           tree_talent.save
           tree.save
         end
