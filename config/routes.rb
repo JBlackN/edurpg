@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    get 'initializer/index'
+    get 'initializer/status', to: 'initializer#show', as: 'init_status'
     get 'dashboards/index'
     resources :character_attributes do
       resources :skills
