@@ -27,7 +27,7 @@ Předpokládám, že se prototyp aplikace nachází ve složce `~/edurpg/`. Př�
 
     2.  `$ psql`,
 
-    3.  `$ CREATE ROLE edurpg WITH LOGIN PASSWORD ’edurpg’ SUPERUSER CREATEROLE CREATEDB;`,
+    3.  `$ CREATE ROLE edurpg WITH LOGIN PASSWORD 'edurpg' SUPERUSER CREATEROLE CREATEDB;`,
 
     4.  `$ \q`,
 
@@ -56,7 +56,7 @@ Předpokládám, že se prototyp aplikace nachází ve složce `~/edurpg/`. Př�
     | Proměnná prostředí | Informace o doméně Mailgun |
     | ------------------ | -------------------------- |
     | `SMTP_ADDRESS`     | `smtp.mailgun.org`         |
-    | `SMTP_PORT`        | `’587’` (včetně apostrofů) |
+    | `SMTP_PORT`        | `'587'` (včetně apostrofů) |
     | `SMTP_DOMAIN`      | DOMAIN                     |
     | `SMTP_USER_NAME`   | Default SMTP Login         |
     | `SMTP_PASSWORD`    | Default Password           |
